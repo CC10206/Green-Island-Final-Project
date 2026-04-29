@@ -36,34 +36,39 @@
 ----- 我是分隔線-----
 上面的內容報告完基本就可以刪了或是封存，下面才是真的.md檔該留的
 # 網站架構
-├── 首頁 (index)
-│   ├── Hero Banner（主視覺）
-│   ├── 關於我們
-│   └── 常見問答（FAQ）
-│
-├── 最新消息 / 活動資訊 (news)
-│   ├── 活動列表
-│   └── 活動詳情頁
-│
-├── 綠島綠色觀光介紹 (about-eco)
-│   ├── 引言：生態環境概況
-│   └── 面臨問題與保育現況
-│
-├── 交通方式簡介 (transport)
-│   ├── 各交通工具說明
-│   └── 碳排放計算工具
-│
-├── 綠色旅遊路線 / 推薦行程 (itinerary)
-│   └── 行程卡片與地圖整合
-│
-├── 景點與生態體驗介紹 (attractions)
-│   ├── 景點介紹
-│   ├── 生態體驗活動
-│   └── 推薦旅宿
-│
-└── 在地店家 / 友善商家資訊 (local-shops)
-    ├── 商家列表（可篩選分類）
-    └── 商家詳情
+### 網站架構圖 (Sitemap)
+
+```mermaid
+graph TD
+    %% 全域樣式設定
+    classDef main fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef sub fill:#fff,stroke:#333,stroke-width:1px;
+
+    Home[首頁 index] --> H1[Hero Banner 主視覺]
+    Home --> H2[關於我們]
+    Home --> H3[常見問答 FAQ]
+
+    News[最新消息 / 活動資訊 news] --> N1[活動列表]
+    News --> N2[活動詳情頁]
+
+    Eco[綠島綠色觀光介紹 about-eco] --> E1[引言：生態環境概況]
+    Eco --> E2[面臨問題與保育現況]
+
+    Trans[交通方式簡介 transport] --> T1[各交通工具說明]
+    Trans --> T2[碳排放計算工具]
+
+    Itin[綠色旅遊路線 itinerary] --> I1[行程卡片與地圖整合]
+
+    Attr[景點與生態體驗 attractions] --> A1[景點介紹]
+    Attr --> A2[生態體驗活動]
+    Attr --> A3[推薦旅宿]
+
+    Shops[在地店家 / 友善商家 local-shops] --> S1[商家列表 可篩選分類]
+    Shops --> S2[商家詳情]
+
+    %% 套用樣式讓主選單更明顯
+    class Home,News,Eco,Trans,Itin,Attr,Shops main;
+```
 # 前後端功能
 (施工中...)
 
