@@ -1,63 +1,427 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <title>ISLE of ROAM - Travel Guide</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <style>
-        /* 整體網頁背景設定 */
-body {
-    background-color: #E6EEC9;
-    margin: 0;
-    padding: 40px;
-    font-family: sans-serif; /*整個網頁的預設字體 */
-}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISLE of ROAM</title>
 
-/* 大橫幅專屬容器 */
-.hero-banner {
-    border-radius: 20px; 
+<!-- 引入 Tailwind CSS 與 Google 雲端字體 -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:wght@400;600&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<style>
+  /* === 1. 綠島續嶼共用變數與基礎排版 === */
+  :root {
+    --teal: #35858e;
+    --sage: #7da78c;
+    --moss: #c2d099;
+    --cream: #e6eec9;
+  }
+  * { box-sizing: border-box; }
+  
+  body { 
+    font-family: 'Noto Sans TC', sans-serif; 
+    background-color: var(--cream); 
+    color: #2d3a2e; 
+    margin: 0;
+  }
+  
+  .font-display { font-family: 'Playfair Display', serif; }
+
+  /* === 2. 導覽列 (Header) 專屬裝潢 === */
+  .nav-link {
+    position: relative; color: rgba(255,255,255,0.85); font-weight: 400; font-size: 0.9rem;
+    letter-spacing: 0.04em; transition: color 0.2s; text-decoration: none; padding: 4px 0;
+  }
+  .nav-link::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: var(--moss); transform: scaleX(0); transition: transform 0.25s;
+  }
+  .nav-link:hover { color: #fff; }
+  .nav-link:hover::after { transform: scaleX(1); }
+
+  #mobile-menu {
+    display: none; position: fixed; inset: 0; background: rgba(26,58,46,0.95);
+    z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
+  }
+  #mobile-menu.show { display: flex; }
+  .mobile-nav-link {
+    color: #e6eec9; font-size: 1.4rem; font-weight: 300; letter-spacing: 0.1em;
+    text-decoration: none; transition: color 0.2s;
+  }
+  .mobile-nav-link:hover { color: #fff; }
+
+  /* === 3. 燈塔大橫幅 (Hero) 專屬裝潢 === */
+  .hero-bg {
+    /* 喚回你的燈塔照片，並保留半透明黑色濾鏡讓白色標題更清楚 */
     background-image: 
         linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
-        url('images/shop-banner.jfif'); /* 用images shop-banner照片 */
+        url('images/shop-banner.jfif');
     background-size: cover; 
     background-position: center;
-    padding: 100px 60px; 
-    color: white; 
-    
-    /* 文字右推 */
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end; 
-    text-align: right; 
-}
+    position: relative;
+    overflow: hidden;
+  }
 
-/* Travel Guide 大標題的樣式 */
-.hero-banner h1 {
-    font-family: 'Lora', serif; /* 幫大標題套上雲端文青字體 */
-    font-size: 68px; /* 字體稍微放大一點點更大氣 */
-    font-weight: 700;
-    margin-top: 0;
+
+  .wave-bottom {
+    position: absolute; bottom: -2px; left: 0; right: 0;
+  }
+
+  /* === 4. 友善商家清單 (Merchants) 專屬裝潢 === */
+  .merchants-section {
+    padding: 60px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .section-header h2 {
+    color: var(--teal);
+    font-family: 'Lora', serif;
+    font-size: 32px;
     margin-bottom: 20px;
-}
+  }
+  .category-tabs {
+    margin-bottom: 30px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    background-color: transparent;
+    border: 2px solid var(--sage);
+    color: var(--teal);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Lora', serif;
+    font-weight: bold;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover, .tab-btn.active {
+    background-color: var(--sage);
+    color: white;
+  }
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .card {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+  }
+  .card-image {
+    background-color: var(--moss); 
+    height: 150px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    position: relative;
+  }
+  .badge {
+    background-color: var(--sage);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: var(--teal);
+  }
+  .card-desc {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    color: #555;
+  }
+  .visit-link {
+    display: inline-block;
+    background-color: var(--teal);
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+  .visit-link:hover {
+    background-color: #1a4a4e;
+  }
+  .hidden-card {
+    display: none;
+  }
+  .show-more-wrapper {
+    text-align: center;
+    margin-top: 40px;
+  }
+  .show-more-btn {
+    background-color: var(--cream);
+    border: 2px solid var(--teal);
+    color: var(--teal);
+    padding: 10px 30px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .show-more-btn:hover {
+    background-color: var(--teal);
+    color: white;
+  }
 
-/* 下方簡介文字的樣式 */
-.hero-banner p {
-    font-family: 'Lora', serif; /* 內文字體 */
-    font-size: 19px;
-    line-height: 1.6; 
-    max-width: 550px; 
-    margin: 0;
-}
-    </style>
+  /* === 5. 頁尾 (Footer) 專屬裝潢 === */
+  .footer-link { color: #a8c4aa; font-size: 0.85rem; text-decoration: none; transition: color 0.2s; }
+  .footer-link:hover { color: var(--cream); }
+
+</style>
 </head>
 <body>
 
-    <!-- 大橫幅 HTML 結構開始 -->
-    <div class="hero-banner">
-        <h1>Travel Guide</h1>
-        <p>Discover the rhythmic pulse of Green Island. From hidden coral sanctuaries to local eco-pioneers, your journey here is a shared story of conservation and connection. Explore with intention, leave only ripples.</p>
+<!-- === 頂部共用導覽列 (Header) === -->
+<header id="header" style="position:fixed;top:0;left:0;right:0;z-index:100;transition:background 0.3s,box-shadow 0.3s;" class="hero-header">
+  <div style="max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px;">
+    <!-- Logo -->
+    <a href="#" style="text-decoration:none;display:flex;align-items:center;gap:10px;">
+  
+    <!-- 這裡換成你的實體圖片標籤 -->
+    <img src="images/logo.png" alt="ISLE of ROAM Logo" style="height: 36px; width: auto;">
+  
+    <span style="font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;letter-spacing:0.05em;font-weight:600;">ISLE of ROAM</span>
+    </a>
+      <span style="font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;letter-spacing:0.05em;font-weight:600;"></span>
+    </a>
+
+    <!-- 桌機版選單 -->
+    <nav style="display:flex;gap:2rem;align-items:center;" class="hidden md:flex">
+      <a href="#" class="nav-link">首頁</a>
+      <a href="#merchant-grid" class="nav-link">友善商家</a>
+      <a href="#" class="nav-link">交通碳排</a>
+    </nav>
+
+    <!-- 手機版漢堡選單按鈕 -->
+    <button id="hamburger" style="display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;" onclick="toggleMenu()">
+      <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
+      <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
+      <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
+    </button>
+  </div>
+</header>
+
+<!-- 手機版隱藏選單 -->
+<div id="mobile-menu">
+  <button onclick="toggleMenu()" style="position:absolute;top:20px;right:24px;background:none;border:none;color:#e6eec9;font-size:1.8rem;cursor:pointer;">✕</button>
+  <a href="#" class="mobile-nav-link" onclick="toggleMenu()">首頁</a>
+  <a href="#merchant-grid" class="mobile-nav-link" onclick="toggleMenu()">友善商家</a>
+  <a href="#" class="mobile-nav-link" onclick="toggleMenu()">交通碳排</a>
+</div>
+
+<!-- === 漸層大橫幅區塊 (Hero) === -->
+<section class="hero-bg" style="min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;">
+  
+  <div style="position:absolute;top:15%;right:10%;width:300px;height:300px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);"></div>
+  <div style="position:absolute;bottom:20%;left:8%;width:180px;height:180px;border-radius:50%;border:1px solid rgba(194,208,153,0.2);"></div>
+
+  <div style="position:relative;z-index:2;text-align:center;padding:2rem;max-width:800px;">
+    
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:50px;padding:6px 18px;margin-bottom:1.5rem;">
+      <span style="width:6px;height:6px;background:#c2d099;border-radius:50%;display:inline-block;"></span>
+      <span style="font-size:0.78rem;color:rgba(255,255,255,0.85);letter-spacing:0.1em;font-family:sans-serif;">ISLE of ROAM</span>
     </div>
-    <!-- 大橫幅 HTML 結構結束 -->
+    
+    <h1 style="font-family:'Lora', serif; font-size:clamp(3.5rem, 6vw, 5rem); color:#fff; line-height:1.15; margin-bottom:1.2rem; font-weight:700; margin-top:0;">
+      Travel Guide
+    </h1>
+    
+    <p style="font-family:'Lora', serif; font-size:clamp(1rem, 2.2vw, 1.2rem); color:rgba(255,255,255,0.85); line-height:1.8; margin-bottom:2.5rem; max-width:600px; margin-left:auto; margin-right:auto;">
+      Discover the rhythmic pulse of Green Island. From hidden coral sanctuaries to local eco-pioneers, your journey here is a shared story of conservation and connection. Explore with intention, leave only ripples.
+    </p>
+    
+    <a href="#merchant-grid" style="display:inline-flex;align-items:center;gap:10px;background:#c2d099;color:#1a4a4e;padding:14px 36px;border-radius:50px;font-weight:bold;font-size:0.95rem;text-decoration:none;transition:all 0.25s;letter-spacing:0.03em;"
+       onmouseover="this.style.background='#d4e8aa';this.style.transform='translateY(-2px)'"
+       onmouseout="this.style.background='#c2d099';this.style.transform='none'">
+      Explore Merchants
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3L13 8L8 13M3 8H13" stroke="#1a4a4e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+
+  <div class="wave-bottom">
+    <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:80px;">
+      <!-- 對齊網頁米白色底色 -->
+      <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#E6EEC9"/>
+    </svg>
+  </div>
+</section>
+
+<!-- === 友善商家清單區塊 (Merchants) === -->
+<div class="merchants-section">
+    <div class="section-header">
+        <h2>Green Merchants (合作的綠色商家)</h2>
+        <div class="category-tabs">
+            <button class="tab-btn active">全部 (All)</button>
+            <button class="tab-btn">🍃 餐飲</button>
+            <button class="tab-btn">🛍️ 購物</button>
+            <button class="tab-btn">🤿 體驗</button>
+        </div>
+    </div>
+
+    <div class="card-container" id="merchant-grid">
+        
+        <div class="card">
+            <div class="card-image">
+                <div class="badge">🍃 餐飲 | 無塑包裝</div>
+            </div>
+            <div class="card-title">Zero Wave Cafe</div>
+            <div class="card-desc">📍 南寮漁港周邊<br>全面禁用一次性塑膠，提供在地食材製作的有機點心。</div>
+            <a href="https://maps.google.com" target="_blank" class="visit-link">Visit Merchant →</a>
+        </div>
+
+        <div class="card">
+            <div class="card-image" style="background-color: #7DA78C;">
+                <div class="badge">🛍️ 購物 | 海廢再生</div>
+            </div>
+            <div class="card-title">Island Echo Crafts</div>
+            <div class="card-desc">📍 柴口浮潛區周邊<br>將海洋廢棄物轉化為充滿綠島風情的藝術紀念品。</div>
+            <a href="https://maps.google.com" target="_blank" class="visit-link">Visit Merchant →</a>
+        </div>
+
+        <div class="card">
+            <div class="card-image" style="background-color: #35858E;">
+                <div class="badge">🤿 體驗 | 海洋友善</div>
+            </div>
+            <div class="card-title">Coral Dive</div>
+            <div class="card-desc">📍 石朗潛水區<br>推廣不擦防曬下水，提供海洋生態保育的潛水導覽。</div>
+            <a href="https://maps.google.com" target="_blank" class="visit-link">Visit Merchant →</a>
+        </div>
+
+        <div class="card hidden-card">
+            <div class="card-image" style="background-color: #C2D099;">
+                <div class="badge">🍃 餐飲 | 在地食材</div>
+            </div>
+            <div class="card-title">Green Bites</div>
+            <div class="card-desc">📍 綠島大街<br>使用綠島在地當季小農蔬菜的無國界低碳料理。</div>
+            <a href="https://maps.google.com" target="_blank" class="visit-link">Visit Merchant →</a>
+        </div>
+
+    </div>
+
+    <div class="show-more-wrapper">
+        <!-- 我幫按鈕換了一個新名字 toggleMoreBtn，也換了新的 JS 指令 toggleMerchants() -->
+        <button id="toggleMoreBtn" class="show-more-btn" onclick="toggleMerchants()">查看更多商家 ↓</button>
+    </div>
+</div>
+
+<!-- === 共用關於我們區塊 (About) === -->
+<section style="padding:5rem 2rem;background:linear-gradient(135deg,#35858e,#4a9aa6);text-align:center;">
+  <div style="max-width:700px;margin:0 auto;">
+    <h2 class="font-display" style="font-size:2rem;color:#fff;margin-bottom:1.2rem;">關於綠島續嶼</h2>
+    <p style="color:rgba(255,255,255,0.82);line-height:1.9;font-size:0.95rem;margin-bottom:2rem;">
+      我們是一群熱愛綠島、關注生態保育的旅遊倡議者。致力於推廣低碳、友善環境的旅遊方式，連結在地友善商家與旅客，讓旅遊成為守護這座美麗島嶼的一股力量。
+    </p>
+  </div>
+</section>
+
+<!-- === 共用頁尾區塊 (Footer) === -->
+<footer style="background:#1a2e1e;color:#a8c4aa;padding:4rem 2rem 2rem;">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:3rem;margin-bottom:3rem;">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
+          <div style="width:30px;height:30px;background:#c2d099;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+              <path d="M9 2C9 2 4 6 4 10.5C4 13.5 6.5 16 9 16C11.5 16 14 13.5 14 10.5C14 6 9 2 9 2Z" fill="#35858e"/>
+            </svg>
+          </div>
+          <span style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#e6eec9;">綠島續嶼</span>
+        </div>
+        <p style="font-size:0.83rem;line-height:1.8;color:#7a9c7b;">以永續旅遊為核心，守護綠島純淨之美，讓旅行成為改變的力量。</p>
+      </div>
+
+      <div>
+        <h4 style="font-size:0.78rem;letter-spacing:0.12em;color:#c2d099;margin-bottom:1rem;text-transform:uppercase;">聯絡資訊</h4>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;font-size:0.85rem;">
+          <span>📧 hello@greenisland-eco.tw</span>
+          <span>📍 台東縣綠島鄉</span>
+          <span>📞 089-672-XXX</span>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,0.07);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+      <span style="font-size:0.8rem;color:#5a7a5c;">© 2026 綠島續嶼. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- === 讓網頁動起來的 JS 魔法區 === -->
+<script>
+  // 1. 導覽列滾動變色特效
+  window.addEventListener('scroll', () => {
+    const h = document.getElementById('header');
+    if (window.scrollY > 60) {
+      h.style.background = 'rgba(26,58,46,0.97)';
+      h.style.boxShadow = '0 2px 20px rgba(0,0,0,0.15)';
+      h.style.backdropFilter = 'blur(10px)';
+    } else {
+      h.style.background = 'transparent';
+      h.style.boxShadow = 'none';
+      h.style.backdropFilter = 'none';
+    }
+  });
+
+  // 2. 手機版漢堡選單控制
+  (function() {
+    const ham = document.getElementById('hamburger');
+    const mq = window.matchMedia('(max-width: 768px)');
+    function check(e) { ham.style.display = e.matches ? 'flex' : 'none'; }
+    mq.addListener(check); check(mq);
+  })();
+
+  function toggleMenu() {
+    document.getElementById('mobile-menu').classList.toggle('show');
+  }
+
+  // 這裡就是我說的「記憶體」！一開始預設是「沒有展開 (false)」
+    let isExpanded = false;
+
+    function toggleMerchants() {
+        // 找出所有原本被隱藏的便當盒，以及我們剛剛設定的那顆按鈕
+        const hiddenCards = document.querySelectorAll('.hidden-card');
+        const btn = document.getElementById('toggleMoreBtn');
+
+        if (isExpanded === false) {
+            // 【展開模式】如果現在是收起狀態，我們就把它打開
+            hiddenCards.forEach(card => {
+                card.style.display = 'block';
+            });
+            // 接著把按鈕的文字換掉，提醒使用者可以收回去
+            btn.innerText = '收起全部商家 ↑';
+            // 最重要的一步：把記憶體更新成「已經展開 (true)」
+            isExpanded = true;
+            
+        } else {
+            // 【收起模式】如果現在已經是展開狀態，我們就把它藏起來
+            hiddenCards.forEach(card => {
+                card.style.display = 'none';
+            });
+            // 把按鈕的文字變回原本的樣子
+            btn.innerText = '查看更多商家 ↓';
+            // 把記憶體更新回「沒有展開 (false)」
+            isExpanded = false;
+        }
+    }
+</script>
 
 </body>
 </html>
