@@ -10,6 +10,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:wght@400;600&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
 <style>
+/* === 啟動全網頁的平滑捲動魔法 === */
+  html {
+      scroll-behavior: smooth; 
+  }
+  
   /* === 1. 綠島續嶼共用變數與基礎排版 === */
   :root {
     --teal: #35858e;
@@ -62,8 +67,36 @@
     position: relative;
     overflow: hidden;
   }
+  /* === 解決導覽列蓋住區塊的煞車魔法 === */
+  .merchants-section, .diving-section, .acc-section {
+      scroll-margin-top: 100px; /* 留出導覽列的高度，外加一點呼吸空間 */
+  }
 
-
+  /* === 首頁快捷按鈕的專屬裝潢 === */
+  .hero-btn-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap; /* 如果用手機看，按鈕擠不下會自動換行排好 */
+  }
+  .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #c2d099;
+      color: #1a4a4e;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.25s;
+      letter-spacing: 0.03em;
+  }
+  .hero-btn:hover {
+      background: #d4e8aa;
+      transform: translateY(-2px);
+  }
   .wave-bottom {
     position: absolute; bottom: -2px; left: 0; right: 0;
   }
@@ -545,12 +578,18 @@
       Discover the rhythmic pulse of Green Island. From hidden coral sanctuaries to local eco-pioneers, your journey here is a shared story of conservation and connection. Explore with intention, leave only ripples.
     </p>
     
-    <a href="#merchant-grid" style="display:inline-flex;align-items:center;gap:10px;background:#c2d099;color:#1a4a4e;padding:14px 36px;border-radius:50px;font-weight:bold;font-size:0.95rem;text-decoration:none;transition:all 0.25s;letter-spacing:0.03em;"
-       onmouseover="this.style.background='#d4e8aa';this.style.transform='translateY(-2px)'"
-       onmouseout="this.style.background='#c2d099';this.style.transform='none'">
-      Explore Merchants
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3L13 8L8 13M3 8H13" stroke="#1a4a4e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
+    <!-- 新的三顆快捷按鈕群組 -->
+    <div class="hero-btn-group">
+        <a href="#merchants-section" class="hero-btn">
+            Green Merchants
+        </a>
+        <a href="#diving-section" class="hero-btn">
+            Eco Diving
+        </a>
+        <a href="#acc-section" class="hero-btn">
+            Eco Stays
+        </a>
+    </div>
   </div>
 
   <div class="wave-bottom">
@@ -562,7 +601,7 @@
 </section>
 
 <!-- === 友善商家清單區塊 (Merchants) === -->
-<div class="merchants-section">
+<div class="merchants-section" id="merchants-section">
     <div class="section-header">
         <h2>Green Merchants (合作的綠色商家)</h2>
         <!-- 分類按鈕 -->
@@ -625,9 +664,9 @@
     </div>
 </div>
 <!-- === 友善商家清單區塊結束 === -->
- 
+
 <!-- === 海洋友善潛水區塊開始 === -->
-<div class="diving-section">
+<div class="diving-section" id="diving-section">
     <div class="diving-header">
         <h2>Ocean-Friendly Diving (海洋友善潛水)</h2>
         <p>Deepen your connection with the Pacific responsibly. Our partner shops prioritize reef health over profit and offer ocean-conscious certification tracks.</p>
@@ -690,7 +729,7 @@
 <!-- === 海洋友善潛水區塊結束 === -->
 
 <!-- === 住宿推薦區塊開始 === -->
-<div class="acc-section">
+<div class="acc-section" id="acc-section">
     <div class="acc-header">
         <h2>Eco-Friendly Accommodations</h2>
         <p style="color: #4a5c4b; margin-bottom: 20px;">Stay where the footprint is small and the soul is large.</p>
