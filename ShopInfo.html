@@ -78,14 +78,18 @@
       gap: 15px;
       justify-content: center;
       flex-wrap: wrap; /* 如果用手機看，按鈕擠不下會自動換行排好 */
+      max-width: 550px; /* 確保野餐墊鋪滿整個寬度 */
+      margin: 0 auto; /* 就算沒有鋪滿，也強制把整張墊子推到正中間 */
   }
   .hero-btn {
+      flex: 1; 
+      justify-content: center;
       display: inline-flex;
       align-items: center;
       gap: 8px;
       background: #c2d099;
       color: #1a4a4e;
-      padding: 12px 28px;
+      padding: 12px 10px;
       border-radius: 50px;
       font-weight: bold;
       font-size: 0.95rem;
@@ -611,7 +615,7 @@
             <button class="tab-btn" onclick="filterMerchants('shop', this)">🛍️ 購物</button>
             <button class="tab-btn" onclick="filterMerchants('exp', this)">🤿 體驗</button>
         </div>
-    </div> <!-- 💡 剛剛很可能就是不小心漏掉這個結尾標籤！ -->
+    </div> 
 
     <!-- 卡片展示架 -->
     <div class="card-container" id="merchant-grid">
