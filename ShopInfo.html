@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISLE of ROAM</title>
+
+<!-- 引入 Tailwind CSS 與 Google 雲端字體 -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:wght@400;600&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<style>
+/* === 啟動全網頁的平滑捲動魔法 === */
+  html {
+      scroll-behavior: smooth; 
+  }
+  
+  /* === 1. 綠島續嶼共用變數與基礎排版 === */
+  :root {
+    --teal: #35858e;
+    --sage: #7da78c;
+    --moss: #c2d099;
+    --cream: #e6eec9;
+  }
+  * { box-sizing: border-box; }
+  
+  body { 
+    font-family: 'Noto Sans TC', sans-serif; 
+    background-color: var(--cream); 
+    color: #2d3a2e; 
+    margin: 0;
+  }
+  
+  .font-display { font-family: 'Playfair Display', serif; }
+
+  /* === 2. 導覽列 (Header) 專屬裝潢 === */
+  .nav-link {
+    position: relative; color: rgba(255,255,255,0.85); font-weight: 400; font-size: 0.9rem;
+    letter-spacing: 0.04em; transition: color 0.2s; text-decoration: none; padding: 4px 0;
+  }
+  .nav-link::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: var(--moss); transform: scaleX(0); transition: transform 0.25s;
+  }
+  .nav-link:hover { color: #fff; }
+  .nav-link:hover::after { transform: scaleX(1); }
+
+  #mobile-menu {
+    display: none; position: fixed; inset: 0; background: rgba(26,58,46,0.95);
+    z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
+  }
+  #mobile-menu.show { display: flex; }
+  .mobile-nav-link {
+    color: #e6eec9; font-size: 1.4rem; font-weight: 300; letter-spacing: 0.1em;
+    text-decoration: none; transition: color 0.2s;
+  }
+  .mobile-nav-link:hover { color: #fff; }
+
+  /* === 3. 燈塔大橫幅 (Hero) 專屬裝潢 === */
+  .hero-bg {
+    /* 喚回你的燈塔照片，並保留半透明黑色濾鏡讓白色標題更清楚 */
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+        url('images/shop-banner.jfif');
+    background-size: cover; 
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+  }
+  /* === 解決導覽列蓋住區塊的煞車魔法 === */
+  .merchants-section, .diving-section, .acc-section {
+      scroll-margin-top: 100px; /* 留出導覽列的高度，外加一點呼吸空間 */
+  }
+
+  /* === 首頁快捷按鈕的專屬裝潢 === */
+  .hero-btn-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap; /* 如果用手機看，按鈕擠不下會自動換行排好 */
+      max-width: 550px; /* 確保野餐墊鋪滿整個寬度 */
+      margin: 0 auto; /* 就算沒有鋪滿，也強制把整張墊子推到正中間 */
+  }
+  .hero-btn {
+      flex: 1; 
+      justify-content: center;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #c2d099;
+      color: #1a4a4e;
+      padding: 12px 10px;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.25s;
+      letter-spacing: 0.03em;
+  }
+  .hero-btn:hover {
+      background: #d4e8aa;
+      transform: translateY(-2px);
+  }
+  .wave-bottom {
+    position: absolute; bottom: -2px; left: 0; right: 0;
+  }
+
+  /* === 4. 友善商家清單 (Merchants) 專屬裝潢 === */
+  .merchants-section {
+    padding: 60px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .section-header h2 {
+    color: var(--teal);
+    font-family: 'Lora', serif;
+    font-size: 32px;
+    margin-bottom: 20px;
+  }
+  .category-tabs {
+    margin-bottom: 30px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    background-color: transparent;
+    border: 2px solid var(--sage);
+    color: var(--teal);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Lora', serif;
+    font-weight: bold;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover, .tab-btn.active {
+    background-color: var(--sage);
+    color: white;
+  }
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .card {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+  }
+  .card-image {
+    background-color: var(--moss); 
+    height: 150px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    position: relative;
+  }
+  .badge {
+    background-color: var(--sage);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: var(--teal);
+  }
+  .card-desc {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    color: #555;
+  }
+  .visit-link {
+    display: inline-block;
+    background-color: var(--teal);
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+  .visit-link:hover {
+    background-color: #1a4a4e;
+  }
+  /* 隱藏狀態 */
+  .hidden-card {
+    display: none; /* 預設完全下台、不佔空間 */
+    opacity: 0; /* 預設完全透明 */
+    transform: translateY(20px); /* 預設稍微往下沉一點點 */
+    
+    /* 漸變動畫：透明度跟位移都要花 0.4 秒慢慢變 */
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  /* 這是我們等一下要用 JS 偷偷打上的「聚光燈」類別 */
+  .hidden-card.show-animate {
+    opacity: 1; /* 變成完全不透明 */
+    transform: translateY(0); /* 浮上來回到原本該在的高度 */
+  }
+  .show-more-wrapper {
+    text-align: center;
+    margin-top: 40px;
+  }
+  .show-more-btn {
+    background-color: var(--cream);
+    border: 2px solid var(--teal);
+    color: var(--teal);
+    padding: 10px 30px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .show-more-btn:hover {
+    background-color: var(--teal);
+    color: white;
+  }
+/* === 6. 海洋友善潛水區 (橫式卡片) 專屬裝潢 === */
+  .diving-section {
+    /* 加強漸層顏色的對比度，讓海水流動更明顯 */
+    background: linear-gradient(135deg, #e4f0ed 0%, #b5d8d0 50%, #e4f0ed 100%); 
+    background-size: 300% 300%; /* 把背景再拉更大，水流感更強 */
+    
+    border-radius: 40px; 
+    box-shadow: 0 10px 30px rgba(53, 133, 142, 0.1);
+    
+    padding: 60px 40px;
+    max-width: 1200px;
+    margin: 0 auto 60px auto;
+    
+    /* 潤滑油名單加上 transform，確保膨脹的時候很絲滑 */
+    transition: box-shadow 0.1s ease-out, background-position 0.1s ease-out, transform 0.1s ease-out; 
+  }
+  .diving-header h2 {
+    color: #1a4a4e;
+    font-family: 'Lora', serif;
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+  .diving-header p {
+    color: #4a5c4b;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    max-width: 700px;
+  }
+  
+  /* 列表的展示架，讓橫式卡片由上往下排 */
+  .list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* 獨立的橫式卡片 (Flexbox 橫向排版) */
+  .horizontal-card {
+    display: flex;
+    align-items: center; /* 讓裡面的照片、文字、按鈕都在垂直方向置中 */
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px 30px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+    gap: 20px;
+  }
+  .horizontal-card:hover {
+    transform: translateY(-3px);
+  }
+  
+  /* 左邊的大頭貼照片 */
+  .hc-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #C2D099;
+    flex-shrink: 0; /* 確保不管字再多，照片都不會被擠壓變形 */
+  }
+  
+  /* 中間的文字區塊 */
+  .hc-content {
+    flex-grow: 1; /* 叫文字區塊把中間剩下的空間全部佔滿，把按鈕推到最右邊 */
+  }
+  .hc-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #35858E;
+    margin-bottom: 5px;
+  }
+  .hc-desc {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  /* 環保小藥丸標籤 */
+  .hc-pills {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .pill {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+  }
+  .pill-blue { background-color: #6da5ff; }
+  .pill-green { background-color: #7DA78C; }
+  
+  /* 右邊的 Booking 按鈕 */
+  .hc-action {
+    flex-shrink: 0;
+  }
+  .book-btn {
+    background-color: #005b9f; /* 醒目的深藍色 CTA */
+    color: white;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 14px;
+    display: inline-block;
+    transition: background 0.2s;
+    text-align: center;
+  }
+  .book-btn:hover { background-color: #003f73; }
+
+  /* 隱藏的橫式卡片 (跟剛剛一樣的滑順動畫) */
+  .hidden-list-card {
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .hidden-list-card.show-animate {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* 📱 手機版排版變形魔法 (Media Query) */
+  @media (max-width: 768px) {
+    .horizontal-card {
+      flex-direction: column; /* 把橫向排隊變成直向疊羅漢！ */
+      text-align: center;
+    }
+    .hc-pills {
+      justify-content: center;
+    }
+  }
+  /* 潛水區專屬：反轉按鈕顏色 */
+  .diving-section .show-more-btn {
+    background-color: #35858E; /* 預設底色變成深青藍色 */
+    color: white; /* 預設字體變白色 */
+    border-color: #35858E; 
+  }
+  
+  .diving-section .show-more-btn:hover {
+    background-color: transparent; /* 滑過去變成透明，透出原本漂亮的淡藍色底圖 */
+    color: #35858E; /* 字體變回深青藍色 */
+  }
+/* === 7. 住宿推薦區 (Accommodations) === */
+  .acc-section {
+    padding: 60px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .acc-header h2 {
+    color: #35858E;
+    font-family: 'Lora', serif;
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+  
+  /* 篩選器面板區塊 */
+  .filter-panel {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+  .filter-group h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #1a4a4e;
+    font-size: 16px;
+  }
+  
+  /* 住宿類型的圓角按鈕 */
+  .type-btn {
+    background-color: transparent;
+    border: 1px solid #7DA78C;
+    color: #35858E;
+    padding: 6px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    transition: all 0.2s;
+  }
+  .type-btn.active, .type-btn:hover {
+    background-color: #7DA78C;
+    color: white;
+  }
+
+  /* 特色要求的 Checkbox */
+  .feature-label {
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+    margin-right: 15px;
+    margin-bottom: 8px;
+    cursor: pointer;
+  }
+  .feature-label input {
+    margin-right: 6px;
+    accent-color: #35858E; /* 讓勾選框變成你們的主色 */
+  }
+
+  /* 住宿卡片排版 */
+  .acc-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .acc-card {
+    background-color: white;
+    border-radius: 20px;
+    width: 350px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    overflow: hidden; /* 讓圖片不會超出圓角 */
+    transition: transform 0.2s;
+  }
+  .acc-card:hover {
+    transform: translateY(-5px);
+  }
+
+  /* 圖片區塊：設定為 relative，這樣價格跟 Booking 按鈕才能定位在它上面 */
+  .acc-img-wrapper {
+    position: relative;
+    height: 220px;
+    background-color: #C2D099;
+  }
+  
+  /* 價格標籤 (左上角) */
+  .price-tag {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #1a4a4e;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  /* Booking 按鈕 (右下角，取代原本的愛心) */
+  .img-book-btn {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background-color: #005b9f;
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 13px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: background 0.2s;
+  }
+  .img-book-btn:hover {
+    background-color: #003f73;
+  }
+
+  .acc-info {
+    padding: 20px;
+  }
+  .acc-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #35858E;
+    margin-bottom: 10px;
+  }
+  .acc-desc {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  /* 跟之前一樣的隱藏與動畫類別 */
+  .acc-hidden {
+    display: none;
+  }
+
+  /* === 8. 頁尾 (Footer) 專屬裝潢 === */
+  .footer-link { color: #a8c4aa; font-size: 0.85rem; text-decoration: none; transition: color 0.2s; }
+  .footer-link:hover { color: var(--cream); }
+
+</style>
+</head>
+<body>
+
+<!-- === 頂部共用導覽列 (Header) === -->
+<header id="header" style="position:fixed;top:0;left:0;right:0;z-index:100;transition:background 0.3s,box-shadow 0.3s;" class="hero-header">
+  <div style="max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px;">
+    <!-- Logo -->
+    <a href="#" style="text-decoration:none;display:flex;align-items:center;gap:10px;">
+  
+    <!-- 這裡換成你的實體圖片標籤 -->
+    <img src="images/logo.png" alt="ISLE of ROAM Logo" style="height: 36px; width: auto;">
+  
+    <span style="font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;letter-spacing:0.05em;font-weight:600;">ISLE of ROAM</span>
+    </a>
+      <span style="font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;letter-spacing:0.05em;font-weight:600;"></span>
+    </a>
+
+    <!-- 桌機版選單 -->
+    <nav style="display:flex;gap:2rem;align-items:center;" class="hidden md:flex">
+      <a href="#" class="nav-link">首頁</a>
+      <a href="#merchant-grid" class="nav-link">友善商家</a>
+      <a href="#" class="nav-link">交通碳排</a>
+    </nav>
+
+    <!-- 手機版漢堡選單按鈕 -->
+    <button id="hamburger" style="display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;" onclick="toggleMenu()">
+      <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
+      <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
+      <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
+    </button>
+  </div>
+</header>
+
+<!-- 手機版隱藏選單 -->
+<div id="mobile-menu">
+  <button onclick="toggleMenu()" style="position:absolute;top:20px;right:24px;background:none;border:none;color:#e6eec9;font-size:1.8rem;cursor:pointer;">✕</button>
+  <a href="#" class="mobile-nav-link" onclick="toggleMenu()">首頁</a>
+  <a href="#merchant-grid" class="mobile-nav-link" onclick="toggleMenu()">友善商家</a>
+  <a href="#" class="mobile-nav-link" onclick="toggleMenu()">交通碳排</a>
+</div>
+
+<!-- === 漸層大橫幅區塊 (Hero) === -->
+<section class="hero-bg" style="min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;">
+  
+  <div style="position:absolute;top:15%;right:10%;width:300px;height:300px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);"></div>
+  <div style="position:absolute;bottom:20%;left:8%;width:180px;height:180px;border-radius:50%;border:1px solid rgba(194,208,153,0.2);"></div>
+
+  <div style="position:relative;z-index:2;text-align:center;padding:2rem;max-width:800px;">
+    
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:50px;padding:6px 18px;margin-bottom:1.5rem;">
+      <span style="width:6px;height:6px;background:#c2d099;border-radius:50%;display:inline-block;"></span>
+      <span style="font-size:0.78rem;color:rgba(255,255,255,0.85);letter-spacing:0.1em;font-family:sans-serif;">ISLE of ROAM</span>
+    </div>
+    
+    <h1 style="font-family:'Lora', serif; font-size:clamp(3.5rem, 6vw, 5rem); color:#fff; line-height:1.15; margin-bottom:1.2rem; font-weight:700; margin-top:0;">
+      Travel Guide
+    </h1>
+    
+    <p style="font-family:'Lora', serif; font-size:clamp(1rem, 2.2vw, 1.2rem); color:rgba(255,255,255,0.85); line-height:1.8; margin-bottom:2.5rem; max-width:600px; margin-left:auto; margin-right:auto;">
+      Discover the rhythmic pulse of Green Island. From hidden coral sanctuaries to local eco-pioneers, your journey here is a shared story of conservation and connection. Explore with intention, leave only ripples.
+    </p>
+    
+    <!-- 新的三顆快捷按鈕群組 -->
+    <div class="hero-btn-group">
+        <a href="#merchants-section" class="hero-btn">
+            Green Merchants
+        </a>
+        <a href="#diving-section" class="hero-btn">
+            Eco Diving
+        </a>
+        <a href="#acc-section" class="hero-btn">
+            Eco Stays
+        </a>
+    </div>
+  </div>
+
+  <div class="wave-bottom">
+    <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:80px;">
+      <!-- 對齊網頁米白色底色 -->
+      <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#E6EEC9"/>
+    </svg>
+  </div>
+</section>
+
+<!-- === 友善商家清單區塊 (Merchants) === -->
+<div class="merchants-section" id="merchants-section">
+    <div class="section-header">
+        <h2>Green Merchants (合作的綠色商家)</h2>
+        <!-- 分類按鈕 -->
+        <div class="category-tabs">
+            <button class="tab-btn active" onclick="filterMerchants('all', this)">全部 (All)</button>
+            <button class="tab-btn" onclick="filterMerchants('food', this)">🍃 餐飲</button>
+            <button class="tab-btn" onclick="filterMerchants('shop', this)">🛍️ 購物</button>
+            <button class="tab-btn" onclick="filterMerchants('exp', this)">🤿 體驗</button>
+        </div>
+    </div> 
+
+    <!-- 卡片展示架 -->
+    <div class="card-container" id="merchant-grid">
+        
+        <!-- 第一家店：餐飲 -->
+        <div class="card" data-category="food">
+            <div class="card-image">
+                <div class="badge">🍃 餐飲 | 無塑包裝</div>
+            </div>
+            <div class="card-title">Zero Wave Cafe</div>
+            <div class="card-desc">📍 南寮漁港周邊<br>全面禁用一次性塑膠，提供在地食材製作的有機點心。</div>
+            <a href="https://maps.google.com" target="_blank" class="visit-link">Visit Merchant →</a>
+        </div>
+
+        <!-- 第二家店：購物 -->
+        <div class="card" data-category="shop">
+            <div class="card-image" style="background-color: #7DA78C;">
+                <div class="badge">🛍️ 購物 | 海廢再生</div>
+            </div>
+            <div class="card-title">Island Echo Crafts</div>
+            <div class="card-desc">📍 柴口浮潛區周邊<br>將海洋廢棄物轉化為充滿綠島風情的藝術紀念品。</div>
+            <a href="https://maps.google.com" target="_blank" class="visit-link">Visit Merchant →</a>
+        </div>
+
+        <!-- 第三家店：體驗 -->
+        <div class="card" data-category="exp">
+            <div class="card-image" style="background-color: #35858E;">
+                <div class="badge">🤿 體驗 | 海洋友善</div>
+            </div>
+            <div class="card-title">Coral Dive</div>
+            <div class="card-desc">📍 石朗潛水區<br>推廣不擦防曬下水，提供海洋生態保育的潛水導覽。</div>
+            <a href="https://maps.google.com" target="_blank" class="visit-link">Visit Merchant →</a>
+        </div>
+
+        <!-- 第四家店 (預設隱藏版)：餐飲 -->
+        <div class="card hidden-card merchant-extra" data-category="food">
+            <div class="card-image" style="background-color: #C2D099;">
+                <div class="badge">🍃 餐飲 | 在地食材</div>
+            </div>
+            <div class="card-title">Green Bites</div>
+            <div class="card-desc">📍 綠島大街<br>使用綠島在地當季小農蔬菜的無國界低碳料理。</div>
+            <a href="https://maps.google.com" target="_blank" class="visit-link">Visit Merchant →</a>
+        </div>
+
+    </div>
+
+    <!-- 查看更多按鈕 -->
+    <div class="show-more-wrapper">
+        <button id="toggleMoreBtn" class="show-more-btn" onclick="toggleMerchants()">查看更多商家 ↓</button>
+    </div>
+</div>
+<!-- === 友善商家清單區塊結束 === -->
+
+<!-- === 海洋友善潛水區塊開始 === -->
+<div class="diving-section" id="diving-section">
+    <div class="diving-header">
+        <h2>Ocean-Friendly Diving (海洋友善潛水)</h2>
+        <p>Deepen your connection with the Pacific responsibly. Our partner shops prioritize reef health over profit and offer ocean-conscious certification tracks.</p>
+    </div>
+
+    <div class="list-container">
+        
+        <!-- 第一家店 (預設顯示) -->
+        <div class="horizontal-card">
+            <div class="hc-image"></div>
+            <div class="hc-content">
+                <div class="hc-title">Azure Guardian Divers</div>
+                <div class="hc-desc">Professional Certification & Guided Eco-Tours</div>
+                <div class="hc-pills">
+                    <span class="pill pill-blue">Reef-safe Sunscreen Policy</span>
+                    <span class="pill pill-green">Eco-equipment Rental</span>
+                </div>
+            </div>
+            <div class="hc-action">
+                <a href="#" target="_blank" class="book-btn">Book Dive<br>Session</a>
+            </div>
+        </div>
+
+        <!-- 第二家店 (預設顯示) -->
+        <div class="horizontal-card">
+            <div class="hc-image" style="background-color: #7DA78C;"></div>
+            <div class="hc-content">
+                <div class="hc-title">Deep Harmony freediving</div>
+                <div class="hc-desc">Breath-hold courses with intensive coral conservation workshops</div>
+                <div class="hc-pills">
+                    <span class="pill pill-blue">Reef-safe Sunscreen Policy</span>
+                    <span class="pill pill-green">Eco-equipment Rental</span>
+                </div>
+            </div>
+            <div class="hc-action">
+                <a href="#" target="_blank" class="book-btn">Book Dive<br>Session</a>
+            </div>
+        </div>
+
+        <!-- 第三家店 (預設隱藏，加上了 hidden-list-card 類別) -->
+        <div class="horizontal-card hidden-list-card">
+            <div class="hc-image" style="background-color: #35858E;"></div>
+            <div class="hc-content">
+                <div class="hc-title">Ocean Whisperers</div>
+                <div class="hc-desc">Zero-impact diving and marine biology introductory courses</div>
+                <div class="hc-pills">
+                    <span class="pill pill-blue">Reef-safe Sunscreen Policy</span>
+                </div>
+            </div>
+            <div class="hc-action">
+                <a href="#" target="_blank" class="book-btn">Book Dive<br>Session</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="show-more-wrapper">
+        <button id="toggleDivingBtn" class="show-more-btn" onclick="toggleDiving()">查看更多潛水店家 ↓</button>
+    </div>
+</div>
+<!-- === 海洋友善潛水區塊結束 === -->
+
+<!-- === 住宿推薦區塊開始 === -->
+<div class="acc-section" id="acc-section">
+    <div class="acc-header">
+        <h2>Eco-Friendly Accommodations</h2>
+        <p style="color: #4a5c4b; margin-bottom: 20px;">Stay where the footprint is small and the soul is large.</p>
+    </div>
+
+    <!-- 篩選器面板 -->
+    <div class="filter-panel">
+        <!-- 類別按鈕 (單選) -->
+        <div class="filter-group">
+            <h4>Property Type</h4>
+            <button class="type-btn active" onclick="filterType('all', this)">All</button>
+            <button class="type-btn" onclick="filterType('bnb', this)">B&B</button>
+            <button class="type-btn" onclick="filterType('hotel', this)">Hotel</button>
+            <button class="type-btn" onclick="filterType('hostel', this)">Hostel</button>
+        </div>
+        
+        <!-- 特色要求 (多選) -->
+        <div class="filter-group">
+            <h4>Eco & Special Features</h4>
+            <label class="feature-label">
+                <input type="checkbox" value="no-plastic" onchange="applyFilters()"> No Single-use Plastics
+            </label>
+            <label class="feature-label">
+                <input type="checkbox" value="eco-certified" onchange="applyFilters()"> Eco-Friendly
+            </label>
+            <label class="feature-label">
+                <input type="checkbox" value="pet-friendly" onchange="applyFilters()"> Pet-Friendly
+            </label>
+        </div>
+    </div>
+
+    <!-- 卡片展示區 -->
+    <div class="acc-grid" id="acc-grid">
+        
+        <!-- 飯店 1: B&B, 無塑, 寵物友善 -->
+        <div class="acc-card default-show" data-type="bnb" data-features="no-plastic pet-friendly">
+            <div class="acc-img-wrapper" style="background-image: url('images/your-hotel1.jpg'); background-size: cover;">
+                <div class="price-tag">From $85 / night</div>
+                <a href="#" target="_blank" class="img-book-btn">Booking</a>
+            </div>
+            <div class="acc-info">
+                <div class="hc-pills" style="margin-bottom: 10px;">
+                    <span class="pill pill-green">B&B</span>
+                    <span class="pill pill-blue">No Plastics</span>
+                    <span class="pill" style="background: #e6a86c;">Pet-Friendly</span>
+                </div>
+                <div class="acc-title">Whispering Wind Inn</div>
+                <div class="acc-desc">Restored traditional island dwellings using local stone and driftwood. Experience a cozy, plastic-free stay with your furry friends.</div>
+            </div>
+        </div>
+
+        <!-- 飯店 2: Hotel, 環保認證, 無塑 -->
+        <div class="acc-card default-show" data-type="hotel" data-features="eco-certified no-plastic">
+            <div class="acc-img-wrapper" style="background-color: #7DA78C;">
+                <div class="price-tag">From $150 / night</div>
+                <a href="#" target="_blank" class="img-book-btn">Booking</a>
+            </div>
+            <div class="acc-info">
+                <div class="hc-pills" style="margin-bottom: 10px;">
+                    <span class="pill pill-green">Hotel</span>
+                    <span class="pill" style="background: #5ba396;">Eco-Certified</span>
+                </div>
+                <div class="acc-title">Terra Sanctum Resort</div>
+                <div class="acc-desc">A passive-cooling architectural marvel that uses 100% solar energy and harvests tropical rain for all garden needs.</div>
+            </div>
+        </div>
+
+        <!-- 飯店 3: Hostel, 無塑 -->
+        <div class="acc-card default-show" data-type="hostel" data-features="no-plastic">
+            <div class="acc-img-wrapper" style="background-color: #35858E;">
+                <div class="price-tag">From $35 / night</div>
+                <a href="#" target="_blank" class="img-book-btn">Booking</a>
+            </div>
+            <div class="acc-info">
+                <div class="hc-pills" style="margin-bottom: 10px;">
+                    <span class="pill pill-green">Hostel</span>
+                    <span class="pill pill-blue">No Plastics</span>
+                </div>
+                <div class="acc-title">Ocean Backpacker</div>
+                <div class="acc-desc">Share stories with fellow travelers in our zero-waste common area. Bunk beds made from upcycled materials.</div>
+            </div>
+        </div>
+
+        <!-- 飯店 4 (預設隱藏，按查看更多才會出現): B&B, 寵物友善 -->
+        <div class="acc-card acc-hidden extra-card" data-type="bnb" data-features="pet-friendly eco-certified">
+            <div class="acc-img-wrapper" style="background-color: #C2D099;">
+                <div class="price-tag">From $90 / night</div>
+                <a href="#" target="_blank" class="img-book-btn">Booking</a>
+            </div>
+            <div class="acc-info">
+                <div class="hc-pills" style="margin-bottom: 10px;">
+                    <span class="pill pill-green">B&B</span>
+                    <span class="pill" style="background: #e6a86c;">Pet-Friendly</span>
+                </div>
+                <div class="acc-title">Green Island Eco-Cabin</div>
+                <div class="acc-desc">Wake up to the sound of waves in our off-grid solar cabins. Perfectly safe and spacious for pets.</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 查看更多按鈕 -->
+    <div class="show-more-wrapper">
+        <button id="toggleAccBtn" class="show-more-btn" onclick="toggleAcc()">Load More Accommodations ↓</button>
+    </div>
+</div>
+<!-- === 住宿推薦區塊結束 === -->
+
+<!-- === 共用關於我們區塊 (About) === -->
+<section style="padding:5rem 2rem;background:linear-gradient(135deg,#35858e,#4a9aa6);text-align:center;">
+  <div style="max-width:700px;margin:0 auto;">
+    <h2 class="font-display" style="font-size:2rem;color:#fff;margin-bottom:1.2rem;">關於綠島續嶼</h2>
+    <p style="color:rgba(255,255,255,0.82);line-height:1.9;font-size:0.95rem;margin-bottom:2rem;">
+      我們是一群熱愛綠島、關注生態保育的旅遊倡議者。致力於推廣低碳、友善環境的旅遊方式，連結在地友善商家與旅客，讓旅遊成為守護這座美麗島嶼的一股力量。
+    </p>
+  </div>
+</section>
+
+<!-- === 共用頁尾區塊 (Footer) === -->
+<footer style="background:#1a2e1e;color:#a8c4aa;padding:4rem 2rem 2rem;">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:3rem;margin-bottom:3rem;">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
+          <div style="width:30px;height:30px;background:#c2d099;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+              <path d="M9 2C9 2 4 6 4 10.5C4 13.5 6.5 16 9 16C11.5 16 14 13.5 14 10.5C14 6 9 2 9 2Z" fill="#35858e"/>
+            </svg>
+          </div>
+          <span style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#e6eec9;">綠島續嶼</span>
+        </div>
+        <p style="font-size:0.83rem;line-height:1.8;color:#7a9c7b;">以永續旅遊為核心，守護綠島純淨之美，讓旅行成為改變的力量。</p>
+      </div>
+
+      <div>
+        <h4 style="font-size:0.78rem;letter-spacing:0.12em;color:#c2d099;margin-bottom:1rem;text-transform:uppercase;">聯絡資訊</h4>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;font-size:0.85rem;">
+          <span>📧 hello@greenisland-eco.tw</span>
+          <span>📍 台東縣綠島鄉</span>
+          <span>📞 089-672-XXX</span>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,0.07);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+      <span style="font-size:0.8rem;color:#5a7a5c;">© 2026 綠島續嶼. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- === 讓網頁動起來的 JS 魔法區 === -->
+<script>
+  // 1. 導覽列滾動變色特效
+  window.addEventListener('scroll', () => {
+    const h = document.getElementById('header');
+    if (window.scrollY > 60) {
+      h.style.background = 'rgba(26,58,46,0.97)';
+      h.style.boxShadow = '0 2px 20px rgba(0,0,0,0.15)';
+      h.style.backdropFilter = 'blur(10px)';
+    } else {
+      h.style.background = 'transparent';
+      h.style.boxShadow = 'none';
+      h.style.backdropFilter = 'none';
+    }
+  });
+
+  // 2. 手機版漢堡選單控制
+  (function() {
+    const ham = document.getElementById('hamburger');
+    const mq = window.matchMedia('(max-width: 768px)');
+    function check(e) { ham.style.display = e.matches ? 'flex' : 'none'; }
+    mq.addListener(check); check(mq);
+  })();
+
+  function toggleMenu() {
+    document.getElementById('mobile-menu').classList.toggle('show');
+  }
+
+  // === 綠色商家專屬：篩選與展開魔法 ===
+  let isMerchantExpanded = false;
+
+  // 點擊分類按鈕時執行的動作
+  function filterMerchants(category, btnElement) {
+      // 切換按鈕的視覺狀態 (誰被點擊，誰就亮起來)
+      const tabs = document.querySelectorAll('.merchants-section .tab-btn');
+      tabs.forEach(btn => btn.classList.remove('active'));
+      btnElement.classList.add('active');
+
+      const allCards = document.querySelectorAll('#merchant-grid .card');
+      const loadMoreBtn = document.getElementById('toggleMoreBtn');
+
+      // 邏輯跟住宿區一樣：如果不是選 All，就自動隱藏「查看更多」按鈕
+      if (category !== 'all') {
+          loadMoreBtn.style.display = 'none';
+      } else {
+          loadMoreBtn.style.display = 'inline-block';
+          isMerchantExpanded = false; 
+          loadMoreBtn.innerText = '查看更多商家 ↓';
+      }
+
+      // 檢查每張卡片的名牌
+      allCards.forEach(card => {
+          const cardCategory = card.getAttribute('data-category');
+          
+          if (category === 'all' || category === cardCategory) {
+              // 如果選 All，要確保原本該隱藏的第四張卡片躲回去
+              if (category === 'all' && card.classList.contains('merchant-extra') && !isMerchantExpanded) {
+                  card.style.display = 'none';
+                  card.classList.remove('show-animate');
+              } else {
+                  // 符合條件的就秀出來，加上一點小動畫
+                  card.style.display = 'block';
+                  setTimeout(() => card.classList.add('show-animate'), 10);
+              }
+          } else {
+              // 不符合條件的直接藏起來
+              card.classList.remove('show-animate');
+              card.style.display = 'none';
+          }
+      });
+  }
+
+  // 處理「查看更多」按鈕的展開與收合
+  function toggleMerchants() {
+      const extraCards = document.querySelectorAll('.merchant-extra');
+      const btn = document.getElementById('toggleMoreBtn');
+
+      if (!isMerchantExpanded) {
+          extraCards.forEach(card => {
+              card.style.display = 'block';
+              setTimeout(() => card.classList.add('show-animate'), 10);
+          });
+          btn.innerText = '收起全部商家 ↑';
+          isMerchantExpanded = true;
+      } else {
+          extraCards.forEach(card => {
+              card.classList.remove('show-animate');
+              setTimeout(() => {
+                  card.style.display = 'none';
+              }, 400); 
+          });
+          btn.innerText = '查看更多商家 ↓';
+          isMerchantExpanded = false;
+      }
+  }
+
+    // 潛水區專屬的記憶體
+  let isDivingExpanded = false;
+
+  function toggleDiving() {
+      const hiddenCards = document.querySelectorAll('.hidden-list-card');
+      const btn = document.getElementById('toggleDivingBtn');
+
+      if (isDivingExpanded === false) {
+          hiddenCards.forEach(card => {
+              // 注意！因為這是橫向卡片，所以要喚醒它的 'flex' 排版，不能用 'block' 喔！
+              card.style.display = 'flex'; 
+              setTimeout(() => {
+                  card.classList.add('show-animate');
+              }, 10);
+          });
+          btn.innerText = '收起潛水店家 ↑';
+          isDivingExpanded = true;
+      } else {
+          hiddenCards.forEach(card => {
+              card.classList.remove('show-animate');
+              setTimeout(() => {
+                  card.style.display = 'none';
+              }, 400); 
+          });
+          btn.innerText = '查看更多潛水店家 ↓';
+          isDivingExpanded = false;
+      }
+  }
+
+  // === 海洋潛水區：狂野版漲潮浪花與呼吸特效 ===
+  window.addEventListener('scroll', () => {
+      const waveBox = document.querySelector('.diving-section');
+      
+      if (waveBox) {
+          const rect = waveBox.getBoundingClientRect();
+          
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+              
+              // 把除以 150 改成 100，讓波浪的頻率變快一點，更有動態感
+              let wave = (Math.sin(rect.top / 100) + 1) / 2; 
+              
+              // 1. 【狂野內部水流】
+              let bgPos = wave * 100; 
+              waveBox.style.backgroundPosition = `${bgPos}% ${bgPos}%`;
+              
+              // 2. 【狂野外部浪花】
+              let shadowSpread = wave * 40; // 擴散範圍直接拉爆到 40px
+              let shadowBlur = 40 + (wave * 40); // 模糊範圍拉大
+              let shadowOpacity = 0.05 + (wave * 0.3); // 浪花來的時候，陰影會變深到 0.35！
+              
+              // 3. 【終極必殺技：漲潮膨脹】
+              let swell = 1 + (wave * 0.025); // 讓框框在 1 倍到 1.025 倍之間呼吸放大
+              
+              // 把算好的超強浪花跟膨脹效果塗上去
+              waveBox.style.boxShadow = `0 20px ${shadowBlur}px ${shadowSpread}px rgba(53, 133, 142, ${shadowOpacity})`;
+              waveBox.style.transform = `scale(${swell})`;
+          }
+      }
+  });
+
+  // === 住宿區專屬：多重篩選與展開魔法 ===
+  let currentType = 'all';
+  let isAccExpanded = false;
+
+  // 1. 處理「住宿類型」按鈕點擊
+  function filterType(type, btnElement) {
+      currentType = type;
+      
+      // 把所有按鈕的 active 狀態取消，只亮起被點擊的那個
+      document.querySelectorAll('.type-btn').forEach(btn => btn.classList.remove('active'));
+      btnElement.classList.add('active');
+      
+      applyFilters(); // 每次點擊後，叫小助手去重新篩選一次
+  }
+
+  // 2. 核心篩選小助手
+  function applyFilters() {
+      // 收集目前有哪些 checkbox 被打勾了
+      const checkedFeatures = Array.from(document.querySelectorAll('.feature-label input:checked')).map(cb => cb.value);
+      const allCards = document.querySelectorAll('.acc-card');
+      const loadMoreBtn = document.getElementById('toggleAccBtn');
+      
+      // 如果有任何篩選條件 (不是選 All，或者有打勾)，就隱藏「Load More」按鈕
+      if (currentType !== 'all' || checkedFeatures.length > 0) {
+          loadMoreBtn.style.display = 'none';
+      } else {
+          // 如果全部恢復預設值，就把按鈕變回來
+          loadMoreBtn.style.display = 'inline-block';
+          // 並且恢復成一開始「沒展開」的狀態
+          isAccExpanded = false;
+          loadMoreBtn.innerText = 'Load More Accommodations ↓';
+      }
+
+      allCards.forEach(card => {
+          // 偷看卡片上的隱形名牌
+          const cardType = card.getAttribute('data-type');
+          const cardFeatures = card.getAttribute('data-features') || "";
+          
+          // 檢查 1：類型有沒有中？ (選 all 就一定中)
+          const typeMatch = (currentType === 'all' || cardType === currentType);
+          
+          // 檢查 2：打勾的特色這張卡片都有嗎？ (用 every 確保必須滿足所有打勾的條件)
+          const featureMatch = checkedFeatures.every(feature => cardFeatures.includes(feature));
+          
+          if (typeMatch && featureMatch) {
+              // 如果條件都符合
+              if (currentType === 'all' && checkedFeatures.length === 0 && card.classList.contains('extra-card') && !isAccExpanded) {
+                  // 如果是預設狀態，且是多出來的卡片，且還沒按展開 -> 隱藏
+                  card.style.display = 'none';
+              } else {
+                  // 顯示出來
+                  card.style.display = 'block';
+              }
+          } else {
+              // 條件不符，直接藏起來
+              card.style.display = 'none';
+          }
+      });
+  }
+
+  // 3. 處理「Load More」按鈕的展開與收合
+  function toggleAcc() {
+      const extraCards = document.querySelectorAll('.extra-card');
+      const btn = document.getElementById('toggleAccBtn');
+
+      if (!isAccExpanded) {
+          extraCards.forEach(card => card.style.display = 'block');
+          btn.innerText = 'Show Less Accommodations ↑';
+          isAccExpanded = true;
+      } else {
+          extraCards.forEach(card => card.style.display = 'none');
+          btn.innerText = 'Load More Accommodations ↓';
+          isAccExpanded = false;
+      }
+  }
+</script>
+
+</body>
+</html>
