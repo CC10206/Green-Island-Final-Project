@@ -159,8 +159,20 @@
   .visit-link:hover {
     background-color: #1a4a4e;
   }
+  /* 隱藏狀態 */
   .hidden-card {
-    display: none;
+    display: none; /* 預設完全下台、不佔空間 */
+    opacity: 0; /* 預設完全透明 */
+    transform: translateY(20px); /* 預設稍微往下沉一點點 */
+    
+    /* 漸變動畫：透明度跟位移都要花 0.4 秒慢慢變 */
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  /* 這是我們等一下要用 JS 偷偷打上的「聚光燈」類別 */
+  .hidden-card.show-animate {
+    opacity: 1; /* 變成完全不透明 */
+    transform: translateY(0); /* 浮上來回到原本該在的高度 */
   }
   .show-more-wrapper {
     text-align: center;
@@ -181,8 +193,292 @@
     background-color: var(--teal);
     color: white;
   }
+/* === 6. 海洋友善潛水區 (橫式卡片) 專屬裝潢 === */
+  .diving-section {
+    /* 加強漸層顏色的對比度，讓海水流動更明顯 */
+    background: linear-gradient(135deg, #e4f0ed 0%, #b5d8d0 50%, #e4f0ed 100%); 
+    background-size: 300% 300%; /* 把背景再拉更大，水流感更強 */
+    
+    border-radius: 40px; 
+    box-shadow: 0 10px 30px rgba(53, 133, 142, 0.1);
+    
+    padding: 60px 40px;
+    max-width: 1200px;
+    margin: 0 auto 60px auto;
+    
+    /* 潤滑油名單加上 transform，確保膨脹的時候很絲滑 */
+    transition: box-shadow 0.1s ease-out, background-position 0.1s ease-out, transform 0.1s ease-out; 
+  }
+  .diving-header h2 {
+    color: #1a4a4e;
+    font-family: 'Lora', serif;
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+  .diving-header p {
+    color: #4a5c4b;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    max-width: 700px;
+  }
+  
+  /* 列表的展示架，讓橫式卡片由上往下排 */
+  .list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* 獨立的橫式卡片 (Flexbox 橫向排版) */
+  .horizontal-card {
+    display: flex;
+    align-items: center; /* 讓裡面的照片、文字、按鈕都在垂直方向置中 */
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px 30px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+    gap: 20px;
+  }
+  .horizontal-card:hover {
+    transform: translateY(-3px);
+  }
+  
+  /* 左邊的大頭貼照片 */
+  .hc-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #C2D099;
+    flex-shrink: 0; /* 確保不管字再多，照片都不會被擠壓變形 */
+  }
+  
+  /* 中間的文字區塊 */
+  .hc-content {
+    flex-grow: 1; /* 叫文字區塊把中間剩下的空間全部佔滿，把按鈕推到最右邊 */
+  }
+  .hc-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #35858E;
+    margin-bottom: 5px;
+  }
+  .hc-desc {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  /* 環保小藥丸標籤 */
+  .hc-pills {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .pill {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+  }
+  .pill-blue { background-color: #6da5ff; }
+  .pill-green { background-color: #7DA78C; }
+  
+  /* 右邊的 Booking 按鈕 */
+  .hc-action {
+    flex-shrink: 0;
+  }
+  .book-btn {
+    background-color: #005b9f; /* 醒目的深藍色 CTA */
+    color: white;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 14px;
+    display: inline-block;
+    transition: background 0.2s;
+    text-align: center;
+  }
+  .book-btn:hover { background-color: #003f73; }
 
-  /* === 5. 頁尾 (Footer) 專屬裝潢 === */
+  /* 隱藏的橫式卡片 (跟剛剛一樣的滑順動畫) */
+  .hidden-list-card {
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .hidden-list-card.show-animate {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* 📱 手機版排版變形魔法 (Media Query) */
+  @media (max-width: 768px) {
+    .horizontal-card {
+      flex-direction: column; /* 把橫向排隊變成直向疊羅漢！ */
+      text-align: center;
+    }
+    .hc-pills {
+      justify-content: center;
+    }
+  }
+  /* 潛水區專屬：反轉按鈕顏色 */
+  .diving-section .show-more-btn {
+    background-color: #35858E; /* 預設底色變成深青藍色 */
+    color: white; /* 預設字體變白色 */
+    border-color: #35858E; 
+  }
+  
+  .diving-section .show-more-btn:hover {
+    background-color: transparent; /* 滑過去變成透明，透出原本漂亮的淡藍色底圖 */
+    color: #35858E; /* 字體變回深青藍色 */
+  }
+/* === 7. 住宿推薦區 (Accommodations) === */
+  .acc-section {
+    padding: 60px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .acc-header h2 {
+    color: #35858E;
+    font-family: 'Lora', serif;
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+  
+  /* 篩選器面板區塊 */
+  .filter-panel {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+  .filter-group h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #1a4a4e;
+    font-size: 16px;
+  }
+  
+  /* 住宿類型的圓角按鈕 */
+  .type-btn {
+    background-color: transparent;
+    border: 1px solid #7DA78C;
+    color: #35858E;
+    padding: 6px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    transition: all 0.2s;
+  }
+  .type-btn.active, .type-btn:hover {
+    background-color: #7DA78C;
+    color: white;
+  }
+
+  /* 特色要求的 Checkbox */
+  .feature-label {
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+    margin-right: 15px;
+    margin-bottom: 8px;
+    cursor: pointer;
+  }
+  .feature-label input {
+    margin-right: 6px;
+    accent-color: #35858E; /* 讓勾選框變成你們的主色 */
+  }
+
+  /* 住宿卡片排版 */
+  .acc-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .acc-card {
+    background-color: white;
+    border-radius: 20px;
+    width: 350px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    overflow: hidden; /* 讓圖片不會超出圓角 */
+    transition: transform 0.2s;
+  }
+  .acc-card:hover {
+    transform: translateY(-5px);
+  }
+
+  /* 圖片區塊：設定為 relative，這樣價格跟 Booking 按鈕才能定位在它上面 */
+  .acc-img-wrapper {
+    position: relative;
+    height: 220px;
+    background-color: #C2D099;
+  }
+  
+  /* 價格標籤 (左上角) */
+  .price-tag {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #1a4a4e;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  /* Booking 按鈕 (右下角，取代原本的愛心) */
+  .img-book-btn {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background-color: #005b9f;
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 13px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: background 0.2s;
+  }
+  .img-book-btn:hover {
+    background-color: #003f73;
+  }
+
+  .acc-info {
+    padding: 20px;
+  }
+  .acc-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #35858E;
+    margin-bottom: 10px;
+  }
+  .acc-desc {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  /* 跟之前一樣的隱藏與動畫類別 */
+  .acc-hidden {
+    display: none;
+  }
+
+  /* === 8. 頁尾 (Footer) 專屬裝潢 === */
   .footer-link { color: #a8c4aa; font-size: 0.85rem; text-decoration: none; transition: color 0.2s; }
   .footer-link:hover { color: var(--cream); }
 
@@ -269,17 +565,20 @@
 <div class="merchants-section">
     <div class="section-header">
         <h2>Green Merchants (合作的綠色商家)</h2>
+        <!-- 分類按鈕 -->
         <div class="category-tabs">
-            <button class="tab-btn active">全部 (All)</button>
-            <button class="tab-btn">🍃 餐飲</button>
-            <button class="tab-btn">🛍️ 購物</button>
-            <button class="tab-btn">🤿 體驗</button>
+            <button class="tab-btn active" onclick="filterMerchants('all', this)">全部 (All)</button>
+            <button class="tab-btn" onclick="filterMerchants('food', this)">🍃 餐飲</button>
+            <button class="tab-btn" onclick="filterMerchants('shop', this)">🛍️ 購物</button>
+            <button class="tab-btn" onclick="filterMerchants('exp', this)">🤿 體驗</button>
         </div>
-    </div>
+    </div> <!-- 💡 剛剛很可能就是不小心漏掉這個結尾標籤！ -->
 
+    <!-- 卡片展示架 -->
     <div class="card-container" id="merchant-grid">
         
-        <div class="card">
+        <!-- 第一家店：餐飲 -->
+        <div class="card" data-category="food">
             <div class="card-image">
                 <div class="badge">🍃 餐飲 | 無塑包裝</div>
             </div>
@@ -288,7 +587,8 @@
             <a href="https://maps.google.com" target="_blank" class="visit-link">Visit Merchant →</a>
         </div>
 
-        <div class="card">
+        <!-- 第二家店：購物 -->
+        <div class="card" data-category="shop">
             <div class="card-image" style="background-color: #7DA78C;">
                 <div class="badge">🛍️ 購物 | 海廢再生</div>
             </div>
@@ -297,7 +597,8 @@
             <a href="https://maps.google.com" target="_blank" class="visit-link">Visit Merchant →</a>
         </div>
 
-        <div class="card">
+        <!-- 第三家店：體驗 -->
+        <div class="card" data-category="exp">
             <div class="card-image" style="background-color: #35858E;">
                 <div class="badge">🤿 體驗 | 海洋友善</div>
             </div>
@@ -306,7 +607,8 @@
             <a href="https://maps.google.com" target="_blank" class="visit-link">Visit Merchant →</a>
         </div>
 
-        <div class="card hidden-card">
+        <!-- 第四家店 (預設隱藏版)：餐飲 -->
+        <div class="card hidden-card merchant-extra" data-category="food">
             <div class="card-image" style="background-color: #C2D099;">
                 <div class="badge">🍃 餐飲 | 在地食材</div>
             </div>
@@ -317,11 +619,185 @@
 
     </div>
 
+    <!-- 查看更多按鈕 -->
     <div class="show-more-wrapper">
-        <!-- 我幫按鈕換了一個新名字 toggleMoreBtn，也換了新的 JS 指令 toggleMerchants() -->
         <button id="toggleMoreBtn" class="show-more-btn" onclick="toggleMerchants()">查看更多商家 ↓</button>
     </div>
 </div>
+<!-- === 友善商家清單區塊結束 === -->
+ 
+<!-- === 海洋友善潛水區塊開始 === -->
+<div class="diving-section">
+    <div class="diving-header">
+        <h2>Ocean-Friendly Diving (海洋友善潛水)</h2>
+        <p>Deepen your connection with the Pacific responsibly. Our partner shops prioritize reef health over profit and offer ocean-conscious certification tracks.</p>
+    </div>
+
+    <div class="list-container">
+        
+        <!-- 第一家店 (預設顯示) -->
+        <div class="horizontal-card">
+            <div class="hc-image"></div>
+            <div class="hc-content">
+                <div class="hc-title">Azure Guardian Divers</div>
+                <div class="hc-desc">Professional Certification & Guided Eco-Tours</div>
+                <div class="hc-pills">
+                    <span class="pill pill-blue">Reef-safe Sunscreen Policy</span>
+                    <span class="pill pill-green">Eco-equipment Rental</span>
+                </div>
+            </div>
+            <div class="hc-action">
+                <a href="#" target="_blank" class="book-btn">Book Dive<br>Session</a>
+            </div>
+        </div>
+
+        <!-- 第二家店 (預設顯示) -->
+        <div class="horizontal-card">
+            <div class="hc-image" style="background-color: #7DA78C;"></div>
+            <div class="hc-content">
+                <div class="hc-title">Deep Harmony freediving</div>
+                <div class="hc-desc">Breath-hold courses with intensive coral conservation workshops</div>
+                <div class="hc-pills">
+                    <span class="pill pill-blue">Reef-safe Sunscreen Policy</span>
+                    <span class="pill pill-green">Eco-equipment Rental</span>
+                </div>
+            </div>
+            <div class="hc-action">
+                <a href="#" target="_blank" class="book-btn">Book Dive<br>Session</a>
+            </div>
+        </div>
+
+        <!-- 第三家店 (預設隱藏，加上了 hidden-list-card 類別) -->
+        <div class="horizontal-card hidden-list-card">
+            <div class="hc-image" style="background-color: #35858E;"></div>
+            <div class="hc-content">
+                <div class="hc-title">Ocean Whisperers</div>
+                <div class="hc-desc">Zero-impact diving and marine biology introductory courses</div>
+                <div class="hc-pills">
+                    <span class="pill pill-blue">Reef-safe Sunscreen Policy</span>
+                </div>
+            </div>
+            <div class="hc-action">
+                <a href="#" target="_blank" class="book-btn">Book Dive<br>Session</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="show-more-wrapper">
+        <button id="toggleDivingBtn" class="show-more-btn" onclick="toggleDiving()">查看更多潛水店家 ↓</button>
+    </div>
+</div>
+<!-- === 海洋友善潛水區塊結束 === -->
+
+<!-- === 住宿推薦區塊開始 === -->
+<div class="acc-section">
+    <div class="acc-header">
+        <h2>Eco-Friendly Accommodations</h2>
+        <p style="color: #4a5c4b; margin-bottom: 20px;">Stay where the footprint is small and the soul is large.</p>
+    </div>
+
+    <!-- 篩選器面板 -->
+    <div class="filter-panel">
+        <!-- 類別按鈕 (單選) -->
+        <div class="filter-group">
+            <h4>Property Type</h4>
+            <button class="type-btn active" onclick="filterType('all', this)">All</button>
+            <button class="type-btn" onclick="filterType('bnb', this)">B&B</button>
+            <button class="type-btn" onclick="filterType('hotel', this)">Hotel</button>
+            <button class="type-btn" onclick="filterType('hostel', this)">Hostel</button>
+        </div>
+        
+        <!-- 特色要求 (多選) -->
+        <div class="filter-group">
+            <h4>Eco & Special Features</h4>
+            <label class="feature-label">
+                <input type="checkbox" value="no-plastic" onchange="applyFilters()"> No Single-use Plastics
+            </label>
+            <label class="feature-label">
+                <input type="checkbox" value="eco-certified" onchange="applyFilters()"> Eco-Friendly
+            </label>
+            <label class="feature-label">
+                <input type="checkbox" value="pet-friendly" onchange="applyFilters()"> Pet-Friendly
+            </label>
+        </div>
+    </div>
+
+    <!-- 卡片展示區 -->
+    <div class="acc-grid" id="acc-grid">
+        
+        <!-- 飯店 1: B&B, 無塑, 寵物友善 -->
+        <div class="acc-card default-show" data-type="bnb" data-features="no-plastic pet-friendly">
+            <div class="acc-img-wrapper" style="background-image: url('images/your-hotel1.jpg'); background-size: cover;">
+                <div class="price-tag">From $85 / night</div>
+                <a href="#" target="_blank" class="img-book-btn">Booking</a>
+            </div>
+            <div class="acc-info">
+                <div class="hc-pills" style="margin-bottom: 10px;">
+                    <span class="pill pill-green">B&B</span>
+                    <span class="pill pill-blue">No Plastics</span>
+                    <span class="pill" style="background: #e6a86c;">Pet-Friendly</span>
+                </div>
+                <div class="acc-title">Whispering Wind Inn</div>
+                <div class="acc-desc">Restored traditional island dwellings using local stone and driftwood. Experience a cozy, plastic-free stay with your furry friends.</div>
+            </div>
+        </div>
+
+        <!-- 飯店 2: Hotel, 環保認證, 無塑 -->
+        <div class="acc-card default-show" data-type="hotel" data-features="eco-certified no-plastic">
+            <div class="acc-img-wrapper" style="background-color: #7DA78C;">
+                <div class="price-tag">From $150 / night</div>
+                <a href="#" target="_blank" class="img-book-btn">Booking</a>
+            </div>
+            <div class="acc-info">
+                <div class="hc-pills" style="margin-bottom: 10px;">
+                    <span class="pill pill-green">Hotel</span>
+                    <span class="pill" style="background: #5ba396;">Eco-Certified</span>
+                </div>
+                <div class="acc-title">Terra Sanctum Resort</div>
+                <div class="acc-desc">A passive-cooling architectural marvel that uses 100% solar energy and harvests tropical rain for all garden needs.</div>
+            </div>
+        </div>
+
+        <!-- 飯店 3: Hostel, 無塑 -->
+        <div class="acc-card default-show" data-type="hostel" data-features="no-plastic">
+            <div class="acc-img-wrapper" style="background-color: #35858E;">
+                <div class="price-tag">From $35 / night</div>
+                <a href="#" target="_blank" class="img-book-btn">Booking</a>
+            </div>
+            <div class="acc-info">
+                <div class="hc-pills" style="margin-bottom: 10px;">
+                    <span class="pill pill-green">Hostel</span>
+                    <span class="pill pill-blue">No Plastics</span>
+                </div>
+                <div class="acc-title">Ocean Backpacker</div>
+                <div class="acc-desc">Share stories with fellow travelers in our zero-waste common area. Bunk beds made from upcycled materials.</div>
+            </div>
+        </div>
+
+        <!-- 飯店 4 (預設隱藏，按查看更多才會出現): B&B, 寵物友善 -->
+        <div class="acc-card acc-hidden extra-card" data-type="bnb" data-features="pet-friendly eco-certified">
+            <div class="acc-img-wrapper" style="background-color: #C2D099;">
+                <div class="price-tag">From $90 / night</div>
+                <a href="#" target="_blank" class="img-book-btn">Booking</a>
+            </div>
+            <div class="acc-info">
+                <div class="hc-pills" style="margin-bottom: 10px;">
+                    <span class="pill pill-green">B&B</span>
+                    <span class="pill" style="background: #e6a86c;">Pet-Friendly</span>
+                </div>
+                <div class="acc-title">Green Island Eco-Cabin</div>
+                <div class="acc-desc">Wake up to the sound of waves in our off-grid solar cabins. Perfectly safe and spacious for pets.</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 查看更多按鈕 -->
+    <div class="show-more-wrapper">
+        <button id="toggleAccBtn" class="show-more-btn" onclick="toggleAcc()">Load More Accommodations ↓</button>
+    </div>
+</div>
+<!-- === 住宿推薦區塊結束 === -->
 
 <!-- === 共用關於我們區塊 (About) === -->
 <section style="padding:5rem 2rem;background:linear-gradient(135deg,#35858e,#4a9aa6);text-align:center;">
@@ -392,35 +868,209 @@
     document.getElementById('mobile-menu').classList.toggle('show');
   }
 
-  // 這裡就是我說的「記憶體」！一開始預設是「沒有展開 (false)」
-    let isExpanded = false;
+  // === 綠色商家專屬：篩選與展開魔法 ===
+  let isMerchantExpanded = false;
 
-    function toggleMerchants() {
-        // 找出所有原本被隱藏的便當盒，以及我們剛剛設定的那顆按鈕
-        const hiddenCards = document.querySelectorAll('.hidden-card');
-        const btn = document.getElementById('toggleMoreBtn');
+  // 點擊分類按鈕時執行的動作
+  function filterMerchants(category, btnElement) {
+      // 切換按鈕的視覺狀態 (誰被點擊，誰就亮起來)
+      const tabs = document.querySelectorAll('.merchants-section .tab-btn');
+      tabs.forEach(btn => btn.classList.remove('active'));
+      btnElement.classList.add('active');
 
-        if (isExpanded === false) {
-            // 【展開模式】如果現在是收起狀態，我們就把它打開
-            hiddenCards.forEach(card => {
-                card.style.display = 'block';
-            });
-            // 接著把按鈕的文字換掉，提醒使用者可以收回去
-            btn.innerText = '收起全部商家 ↑';
-            // 最重要的一步：把記憶體更新成「已經展開 (true)」
-            isExpanded = true;
-            
-        } else {
-            // 【收起模式】如果現在已經是展開狀態，我們就把它藏起來
-            hiddenCards.forEach(card => {
-                card.style.display = 'none';
-            });
-            // 把按鈕的文字變回原本的樣子
-            btn.innerText = '查看更多商家 ↓';
-            // 把記憶體更新回「沒有展開 (false)」
-            isExpanded = false;
-        }
-    }
+      const allCards = document.querySelectorAll('#merchant-grid .card');
+      const loadMoreBtn = document.getElementById('toggleMoreBtn');
+
+      // 邏輯跟住宿區一樣：如果不是選 All，就自動隱藏「查看更多」按鈕
+      if (category !== 'all') {
+          loadMoreBtn.style.display = 'none';
+      } else {
+          loadMoreBtn.style.display = 'inline-block';
+          isMerchantExpanded = false; 
+          loadMoreBtn.innerText = '查看更多商家 ↓';
+      }
+
+      // 檢查每張卡片的名牌
+      allCards.forEach(card => {
+          const cardCategory = card.getAttribute('data-category');
+          
+          if (category === 'all' || category === cardCategory) {
+              // 如果選 All，要確保原本該隱藏的第四張卡片躲回去
+              if (category === 'all' && card.classList.contains('merchant-extra') && !isMerchantExpanded) {
+                  card.style.display = 'none';
+                  card.classList.remove('show-animate');
+              } else {
+                  // 符合條件的就秀出來，加上一點小動畫
+                  card.style.display = 'block';
+                  setTimeout(() => card.classList.add('show-animate'), 10);
+              }
+          } else {
+              // 不符合條件的直接藏起來
+              card.classList.remove('show-animate');
+              card.style.display = 'none';
+          }
+      });
+  }
+
+  // 處理「查看更多」按鈕的展開與收合
+  function toggleMerchants() {
+      const extraCards = document.querySelectorAll('.merchant-extra');
+      const btn = document.getElementById('toggleMoreBtn');
+
+      if (!isMerchantExpanded) {
+          extraCards.forEach(card => {
+              card.style.display = 'block';
+              setTimeout(() => card.classList.add('show-animate'), 10);
+          });
+          btn.innerText = '收起全部商家 ↑';
+          isMerchantExpanded = true;
+      } else {
+          extraCards.forEach(card => {
+              card.classList.remove('show-animate');
+              setTimeout(() => {
+                  card.style.display = 'none';
+              }, 400); 
+          });
+          btn.innerText = '查看更多商家 ↓';
+          isMerchantExpanded = false;
+      }
+  }
+
+    // 潛水區專屬的記憶體
+  let isDivingExpanded = false;
+
+  function toggleDiving() {
+      const hiddenCards = document.querySelectorAll('.hidden-list-card');
+      const btn = document.getElementById('toggleDivingBtn');
+
+      if (isDivingExpanded === false) {
+          hiddenCards.forEach(card => {
+              // 注意！因為這是橫向卡片，所以要喚醒它的 'flex' 排版，不能用 'block' 喔！
+              card.style.display = 'flex'; 
+              setTimeout(() => {
+                  card.classList.add('show-animate');
+              }, 10);
+          });
+          btn.innerText = '收起潛水店家 ↑';
+          isDivingExpanded = true;
+      } else {
+          hiddenCards.forEach(card => {
+              card.classList.remove('show-animate');
+              setTimeout(() => {
+                  card.style.display = 'none';
+              }, 400); 
+          });
+          btn.innerText = '查看更多潛水店家 ↓';
+          isDivingExpanded = false;
+      }
+  }
+
+  // === 海洋潛水區：狂野版漲潮浪花與呼吸特效 ===
+  window.addEventListener('scroll', () => {
+      const waveBox = document.querySelector('.diving-section');
+      
+      if (waveBox) {
+          const rect = waveBox.getBoundingClientRect();
+          
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+              
+              // 把除以 150 改成 100，讓波浪的頻率變快一點，更有動態感
+              let wave = (Math.sin(rect.top / 100) + 1) / 2; 
+              
+              // 1. 【狂野內部水流】
+              let bgPos = wave * 100; 
+              waveBox.style.backgroundPosition = `${bgPos}% ${bgPos}%`;
+              
+              // 2. 【狂野外部浪花】
+              let shadowSpread = wave * 40; // 擴散範圍直接拉爆到 40px
+              let shadowBlur = 40 + (wave * 40); // 模糊範圍拉大
+              let shadowOpacity = 0.05 + (wave * 0.3); // 浪花來的時候，陰影會變深到 0.35！
+              
+              // 3. 【終極必殺技：漲潮膨脹】
+              let swell = 1 + (wave * 0.025); // 讓框框在 1 倍到 1.025 倍之間呼吸放大
+              
+              // 把算好的超強浪花跟膨脹效果塗上去
+              waveBox.style.boxShadow = `0 20px ${shadowBlur}px ${shadowSpread}px rgba(53, 133, 142, ${shadowOpacity})`;
+              waveBox.style.transform = `scale(${swell})`;
+          }
+      }
+  });
+
+  // === 住宿區專屬：多重篩選與展開魔法 ===
+  let currentType = 'all';
+  let isAccExpanded = false;
+
+  // 1. 處理「住宿類型」按鈕點擊
+  function filterType(type, btnElement) {
+      currentType = type;
+      
+      // 把所有按鈕的 active 狀態取消，只亮起被點擊的那個
+      document.querySelectorAll('.type-btn').forEach(btn => btn.classList.remove('active'));
+      btnElement.classList.add('active');
+      
+      applyFilters(); // 每次點擊後，叫小助手去重新篩選一次
+  }
+
+  // 2. 核心篩選小助手
+  function applyFilters() {
+      // 收集目前有哪些 checkbox 被打勾了
+      const checkedFeatures = Array.from(document.querySelectorAll('.feature-label input:checked')).map(cb => cb.value);
+      const allCards = document.querySelectorAll('.acc-card');
+      const loadMoreBtn = document.getElementById('toggleAccBtn');
+      
+      // 如果有任何篩選條件 (不是選 All，或者有打勾)，就隱藏「Load More」按鈕
+      if (currentType !== 'all' || checkedFeatures.length > 0) {
+          loadMoreBtn.style.display = 'none';
+      } else {
+          // 如果全部恢復預設值，就把按鈕變回來
+          loadMoreBtn.style.display = 'inline-block';
+          // 並且恢復成一開始「沒展開」的狀態
+          isAccExpanded = false;
+          loadMoreBtn.innerText = 'Load More Accommodations ↓';
+      }
+
+      allCards.forEach(card => {
+          // 偷看卡片上的隱形名牌
+          const cardType = card.getAttribute('data-type');
+          const cardFeatures = card.getAttribute('data-features') || "";
+          
+          // 檢查 1：類型有沒有中？ (選 all 就一定中)
+          const typeMatch = (currentType === 'all' || cardType === currentType);
+          
+          // 檢查 2：打勾的特色這張卡片都有嗎？ (用 every 確保必須滿足所有打勾的條件)
+          const featureMatch = checkedFeatures.every(feature => cardFeatures.includes(feature));
+          
+          if (typeMatch && featureMatch) {
+              // 如果條件都符合
+              if (currentType === 'all' && checkedFeatures.length === 0 && card.classList.contains('extra-card') && !isAccExpanded) {
+                  // 如果是預設狀態，且是多出來的卡片，且還沒按展開 -> 隱藏
+                  card.style.display = 'none';
+              } else {
+                  // 顯示出來
+                  card.style.display = 'block';
+              }
+          } else {
+              // 條件不符，直接藏起來
+              card.style.display = 'none';
+          }
+      });
+  }
+
+  // 3. 處理「Load More」按鈕的展開與收合
+  function toggleAcc() {
+      const extraCards = document.querySelectorAll('.extra-card');
+      const btn = document.getElementById('toggleAccBtn');
+
+      if (!isAccExpanded) {
+          extraCards.forEach(card => card.style.display = 'block');
+          btn.innerText = 'Show Less Accommodations ↑';
+          isAccExpanded = true;
+      } else {
+          extraCards.forEach(card => card.style.display = 'none');
+          btn.innerText = 'Load More Accommodations ↓';
+          isAccExpanded = false;
+      }
+  }
 </script>
 
 </body>
