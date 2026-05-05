@@ -1,0 +1,420 @@
+<!-- ============================================================
+     綠島續語 (ISLE of ROAM) — about-eco 區塊
+     前綴: vic-  |  依賴: Bootstrap 5、Bootstrap Icons
+     ============================================================ -->
+
+<style>
+  /* ── Google Fonts ── */
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+
+  /* ── 色彩變數 ── */
+  :root {
+    --vic-forest:   #195724;
+    --vic-grass:    #C2D099;
+    --vic-moss:     #4a7c59;
+    --vic-sage:     #e8f0dd;
+    --vic-sand:     #f5f0e8;
+    --vic-deep:     #0d2e15;
+    --vic-white:    #ffffff;
+  }
+
+  /* ── 區塊容器 ── */
+  .vic-about-eco {
+    background: linear-gradient(180deg, #f5f0e8 0%, #edf4e3 60%, #deecd0 100%);
+    padding: 100px 0 120px;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+
+  /* 裝飾性背景紋路（葉脈感） */
+  .vic-about-eco::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 80px 120px at 8% 20%, rgba(25,87,36,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 60px 90px at 92% 70%, rgba(74,124,89,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 100px 60px at 50% 90%, rgba(194,208,153,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── 區塊標題群 ── */
+  .vic-section-eyebrow {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    color: var(--vic-moss);
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+
+  .vic-section-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    font-weight: 700;
+    color: var(--vic-forest);
+    line-height: 1.25;
+    margin-bottom: 1rem;
+  }
+
+  .vic-section-title span {
+    display: block;
+    font-size: 0.48em;
+    font-weight: 400;
+    font-family: 'Noto Sans TC', sans-serif;
+    letter-spacing: 0.12em;
+    color: var(--vic-moss);
+    margin-top: 0.2rem;
+  }
+
+  .vic-section-divider {
+    width: 48px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--vic-forest), var(--vic-grass));
+    border-radius: 2px;
+    margin: 0 auto 1.6rem;
+  }
+
+  .vic-section-intro {
+    max-width: 560px;
+    margin: 0 auto 3.5rem;
+    color: #4a5540;
+    font-size: 0.97rem;
+    line-height: 1.85;
+  }
+
+  /* ── 卡片 ── */
+  .vic-card {
+    background: rgba(255,255,255,0.82);
+    border: 1px solid rgba(25,87,36,0.12);
+    border-radius: 20px;
+    padding: 2.6rem 2.2rem 2.4rem;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(6px);
+    transition: transform 0.35s cubic-bezier(.22,.68,0,.99),
+                box-shadow 0.35s ease,
+                border-color 0.35s ease;
+    box-shadow: 0 4px 24px rgba(25,87,36,0.07);
+  }
+
+  .vic-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 48px rgba(25,87,36,0.14);
+    border-color: rgba(25,87,36,0.28);
+  }
+
+  /* 卡片右上角裝飾圓 */
+  .vic-card::after {
+    content: '';
+    position: absolute;
+    top: -36px;
+    right: -36px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(194,208,153,0.35) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── 卡片圖示徽章 ── */
+  .vic-card-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    margin-bottom: 1.5rem;
+    font-size: 1.6rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .vic-badge-eco {
+    background: linear-gradient(135deg, #d4edda, #c2d099);
+    color: var(--vic-forest);
+    box-shadow: 0 4px 16px rgba(25,87,36,0.15);
+  }
+
+  .vic-badge-alert {
+    background: linear-gradient(135deg, #fef3cd, #f5e4a0);
+    color: #856404;
+    box-shadow: 0 4px 16px rgba(133,100,4,0.15);
+  }
+
+  /* ── 卡片文字 ── */
+  .vic-card-tag {
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    font-weight: 500;
+    color: var(--vic-moss);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .vic-card-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--vic-forest);
+    margin-bottom: 1.1rem;
+    line-height: 1.4;
+  }
+
+  .vic-card-body {
+    color: #4a5540;
+    font-size: 0.92rem;
+    line-height: 1.9;
+  }
+
+  /* ── 標籤列表（卡片內特色列） ── */
+  .vic-feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.4rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .vic-feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    font-size: 0.88rem;
+    color: #3d5140;
+  }
+
+  .vic-feature-list li i {
+    margin-top: 0.2rem;
+    flex-shrink: 0;
+    color: var(--vic-forest);
+    font-size: 0.95rem;
+  }
+
+  /* ── 卡片底部標籤 ── */
+  .vic-pill {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 500;
+    padding: 0.28em 0.85em;
+    border-radius: 999px;
+    border: 1px solid;
+    margin-top: 1.6rem;
+    letter-spacing: 0.05em;
+  }
+
+  .vic-pill-green {
+    color: var(--vic-forest);
+    border-color: rgba(25,87,36,0.35);
+    background: rgba(194,208,153,0.25);
+  }
+
+  .vic-pill-amber {
+    color: #7a5c00;
+    border-color: rgba(133,100,4,0.3);
+    background: rgba(254,243,205,0.45);
+  }
+
+  /* ── 底部裝飾數據列 ── */
+  .vic-stat-row {
+    margin-top: 5rem;
+    padding: 2.4rem 2rem;
+    background: linear-gradient(135deg, rgba(25,87,36,0.06) 0%, rgba(194,208,153,0.18) 100%);
+    border: 1px solid rgba(25,87,36,0.1);
+    border-radius: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+    gap: 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .vic-stat-row::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23195724' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .vic-stat-item {
+    min-width: 140px;
+    position: relative;
+  }
+
+  .vic-stat-number {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--vic-forest);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .vic-stat-number sup {
+    font-size: 0.65em;
+    vertical-align: super;
+  }
+
+  .vic-stat-label {
+    font-size: 0.8rem;
+    color: var(--vic-moss);
+    letter-spacing: 0.08em;
+  }
+
+  .vic-stat-divider {
+    width: 1px;
+    height: 48px;
+    background: rgba(25,87,36,0.2);
+  }
+
+  @media (max-width: 576px) {
+    .vic-stat-divider { display: none; }
+    .vic-stat-row { gap: 2rem; }
+  }
+
+  /* ── 入場動畫 ── */
+  @keyframes vic-fade-up {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .vic-animate {
+    opacity: 0;
+    animation: vic-fade-up 0.7s ease forwards;
+  }
+  .vic-delay-1 { animation-delay: 0.1s; }
+  .vic-delay-2 { animation-delay: 0.25s; }
+  .vic-delay-3 { animation-delay: 0.4s; }
+  .vic-delay-4 { animation-delay: 0.55s; }
+  .vic-delay-5 { animation-delay: 0.7s; }
+</style>
+
+<!-- ════════════════════════════════════════════
+     about-eco 區塊
+════════════════════════════════════════════ -->
+<section id="about-eco" class="vic-about-eco">
+  <div class="container">
+
+    <!-- 標題區 -->
+    <div class="text-center vic-animate vic-delay-1">
+      <p class="vic-section-eyebrow">
+        <i class="bi bi-geo-alt me-1"></i>Green Island · Taiwan
+      </p>
+      <h2 class="vic-section-title">
+        認識綠色觀光
+        <span>ABOUT ECO TOURISM</span>
+      </h2>
+      <div class="vic-section-divider"></div>
+      <p class="vic-section-intro">
+        綠島，一座漂浮在太平洋上的火山島嶼，以其清澈海域與豐富生態著稱。
+        然而在美麗的背後，她正面臨著現代觀光帶來的沉重考驗。
+        認識她，才能真正守護她。
+      </p>
+    </div>
+
+    <!-- 兩欄卡片 -->
+    <div class="row g-4">
+
+      <!-- 卡片一：引言·生態環境概況 -->
+      <div class="col-md-6 vic-animate vic-delay-2">
+        <div class="vic-card">
+          <div class="vic-card-badge vic-badge-eco">
+            <i class="bi bi-tree-fill"></i>
+          </div>
+          <p class="vic-card-tag"><i class="bi bi-water me-1"></i>引言 · 生態環境概況</p>
+          <h3 class="vic-card-title">豐饒的自然與海洋生態</h3>
+          <p class="vic-card-body">
+            綠島四周被珊瑚礁所圍繞，海域內記錄逾 <strong>800 種魚類</strong>與
+            <strong>300 種珊瑚</strong>，是台灣生物多樣性最高的海域之一。
+            島上陸地植被完整，從海岸林到亞熱帶森林，孕育了無數特有種動植物，
+            更是黑潮洋流與台灣海峽生態系統的重要節點。
+          </p>
+          <ul class="vic-feature-list">
+            <li>
+              <i class="bi bi-fish-fill"></i>
+              <span>海龜、鬼蝠魟與獨特軟珊瑚群落，為全球潛水勝地</span>
+            </li>
+            <li>
+              <i class="bi bi-tree"></i>
+              <span>保留完整的海岸林與火山地形景觀，具地質教育價值</span>
+            </li>
+            <li>
+              <i class="bi bi-sun"></i>
+              <span>溫泉資源豐富，為全球三大海底溫泉之一</span>
+            </li>
+          </ul>
+          <span class="vic-pill vic-pill-green">
+            <i class="bi bi-award me-1"></i>生態多樣性熱點
+          </span>
+        </div>
+      </div>
+
+      <!-- 卡片二：面臨問題與保育現況 -->
+      <div class="col-md-6 vic-animate vic-delay-3">
+        <div class="vic-card">
+          <div class="vic-card-badge vic-badge-alert">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+          </div>
+          <p class="vic-card-tag"><i class="bi bi-shield-exclamation me-1"></i>面臨問題 · 保育現況</p>
+          <h3 class="vic-card-title">環境壓力與永續保育的抉擇</h3>
+          <p class="vic-card-body">
+            每年超過 <strong>35 萬名</strong>遊客湧入這座僅 15 平方公里的小島，
+            帶來的過度開發、垃圾汙染與珊瑚礁破壞，已使部分生態系統瀕臨崩潰臨界。
+            如何在觀光收益與環境承載量之間取得平衡，是綠島當前最迫切的課題。
+          </p>
+          <ul class="vic-feature-list">
+            <li>
+              <i class="bi bi-thermometer-high"></i>
+              <span>海水溫度上升導致珊瑚白化現象逐年加劇</span>
+            </li>
+            <li>
+              <i class="bi bi-trash3"></i>
+              <span>廢水與固體廢棄物處理設施不足，生態壓力沉重</span>
+            </li>
+            <li>
+              <i class="bi bi-people"></i>
+              <span>旅遊承載量管制起步中，社區保育意識持續提升</span>
+            </li>
+          </ul>
+          <span class="vic-pill vic-pill-amber">
+            <i class="bi bi-binoculars me-1"></i>永續觀光迫切需求
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部數據列 -->
+    <div class="vic-stat-row vic-animate vic-delay-4">
+      <div class="vic-stat-item">
+        <div class="vic-stat-number">800<sup>+</sup></div>
+        <div class="vic-stat-label">海域魚類物種</div>
+      </div>
+      <div class="vic-stat-divider d-none d-sm-block"></div>
+      <div class="vic-stat-item">
+        <div class="vic-stat-number">15<sup>km²</sup></div>
+        <div class="vic-stat-label">全島面積</div>
+      </div>
+      <div class="vic-stat-divider d-none d-sm-block"></div>
+      <div class="vic-stat-item">
+        <div class="vic-stat-number">35<sup>萬+</sup></div>
+        <div class="vic-stat-label">年均遊客人次</div>
+      </div>
+      <div class="vic-stat-divider d-none d-sm-block"></div>
+      <div class="vic-stat-item">
+        <div class="vic-stat-number">300<sup>+</sup></div>
+        <div class="vic-stat-label">珊瑚礁種類</div>
+      </div>
+    </div>
+
+  </div><!-- /.container -->
+</section>
+<!-- ════════ /about-eco ════════ -->
