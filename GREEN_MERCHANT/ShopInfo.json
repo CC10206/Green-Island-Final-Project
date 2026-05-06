@@ -1,0 +1,232 @@
+{
+  "merchants": [
+  {
+    "name": "Ocean & Daily",
+    "image": "images/Ocean & Daily.jpg",
+    "desc": "Independent shop selling ocean-friendly sunscreens and zero-waste daily goods.",
+    "category": "shop",
+    "badge": "Eco-Friendly Shop",
+    "area": "Nanliao Village",
+    "link": "https://maps.google.com/?q=海和日常",
+    "extraClass": ""
+  },
+  {
+    "name": "7-ELEVEN Island Store",
+    "image": "images/7-ELEVEN Island Store.jpg",
+    "desc": "Plastic-reduction future store featuring a cup rental station and bottle recycling.",
+    "category": "shop",
+    "badge": "Convenience Store",
+    "area": "Nanliao Village",
+    "link": "https://maps.google.com/?q=7-11綠島門市",
+    "extraClass": "hidden-card merchant-extra"
+  },
+  {
+    "name": "Island Duty Free Shop",
+    "image": "images/Green Island Duty Free Shop.jpg",
+    "desc": "The largest duty-free shop joining the cup rental initiative for eco-friendly shopping.",
+    "category": "shop",
+    "badge": "Duty-Free Shop",
+    "area": "Nanliao Village",
+    "link": "https://maps.google.com/?q=綠島新天地免稅商店",
+    "extraClass": "hidden-card merchant-extra"
+  },
+  {
+    "name": "Green Island Hainbain",
+    "image": "images/Lu Dao Cuo Souvenir Shop.jpg",
+    "desc": "Famous for local snacks, promoting local ingredients and encouraging reusable bags.",
+    "category": "food",
+    "badge": "Local Foods",
+    "area": "Nanliao Village",
+    "link": "https://maps.google.com/?q=綠島厝",
+    "extraClass": ""
+  },
+  {
+    "name": "Brother's Story",
+    "image": "images/Brothers Story.jpg",
+    "desc": "Iconic souvenir shop advocating environmental care by reducing plastic bag usage.",
+    "category": "shop",
+    "badge": "Creative Souvenirs",
+    "area": "Nanliao Village",
+    "link": "https://maps.google.com/?q=大哥的故事",
+    "extraClass": "hidden-card merchant-extra"
+  },
+  {
+    "name": "Stay Young Select Shop",
+    "image": "images/Stayyoung.jpeg",
+    "desc": "Must-visit shop for sustainable vintage apparel, unique souvenirs, and tasty soft-serve ice cream.",
+    "category": "shop",
+    "badge": "Select Shop",
+    "area": "Nanliao Village",
+    "link": "https://maps.app.goo.gl/UZoxnkpj8C3Sc8Y96",
+    "extraClass": ""
+  },
+  {
+    "name": "Shui Yuan Café",
+    "image": "images/Shuiyuan Jinghao.jpg",
+    "desc": "Eco-certified green restaurant serving local natural ingredients and handmade scones.",
+    "category": "food",
+    "badge": "Eco-Certified Cafe",
+    "area": "Nanliao Village",
+    "link": "https://maps.google.com/?q=水芫靜好",
+    "extraClass": ""
+  },
+  {
+    "name": "Hijau Restaurant",
+    "image": "images/Hijau Restaurant.jpg",
+    "desc": "Offers custom vegan and vegetarian meals to help travelers reduce their carbon footprint.",
+    "category": "food",
+    "badge": "Vegetarian Friendly",
+    "area": "Nanliao Village",
+    "link": "https://maps.google.com/?q=Hijau+青嶼味旅行館餐廳",
+    "extraClass": ""
+  },
+  {
+    "name": "Crazy Bar",
+    "image": "images/CRAZY BAR.jpg",
+    "desc": "Popular nature-integrated BAR strictly rejecting single-use plastic and appealing drinks.",
+    "category": "food",
+    "badge": "Crazy Night",
+    "area": "Gongguan Village",
+    "link": "https://maps.app.goo.gl/Yc2ruA8tQritSpwG9",
+    "extraClass": ""
+  },
+  {
+    "name": "AMIS Cafe",
+    "image": "images/AMIS Cafe.jpg",
+    "desc": "Reduces food mileage with local seafood and produce, actively promoting plastic reduction.",
+    "category": "food",
+    "badge": "Local Seafood & Cafe",
+    "area": "Gongguan Village",
+    "link": "https://maps.google.com/?q=海邊坐坐",
+    "extraClass": "hidden-card merchant-extra"
+  },
+  {
+    "name": "Dingo Tea Drinks",
+    "image": "images/Dingo Tea Drinks.png",
+    "desc": "Partner of the reusable cup rental station. Bring or rent a cup for a discount!",
+    "category": "food",
+    "badge": "Beverage & Tea",
+    "area": "Nanliao Village",
+    "link": "https://maps.google.com/?q=叮哥茶飲+綠島店",
+    "extraClass": "hidden-card merchant-extra"
+  },
+  {
+    "name": "Crazyfried Seafood",
+    "image": "images/Crazyfried Seafood.jpg",
+    "desc": "Uses eco-tableware and local catches to reduce food mileage. No single-use plastics.",
+    "category": "food",
+    "badge": "Eco-Seafood Dining",
+    "area": "Nanliao Village",
+    "link": "https://maps.google.com/?q=非炒不可海鮮食堂",
+    "extraClass": "hidden-card merchant-extra"
+  }
+  ],
+
+  "diving": [
+    {
+      "name": "Cool Diving Resort",
+      "image": "images/Cool Diving Resort.webp",
+      "desc": "A premier resort offering professional PADI courses and boat diving.  Explore the deep with expert local guides.",
+      "area": "Zhonglaio Village",
+      "features": ["Eco-equipment Rental", "Marine Friendly"],
+      "link": "https://cool-diving.com/",
+      "extraClass": ""
+    },
+    {
+      "name": "Green Island Bay Dive Center",
+      "image": "images/Green Island Bay Dive Center.jpg",
+      "desc": "Prime location with pro 1-on-1 diving courses and diverse island tours. Enjoy a full adventure from BBQ to SUP.",
+      "area": "Nanliao Village",
+      "features": ["Eco-equipment Rental", "Reef-safe Sunscreen Policy", "Marine Friendly"],
+      "link": "https://www.facebook.com/BayDiveCenter/",
+      "extraClass": ""
+    },
+    {
+      "name": "Ocean Rover",
+      "image": "images/Ocean Rover.jfif",
+      "desc": "PADI courses with pro gear and eco-focus. A pet-friendly stay perfect for solo travelers to make new friends.",
+      "area": "Gongguan Village",
+      "features": ["Reef-safe Sunscreen Policy", "Marine Friendly"],
+      "link": "https://www.facebook.com/oceanrover.taiwan/?locale=zh_TW",
+      "extraClass": "hidden-list-card"
+    },
+    {
+      "name": "Blue Safari Diving Center",
+      "image": "images/Blue Safari Diving Center.webp",
+      "desc": "Year-round PADI courses and night tours. Dive with us to send waterproof postcards from our underwater mailbox!",
+      "area": "Gongguan Village",
+      "features": ["Eco-equipment Rental", "Marine Friendly"],
+      "link": "http://www.blue-safari.com.tw/",
+      "extraClass": "hidden-list-card"
+    }
+  ],
+
+  "accommodations": [
+    {
+      "name": "Greenisland Shiacare B&B",
+      "image": "images/Greenisland Shiacare.jpg",
+      "desc": "Named after Chih-Ke-Ah, an ocean health indicator, we strive to protect the island by minimizing our footprint.",
+      "type": "bnb", 
+      "ecoFeatures": ["no-plastic", "eco-certified"],
+      "price": "$2800 NTD / night",
+      "link": "https://www.ludao-travel.com.tw/web/a0928438018/",
+      "area": "Gongguan Village",
+      "extraClass": "default-show"
+    },
+    {
+      "name": "Hijau Hotel",
+      "image": "images/Hijau Hotel.jpg",
+      "desc": "Hijau means green in Malay. We offer a luxury island escape focused on nature and sustainability.",
+      "type": "hotel",
+      "ecoFeatures": ["eco-certified", "pet-friendly"],
+      "price": "$5600 NTD / night",
+      "link": "https://hijau.com.tw/",
+      "area": "Nanliao Village",
+      "extraClass": "default-show"
+    },
+    {
+      "name": "Slow Island Hostel",
+      "image": "images/Slow Island Hostel.jfif",
+      "desc": "Slow down and discover life's possibilities. We offer more than a stay—experience Green Islands history and stories.",
+      "type": "hostel",
+      "ecoFeatures": ["eco-certified", "pet-friendly"],
+      "price": "$700 NTD / night",
+      "link": "https://www.instagram.com/slowislandhostel/",
+      "area": "Nanliao Village",
+      "extraClass": "default-show"
+    },
+    {
+      "name": "Green Island Unie 2020 Guild Hall",
+      "image": "images/Green Island Unie 2020 Guild Hall.jpg",
+      "desc": "Newly renovated rooms and exquisite breakfast sets. A premium, comfortable stay right in the heart of Green Island.",
+      "type": "hotel",
+      "ecoFeatures": ["pet-friendly", "no-plastic"],
+      "price": "$5000 NTD / night",
+      "link": "https://www.unie2020.com/",
+      "area": "Zhonglaio Village",
+      "extraClass": "acc-hidden extra-card"
+    },
+    {
+      "name": "Ocean Diary Backpacker Inn",
+      "image": "images/Backpacker Inn.png",
+      "desc": "Top-tier diving with pro photos and instant film gifts. Experience a warm, chill stay filled with shared memories.",
+      "type": "hostel",
+      "ecoFeatures": ["no-plastic", "eco-certified"],
+      "price": "$1300 NTD / night",
+      "link": "https://oceandiary.com.tw/",
+      "area": "Gongguan Village",
+      "extraClass": "acc-hidden extra-card"
+    },
+    {
+      "name": "Coast B&B",
+      "image": "images/Coast B&B.jpg",
+      "desc": "Modern ocean-front stay with breathtaking sunset views. Relax in a minimalist space right by the coast.",
+      "type": "bnb",
+      "ecoFeatures": ["pet-friendly", "eco-certified"],
+      "price": "$3700 NTD / night",
+      "link": "https://www.facebook.com/100090404414108/mentions/",
+      "area": "Nanliao Village",
+      "extraClass": "acc-hidden extra-card"
+    }
+  ]
+}
