@@ -199,14 +199,47 @@ html { scroll-behavior: smooth; }
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   gap: 12px;
-  transition: background 0.4s;
+  transition: background 0.4s, transform 0.25s, box-shadow 0.25s;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
+}
+.detail-img-placeholder:hover {
+  transform: scale(1.03);
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
 }
 .detail-img-placeholder::before {
   content: '';
   position: absolute; inset: 0;
   opacity: 0.2;
+}
+.image-preview-overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 300;
+  cursor: pointer;
+}
+.image-preview-overlay.show { display: flex; }
+.image-preview-overlay::after {
+  content: '點擊背景或按 Esc 關閉';
+  position: absolute;
+  bottom: 18px;
+  color: rgba(255,255,255,0.85);
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+}
+.image-preview-overlay img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 16px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+  cursor: default;
 }
 .img-caption {
   font-size: 1.4rem;
@@ -356,10 +389,10 @@ html { scroll-behavior: smooth; }
   <div style="position:relative;z-index:2;max-width:1200px;margin:0 auto;">
     <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:50px;padding:5px 14px;margin-bottom:1rem;">
       <span style="width:5px;height:5px;background:#c2d099;border-radius:50%;display:inline-block;"></span>
-      <span style="font-size:0.75rem;color:rgba(255,255,255,0.85);letter-spacing:0.1em;">NEWS & ACTIVITIES</span>
+      <span style="font-size:0.75rem;color:rgba(255,255,255,0.85);letter-spacing:0.1em;">INSIGHTS & UPDATES</span>
     </div>
-    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:#fff;font-weight:600;margin-bottom:0.5rem;">最新消息</h1>
-    <p style="font-size:0.9rem;color:rgba(255,255,255,0.7);">綠島活動資訊、生態新知與在地動態</p>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:#fff;font-weight:600;margin-bottom:0.5rem;">Latest News</h1>
+    <p style="font-size:0.9rem;color:rgba(255,255,255,0.7);">Green Island: Events, Ecology, and Local Updates</p>
   </div>
   <div class="page-hero-wave">
     <svg viewBox="0 0 1440 50" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:50px;">
@@ -374,8 +407,8 @@ html { scroll-behavior: smooth; }
   <!-- 區塊一：活動列表 -->
   <aside class="list-panel">
     <div class="list-header">
-      <h2>活動列表</h2>
-      <span class="news-count">8 則</span>
+      <h2>Latest News</h2>
+      <span class="news-count">8 Articles</span>
     </div>
     <div class="news-list" id="news-list"></div>
   </aside>
@@ -387,138 +420,339 @@ html { scroll-behavior: smooth; }
 
 </div>
 
+<div id="image-preview-overlay" class="image-preview-overlay" onclick="overlayClick(event)">
+  <img id="image-preview-img" src="" alt="Full preview" onclick="event.stopPropagation()" />
+</div>
+
 <script>
 /* ── DATA ── */
 const newsData = [
   {
     id: 1,
     date: '2026-05-04',
-    title: '2026年綠島海上長泳',
+    title: '2026 Green Island Open Water Swimming Event',
     badge: 'new',
-    badgeLabel: '最新',
+    badgeLabel: 'new',
+    imgSrc: 'images/2026年綠島海上長泳.png',
     imgGradient: 'linear-gradient(135deg, #1a6a7e 0%, #35858e 50%, #4aa8b5 100%)',
-    imgIcon: '🏊',
-    imgCaption: '乘風破浪，擁抱蔚藍太平洋',
-    tags: ['體育活動', '海上競技', '2026'],
+    tags: ['Water Event', 'Eco Tourism', 'Community Involvement'],
     content: `
-      <p><strong>2026年綠島海上長泳</strong>將於5月4日盛大登場，這是東台灣每年最受矚目的水上盛事之一，吸引來自全台各地的游泳愛好者挑戰太平洋的湛藍水域。</p>
-      <p>本屆長泳路線全程約3公里，由南寮漁港出發，沿綠島西岸海域游至終點。活動設有男女分組及年齡組別，報名選手需具備一定游泳能力，並通過體能資格審查。</p>
-      <p>主辦單位將於活動期間在海上安排充足的安全人員、救生艇及補給站，確保每位參賽者的安全。沿途還可欣賞綠島獨特的海岸火山地形，是結合運動與生態旅遊的絕佳體驗。</p>
-      <p>報名資訊請洽東部海岸國家風景區管理處，名額有限，敬請把握。</p>
+    <div class="event-section-en">
+    <p>Experience the stunning turquoise waters of the Pacific and explore Green Island's unique volcanic coastal landscapes. This annual event perfectly combines athletic challenge with eco-tourism.</p>
+
+    <hr>
+
+    <div class="event-details">
+        <h3>Event Details</h3>
+        <ul>
+            <li><strong>Date:</strong> May 4, 2026</li>
+            <li><strong>Highlight:</strong> One of the most anticipated aquatic events in Eastern Taiwan, offering a unique opportunity to swim across the vibrant waters of the Pacific.</li>
+        </ul>
+    </div>
+
+    <div class="swim-route">
+        <h3>Swim Route</h3>
+        <ul>
+            <li><strong>Route:</strong> Starting from Nanliao Fishing Harbor, swimming along the west coast of Green Island to the finish line.</li>
+            <li><strong>Distance:</strong> Approximately 3,000 meters.</li>
+        </ul>
+    </div>
+
+    <div class="safety-registration">
+        <h3>Safety & Registration</h3>
+        <ul>
+            <li><strong>Qualifications:</strong> Participants must demonstrate sufficient swimming proficiency and pass a physical fitness screening.</li>
+            <li><strong>Safety Measures:</strong> Professional safety personnel, rescue boats, and water stations will be stationed along the route to ensure participant safety.</li>
+            <li><strong>Registration:</strong> Please contact the East Coast National Scenic Area Administration. Limited spots available—register early!</li>
+        </ul>
+    </div>
+</div>
+
+<style>
+    /* Styling for clear, scannable layout */
+    .event-section-en {
+        line-height: 1.6;
+        color: #444;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 800px;
+    }
+    .event-section-en h2 {
+        color: #005a87;
+        border-left: 5px solid #005a87;
+        padding-left: 12px;
+        margin-bottom: 15px;
+    }
+    .event-section-en h3 {
+        color: #007ba7;
+        margin-top: 25px;
+        font-size: 1.2rem;
+    }
+    .event-section-en ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .event-section-en li {
+        margin-bottom: 10px;
+        position: relative;
+        padding-left: 20px;
+    }
+    .event-section-en li::before {
+        content: "•";
+        color: #007ba7;
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+    }
+    .event-section-en hr {
+        border: 0;
+        border-top: 1px solid #ddd;
+        margin: 25px 0;
+    }
+</style>
     `
   },
   {
     id: 2,
     date: '2026-05-04',
-    title: '探索綠島再升級，科技領航潛入蔚藍秘境！從島嶼故事走進湛藍海底，開啟多感官數位旅遊新體驗',
+    title: 'Tech-Driven Discovery: Dive into Green Island’s Hidden Depths. A New Era of Multi-Sensory Digital Tourism—Where Island Heritage Meets the Deep Blue.',
     badge: 'new',
-    badgeLabel: '最新',
+    badgeLabel: 'new',
+    imgSrc: 'images/探索綠島再升級.jpg',
     imgGradient: 'linear-gradient(135deg, #0d3d52 0%, #1a6a7e 40%, #2a9db5 100%)',
-    imgIcon: '🤿',
-    imgCaption: '科技與海洋的奇幻相遇',
-    tags: ['數位旅遊', '科技體驗', '沉浸式'],
+    tags: ['Digital Tourism', 'Technology Experience', 'Immersive'],
     content: `
-      <p>東管處攜手科技業者推出<strong>「數位沉浸綠島」</strong>全新旅遊計畫，結合AR擴增實境、水下攝影直播與多感官互動裝置，讓旅客在不入水的情況下也能深度感受綠島海底世界的震撼之美。</p>
-      <p>體驗中心設於南寮港區，遊客可透過高解析水下攝影機的即時畫面，搭配空間音效與海水溫度感應裝置，宛如身歷其境地探索珊瑚礁生態。</p>
-      <p>此外，展區同步展出以AR技術重現的百年綠島漁業文化，將科技與人文完美融合，打造出一條兼具知識性與娛樂性的島嶼旅遊新路線。活動自即日起持續至9月底。</p>
+      <p>The East Coast National Scenic Area Administration has upgraded its <strong>"Explore Green Island"</strong> digital service, 
+        blending AI technology with immersive storytelling to offer a seamless travel experience. A major highlight is the expanded underwater 
+        content in Chaikou and Shilang, featuring nine high-definition panoramic scenes like Atlantis. These visuals have been enhanced with 
+        hundred-megapixel AI technology, bringing even the finest seabed details to life.</p>
+      <p>The updated platform now features a refined UI/UX designed around three narrative themes: <strong>terrestrial ecology, historical heritage, 
+        and the underwater world.</strong> Additionally, the update includes new aerial footage of inland sites and a Japanese language interface to 
+        better serve international visitors.</p>
+      <p>Discover the natural and cultural wonders of Green Island from a whole new perspective—visit our official website for full access to all features.</p>
     `
   },
   {
     id: 3,
     date: '2026-04-28',
-    title: '開啟115年綠島最美的山海守護之旅！古道療癒、護蟹淨灘，再享在地店家回饋！',
+    title: '2026 Green Island Eco-Guardians: Healing Trails, Crab Rescue, and Beach Cleanups. Join Us and Support Local Businesses!',
     badge: 'event',
-    badgeLabel: '活動',
+    badgeLabel: 'Event',
+    imgSrc: 'images/開啟115年綠島最美的山海守護之旅.png',
     imgGradient: 'linear-gradient(135deg, #2d5a3e 0%, #4a8a5e 40%, #7da78c 100%)',
-    imgIcon: '🦀',
-    imgCaption: '山海之間，守護每一抹純淨',
-    tags: ['生態保育', '淨灘', '古道健行', '在地回饋'],
+    tags: ['Conservation', 'Beach Cleanup', 'Hiking', 'Local Support'],
     content: `
-      <p>配合民國115年，東管處精心規劃<strong>「山海守護雙重奏」</strong>，結合綠島古道療癒健行與海龜陸蟹護蟹淨灘，為旅客帶來兼具身心靈滋養與生態貢獻的深度旅遊體驗。</p>
+      <div class="eco-travel-section">
+    <p>From <strong>May 1st to October 31st, 2026</strong>, the East Coast 
+      National Scenic Area Administration presents the <strong>"Eco-Slow Travel 
+      Series."</strong> We invite travelers to engage their five senses, practice 
+      "Leave No Trace" principles, and foster local community well-being through 
+      three curated themes.</p>
+
+    <div class="activity-item">
+        <h3>Guided Treasure Hunt on Cross-Mountain Ancient Trail</h3>
+        <p>Experience "Forest Healing" with guided tours available daily 
+        (morning and afternoon sessions). Learn about native vegetation and 
+        reconnect with nature. This activity follows a "User Pays" model: 
+        <strong>NT$150 for adults</strong> (includes a NT$50 voucher for local 
+        partner shops). Minimum of two participants required for reservation.</p>
+    </div>
+
+    <div class="activity-item">
+        <h3>"Thank You for the Love" Crab Protection Action</h3>
+        <p>Join us for four special sessions between June and September to become a "Crab Guardian." Help mother land crabs safely cross the road to release their eggs, spreading a meaningful message of life education and environmental protection.</p>
+    </div>
+
+    <div class="activity-item">
+        <h3>Environmental Beach Cleanups</h3>
+        <p>Take action to protect our oceans. From now until the end of October, visitors can pick up cleanup supplies at the Green Island Visitor Center and turn environmental awareness into practical contributions to keep our beaches pristine.</p>
+    </div>
+
+    <div class="booking-info">
+        <h3>Activity Registration</h3>
+        <ul>
+            <li><strong>Booking Hotline:</strong> 089-672026</li>
+            <li><strong>More Information:</strong> Please visit the official ECNSA website or the "Guoshan Ancient Trail Treasure Hunt" Facebook fan page.</li>
+        </ul>
+    </div>
+</div>
+
+<style>
+    .eco-travel-section {
+        line-height: 1.7;
+        color: #333;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        max-width: 800px;
+        padding: 20px;
+    }
+    .eco-travel-section h2 {
+        color: #2e7d32; /* 綠色系呼應生態主題 */
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+    .eco-travel-section h3 {
+        color: #388e3c;
+        margin-top: 25px;
+        font-size: 1.3rem;
+        border-bottom: 2px solid #e8f5e9;
+        padding-bottom: 5px;
+    }
+    .eco-travel-section p {
+        margin-bottom: 15px;
+    }
+    .eco-travel-section hr {
+        border: 0;
+        border-top: 1px solid #ddd;
+        margin: 30px 0;
+    }
+    .booking-info {
+        background-color: #f1f8e9;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-top: 30px;
+    }
+    .booking-info ul {
+        list-style: none;
+        padding-left: 0;
+    }
+    .booking-info li {
+        margin-bottom: 8px;
+    }
+</style>
+
+      <!-- <p>配合民國115年，東管處精心規劃<strong>「山海守護雙重奏」</strong>，結合綠島古道療癒健行與海龜陸蟹護蟹淨灘，為旅客帶來兼具身心靈滋養與生態貢獻的深度旅遊體驗。</p>
       <p>活動分為上午場與下午場。上午場沿柚子湖古道漫步，由在地解說員導覽沿途生態，探訪清代時期遺留的石砌灌溉系統；下午場則於大白沙海灘進行護蟹淨灘，參與者將協助記錄陸蟹族群數量並清除海漂垃圾。</p>
-      <p>完成全程活動的旅客可獲得紀念護照章，並享有島上合作友善商家的專屬消費折扣，鼓勵旅客以消費行動支持在地永續經濟。</p>
+      <p>完成全程活動的旅客可獲得紀念護照章，並享有島上合作友善商家的專屬消費折扣，鼓勵旅客以消費行動支持在地永續經濟。</p> --!>
     `
   },
   {
     id: 4,
     date: '2026-04-27',
-    title: '115年綠島海上長泳活動海域管制',
+    title: '2026 Green Island Ocean Swim: Maritime Traffic Control & Restrictions',
     badge: 'event',
-    badgeLabel: '公告',
+    badgeLabel: 'Ann.',
+    imgSrc: 'images/115年綠島海上長泳活動海域管制.jpg',
     imgGradient: 'linear-gradient(135deg, #3a4a6a 0%, #4a6a8e 50%, #6a8aae 100%)',
-    imgIcon: '⚓',
-    imgCaption: '安全護航，確保活動圓滿進行',
-    tags: ['海域管制', '安全公告', '交通'],
+    imgIcon: '',
+    imgCaption: '',
+    tags: ['Maritime Traffic Control', 'Safety Ann.', 'Traffic Restrictions'],
     content: `
-      <p>配合<strong>115年綠島海上長泳</strong>活動舉辦，東部海岸國家風景區管理處公告相關海域管制措施，請島上居民及旅客配合遵守。</p>
-      <p><strong>管制時間：</strong>民國115年5月4日上午07:00至12:00</p>
-      <p><strong>管制範圍：</strong>南寮漁港北側至柴口海域，寬度約500公尺。管制期間禁止非賽事船隻進入，浮潛及水上活動亦暫停開放。</p>
-      <p>相關遊憩業者請提前告知旅客，並調整當日行程安排。如有疑問請洽東管處服務電話，我們將盡快為您服務。感謝各界配合，共同支持這場年度海上盛事。</p>
+      <p>The Green Island Township Office will host the <strong>"Green Island Ocean Swim"</strong> on May 17, 
+        2026, from 5:00 AM to 12:00 PM. To ensure participant safety, the Chaikou Snorkeling 
+        Area will be under maritime control during this period. Tourists are prohibited from 
+        entering the water for any aquatic activities. Please follow all on-site signage and 
+        prioritize your safety. We apologize for any inconvenience caused.</p>
     `
   },
   {
     id: 5,
     date: '2025-12-02',
-    title: '2026綠島海陸跨年演唱會',
+    title: '2026 Green Island Dual Countdown Concert',
     badge: 'event',
-    badgeLabel: '活動',
+    badgeLabel: 'Event',
+    imgSrc: 'images/2026綠島海陸跨年演唱會.jpg',
     imgGradient: 'linear-gradient(135deg, #1a1a3e 0%, #2a2a6e 40%, #4a3a8e 100%)',
-    imgIcon: '🎆',
-    imgCaption: '星空下，與綠島共迎新年曙光',
-    tags: ['跨年', '演唱會', '煙火', '限定活動'],
+    imgIcon: '',
+    imgCaption: '',
+    tags: ['New Year', 'Concert', 'Fireworks', 'Time-limited Event'],
     content: `
-      <p><strong>2026綠島海陸跨年演唱會</strong>將於2025年12月31日晚間盛大登場，以無與倫比的星空與太平洋為背景，邀請旅客在這座天堂小島上迎接新年的到來。</p>
-      <p>演唱會場地設於南寮漁港廣場，邀請多組台灣知名音樂人接力演出，從日落時分持續至午夜跨年倒數。壓軸時刻將施放海上煙火秀，在一望無際的太平洋海面上綻放萬紫千紅，與滿天繁星相互輝映，創造難忘的感動時刻。</p>
-      <p>活動採限額入場，旅宿住客享優先購票權。建議提早規劃跨年行程，島上旅宿名額有限，請儘早完成訂房。</p>
+    <p><strong>The 2026 Green Island Dual Countdown Concert</strong> will grandly 
+      kick off on the evening of December 31, 2025. Experience Taiwan’s only synchronized 
+      underwater and onshore countdown, using the breathtaking Pacific starry sky and the 
+      deep blue ocean as your backdrop.</p>
+    <p>The main event takes place at the <strong>Plaza in front of the Green Island Duty-Free 
+      Shop</strong>. Beyond spectacular live performances from 8:00 PM onwards, the night is 
+      packed with exciting lucky draw prizes and authentic local Green Island delicacies. 
+      Whether you are dancing on land or diving deep, it’s a feast for the senses!</p>
+    <p>For diving enthusiasts, don’t miss the legendary <strong>Underwater Countdown
+      </strong> at the Shilang Diving Area (Pygmy Seahorse Underwater Postbox) starting 
+      from 10:30 PM. Celebrate the New Year in the most unique way possible—submerged in 
+      the beauty of the ocean.</p>
+    <p>Activity spots are limited! We recommend planning your trip early as island accommodations fill up fast. Come to Green Island to watch, eat, win, and welcome 2026 with joy!</p>
     `
   },
   {
     id: 6,
     date: '2025-10-14',
-    title: '跨域共創綠島永續願景——東管處攜手中研院與地方推動海洋治理新模式',
+    title: 'Building a Sustainable Green Island: A New Model of Ocean Governance Through Multi-Party Partnership',
     badge: 'env',
-    badgeLabel: '永續',
+    badgeLabel: 'Eco',
+    imgSrc: 'images/跨域共創綠島永續願景.jpg',
     imgGradient: 'linear-gradient(135deg, #1a4a3a 0%, #2a6a5a 40%, #3a8a7a 100%)',
-    imgIcon: '🔬',
-    imgCaption: '科學與在地智慧，共寫海洋治理新章',
-    tags: ['海洋治理', '學術合作', '永續發展', '中研院'],
+    imgIcon: '',
+    imgCaption: '',
+    tags: ['Ocean Governance', 'Academic Collaboration', 'Sustainable Development', 'Academia Sinica'],
     content: `
-      <p>東管處於2025年10月正式宣布與<strong>中央研究院</strong>及綠島在地社區簽署合作備忘錄，共同推動以科學為本、融合在地知識的海洋治理新模式，為台灣離島永續發展樹立新典範。</p>
-      <p>此合作計畫涵蓋三大面向：一是建立長期珊瑚礁生態監測系統，追蹤氣候變遷對綠島海洋生態的影響；二是與在地漁民合作建立傳統知識資料庫，將世代傳承的海洋智慧轉化為治理參考依據；三是推動海洋友善旅遊認證機制，引導觀光業者走向更具責任感的經營模式。</p>
-      <p>計畫預計為期五年，研究成果將向社會大眾公開，同時作為政策制定的科學基礎，讓綠島的海洋保育工作獲得更堅實的學術支撐。</p>
+      <p>On October 13, <strong>ECNSA</strong> hosted the "Green Island Sustainable 
+        Governance Workshop" at Dabaisha. This event brought together <strong>Academia 
+        Sinica</strong>, local diving associations, and cross-disciplinary experts to 
+        develop long-term strategies for balancing ecological conservation with industrial 
+        growth through immersive field experiences and professional dialogue.</p>
+    <p>The workshop achieved two core consensuses: First, a transition toward <strong>"High-Value Tourism,"</strong> 
+      shifting from price competition to high-quality, personalized experiences. Second, the establishment of a 
+      <strong>"Professional Dive Guide System"</strong> at Dabaisha as a pilot site, enhancing environmental 
+      responsibility among operators through certification and training mechanisms.</p>
+    <p>Director Lin Wei-ling of ECNSA emphasized that future efforts will focus on empowering 
+      local self-management and infrastructure improvements. By integrating academic monitoring 
+      with community collaboration, Green Island aims to become an internationally competitive 
+      destination that prioritizes both safety and marine sustainability.</p>
     `
   },
   {
     id: 7,
     date: '2025-09-03',
-    title: '綠島‧天堂島嶼之美再登國際！《最喜歡的綠島風景》勇奪美國繆思創意獎雙料金獎',
+    title: 'Double Gold Winner! Green Island’s "My Favorite Scenery" Triumphs at the U.S. MUSE Creative Awards',
     badge: 'intl',
-    badgeLabel: '國際',
+    badgeLabel: 'Global',
+    imgSrc: 'images/綠島‧天堂島嶼之美再登國際.jpg',
     imgGradient: 'linear-gradient(135deg, #5a3a1a 0%, #8a6a2a 40%, #c2a040 100%)',
-    imgIcon: '🏆',
-    imgCaption: '島嶼之美，驚艷國際的榮耀時刻',
-    tags: ['國際獎項', '繆思創意獎', '攝影', '金獎'],
+    imgIcon: '',
+    imgCaption: '',
+    tags: ['International Awards', 'The Muse Creative Awards', 'Photography', 'Gold Award'],
     content: `
-      <p>東管處委託拍攝的旅遊形象影片<strong>《最喜歡的綠島風景》</strong>於2025年美國繆思創意獎（The Muse Creative Awards）評選中，榮獲旅遊類別影片金獎及最佳視覺呈現金獎，一舉摘下雙料殊榮，讓台灣離島之美在國際舞台大放異彩。</p>
-      <p>影片全長約12分鐘，以四季為軸線，呈現綠島從清晨薄霧的朝日溫泉、日正當中的珊瑚礁浮潛，到黃昏時的火焰岩彩霞，再到深夜滿天銀河的震撼星空。全片無一處加工美化，忠實記錄綠島原始純粹的自然之美。</p>
-      <p>東管處表示，獲獎不僅是對製作團隊的肯定，更希望藉此提升國際旅客對台灣生態旅遊的認識，吸引更多重視永續旅遊的國際旅客造訪。影片已於官方YouTube頻道公開，歡迎分享。</p>
+      <p>The promotional video <strong>"My Favorite Green Island Scenery,"</strong> produced 
+        by ECNSA, has won <strong>Double Gold</strong> at the 2025 Q1 MUSE Creative Awards in 
+        the "Video - Cultural" and "Video - Travel" categories. This prestigious international 
+        recognition highlights Green Island’s stunning natural landscapes and rich cultural 
+        heritage on a global stage.</p>
+    <p>Narrated from a local perspective, the film captures the island’s daily aesthetics, 
+      featuring low-carbon travel, the heritage of Dahu Village, and traditional crafts like 
+      peanut candy making. It weaves together the island's historical memory with the 
+      ecological wonders of the Kuroshio Current, showcasing the harmonious coexistence of 
+      people and nature in this <strong>"Emerald of the Pacific."</strong></p>
+    <p>ECNSA stated that this award is a milestone for the "Green Island • Paradise Island" 
+      brand. Moving forward, the focus will remain on sustainable tourism and digital 
+      marketing to enhance international brand value, inviting global travelers to experience 
+      this mysterious island known for its vibrant coral reefs and rare saltwater hot springs.</p>
     `
   },
   {
     id: 8,
     date: '2025-06-04',
-    title: '綠島小丑魚生態重現生機　東管處長期潛點監測見證海洋恢復力',
+    title: 'Green Island Ecosystem Revival: Long-term Dive Site Surveys Show Clownfish Recovery',
     badge: 'env',
-    badgeLabel: '生態',
+    badgeLabel: 'Eco',
+    imgSrc: 'images/綠島小丑魚生態重現生機.jpg',
     imgGradient: 'linear-gradient(135deg, #1a4a5e 0%, #2a7a8e 40%, #3aaa9e 100%)',
-    imgIcon: '🐠',
-    imgCaption: '海底家園，生命力的頑強回歸',
-    tags: ['小丑魚', '珊瑚礁', '生態監測', '海洋保育'],
+    imgIcon: '',
+    imgCaption: '',
+    tags: ['Clownfish', 'Coral Reef', 'Ecosystem Monitoring', 'Marine Conservation'],
     content: `
-      <p>根據東管處2025年最新海洋生態調查報告，<strong>綠島小丑魚族群數量</strong>在連續三年的監測保護下，於柚子湖、石朗等核心潛點的分布密度顯著回升，最大族群數量已較2022年增加逾40%。</p>
-      <p>這項令人振奮的成果，歸功於東管處長達五年的「潛點生態復育計畫」：透過設置人工礁體提供海葵附著基質、建立海域巡查機制防止破壞性觀光行為、以及與潛水業者合作推廣生態友善潛水守則。</p>
-      <p>研究人員指出，小丑魚族群的回升是整體珊瑚礁生態系統趨於健康的重要指標。在全球珊瑚礁大規模白化的嚴峻背景下，綠島的恢復案例引起國際海洋生物學者的高度關注，多個學術團隊已申請前來進行聯合研究。</p>
-      <p>東管處呼籲旅客在觀賞小丑魚時，保持適當距離，避免使用閃光燈，共同守護這些海底精靈的家園。</p>
+      <p>Exciting news from Green Island’s famous dive site, <strong>"Clownfish Island"
+        </strong>! Since 2020, this area faced severe ecological crises due to port 
+        construction, extreme weather, and rising ocean temperatures, which led to siltation 
+        and mass anemone die-offs. However, after four years of fixed-point monitoring by 
+        the Taiwan Society for Coral Reefs, latest surveys show the site is exhibiting 
+        remarkable self-healing, with key species steadily returning.</p>
+    <p>The report indicates that anemone distributions have stabilized, accompanied by a 
+      significant increase in resident fish such as the <strong>clown anemonefish</strong> 
+      and threespot dascyllus. This journey from damage to recovery serves as vital empirical 
+      evidence for marine conservation and a cornerstone for environmental education and 
+      sustainable tourism.</p>
+    <p>ECNSA emphasizes the continued promotion of <strong>"Low-Disturbance"</strong> 
+      eco-friendly travel. Visitors are encouraged to explore responsibly, using resources 
+      like the book <i>11 Entrances to Diving in Green Island</i> as a guide. Through 
+      long-term monitoring and local collaboration, Green Island aims to balance conservation 
+      with tourism, protecting this vibrant "Deep Blue Kingdom."</p>
     `
   }
 ];
@@ -553,12 +787,17 @@ function selectNews(id) {
   });
 
   const panel = document.getElementById('detail-panel');
+  const imageStyle = item.imgSrc
+    ? `background-image: url('${item.imgSrc}'); background-size: cover; background-position: center; background-repeat: no-repeat;`
+    : `background: ${item.imgGradient};`;
+
   panel.innerHTML = `
     <div class="detail-animate">
       <div class="detail-image-wrap">
-        <div class="detail-img-placeholder" style="background:${item.imgGradient};">
-          <div class="img-icon">${item.imgIcon}</div>
-          <div class="img-caption">${item.imgCaption}</div>
+        <div class="detail-img-placeholder" style="${imageStyle}"
+             onclick="showFullImage('${item.imgSrc || ''}')">
+          <div class="img-icon">${item.imgIcon || ''}</div>
+          <div class="img-caption">${item.imgCaption || ''}</div>
         </div>
       </div>
       <div class="detail-body">
@@ -573,7 +812,7 @@ function selectNews(id) {
         <div class="detail-divider"></div>
         <div class="detail-content">${item.content}</div>
         <div class="detail-tags">
-          ${item.tags.map(t => `<span class="detail-tag"># ${t}</span>`).join('')}
+          ${ (item.tags || []).map(t => `<span class="detail-tag"># ${t}</span>`).join('') }
         </div>
       </div>
     </div>
@@ -583,6 +822,29 @@ function selectNews(id) {
     document.getElementById('detail-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
+
+function showFullImage(src) {
+  if (!src) return;
+  const overlay = document.getElementById('image-preview-overlay');
+  const img = document.getElementById('image-preview-img');
+  if (!overlay || !img) return;
+  img.src = src;
+  overlay.classList.add('show');
+}
+function hideFullImage() {
+  const overlay = document.getElementById('image-preview-overlay');
+  if (overlay) overlay.classList.remove('show');
+}
+function overlayClick(event) {
+  if (event.target.id === 'image-preview-overlay') {
+    hideFullImage();
+  }
+}
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    hideFullImage();
+  }
+});
 
 /* Init with first item */
 selectNews(1);
