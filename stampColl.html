@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Island Stamp Mission — 綠島續嶼</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal: #35858e;
+  --teal-dark: #1a5a62;
+  --teal-deep: #0f3a40;
+  --sage: #7da78c;
+  --moss: #c2d099;
+  --cream: #e6eec9;
+  --bg: #f8faf3;
+  --text: #2d3a2e;
+  --muted: #6b7f6c;
+  --border: #dde8d0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); }
+
+/* Header */
+#header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(26,58,46,0.97);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+  backdrop-filter: blur(10px);
+}
+.nav-link {
+  position: relative; color: rgba(255,255,255,0.85);
+  font-size: 0.9rem; letter-spacing: 0.04em;
+  transition: color 0.2s; text-decoration: none; padding: 4px 0;
+}
+.nav-link::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: var(--moss); transform: scaleX(0); transition: transform 0.25s;
+}
+.nav-link:hover { color: #fff; }
+.nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+.nav-link.active { color: #fff; }
+
+/* Page hero */
+.page-hero {
+  background: linear-gradient(160deg, #1a4a4e 0%, #35858e 60%, #5ba396 100%);
+  padding: 110px 2rem 55px;
+  position: relative; overflow: hidden;
+}
+.page-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 80% 50%, rgba(194,208,153,0.15) 0%, transparent 60%);
+}
+.page-hero-wave {
+  position: absolute; bottom: -2px; left: 0; right: 0;
+}
+
+/* BLOCK HEADERS */
+.block-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--teal); font-weight: 600; margin-bottom: 0.5rem;
+}
+.block-label::before {
+  content: ''; width: 20px; height: 1px; background: var(--teal); display: block;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 600; color: var(--text); margin-bottom: 0.4rem;
+}
+
+/* BLOCK 1 — ROUTE SPINNER */
+.spinner-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.spinner-card::before {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle at top right, rgba(194,208,153,0.25), transparent 70%);
+  pointer-events: none;
+}
+
+.route-display {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 2rem;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1.5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.route-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 14px; border-radius: 50px; font-size: 0.72rem; font-weight: 600;
+  margin-bottom: 0.8rem; width: fit-content;
+}
+.badge-r1 { background: #e3f5f0; color: #1a6a52; }
+.badge-r2 { background: #fdeee3; color: #7a3a1a; }
+.badge-r3 { background: #e8e3f5; color: #3a1a7a; }
+
+.route-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.35rem; font-weight: 600; color: var(--text);
+  margin-bottom: 1rem; line-height: 1.3;
+}
+
+.route-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+}
+.slot-mini {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+.slot-mini-time {
+  font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 3px;
+}
+.slot-mini-text {
+  font-size: 0.78rem; line-height: 1.4; color: var(--text);
+}
+
+.spin-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--teal);
+  color: #fff; border: none; cursor: pointer;
+  padding: 12px 28px; border-radius: 50px;
+  font-size: 0.9rem; font-weight: 500; font-family: inherit;
+  transition: all 0.2s; letter-spacing: 0.02em;
+}
+.spin-btn:hover { background: var(--teal-dark); transform: translateY(-1px); }
+.spin-btn:active { transform: scale(0.98); }
+.spin-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.rule-link-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: none; border: 1px solid var(--border);
+  color: var(--teal); cursor: pointer;
+  padding: 8px 18px; border-radius: 50px;
+  font-size: 0.82rem; font-family: inherit;
+  transition: all 0.18s; text-decoration: none;
+}
+.rule-link-btn:hover { background: var(--bg); border-color: var(--teal); }
+
+/* Spinning animation */
+@keyframes spin-blur {
+  0%   { opacity: 0.3; transform: translateY(-6px); }
+  50%  { opacity: 0.6; transform: translateY(2px); }
+  100% { opacity: 1;   transform: translateY(0); }
+}
+.spin-reveal { animation: spin-blur 0.5s ease both; }
+
+/* BLOCK 2 — STAMP TASKS */
+.stamp-row {
+  display: grid;
+  grid-template-columns: 72px 1fr 130px;
+  gap: 16px;
+  align-items: center;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid #eef3e6;
+}
+.stamp-row:last-child { border-bottom: none; }
+.stamp-row-header { display: grid; grid-template-columns: 72px 1fr 130px; gap: 16px; }
+
+/* Stamp circle */
+.stamp-circle {
+  width: 68px; height: 68px; border-radius: 50%;
+  border: 2px dashed #c8d9c8;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: #f4f8f0;
+  transition: all 0.4s;
+  font-size: 0.62rem; color: var(--muted);
+  text-align: center; gap: 2px;
+  flex-shrink: 0;
+}
+.stamp-circle.done {
+  border: 2.5px solid #35858e;
+  background: linear-gradient(135deg, #d4eeea, #e6f5e0);
+  color: var(--teal-dark);
+}
+.stamp-circle.done .stamp-icon { font-size: 1.4rem; }
+.stamp-circle .stamp-time-label { font-size: 0.6rem; color: var(--muted); }
+.stamp-circle.done .stamp-time-label { color: var(--teal-dark); }
+
+/* Task box */
+.task-box {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem;
+  min-height: 72px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.task-time-tag {
+  font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 4px;
+}
+.task-text {
+  font-size: 0.85rem; line-height: 1.55; color: var(--text);
+}
+.task-text.empty { color: #b0c0b2; font-style: italic; }
+
+/* Complete box */
+.complete-box {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 72px;
+  transition: all 0.3s;
+}
+.complete-box.done {
+  background: linear-gradient(135deg, #d4eeea, #e6f5e0);
+  border-color: #a0d4c0;
+}
+.code-btn {
+  background: none; border: 1.5px solid var(--teal);
+  color: var(--teal); cursor: pointer;
+  padding: 7px 12px; border-radius: 8px;
+  font-size: 0.75rem; font-family: inherit; font-weight: 500;
+  transition: all 0.18s; text-align: center; line-height: 1.3;
+  width: 100%;
+}
+.code-btn:hover { background: #e8f5f0; }
+.code-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.done-label {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  color: var(--teal-dark); font-size: 0.78rem; font-weight: 600;
+}
+
+/* MODAL */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(26,50,30,0.55);
+  z-index: 500;
+  align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.modal-overlay.show { display: flex; }
+.modal-box {
+  background: #fff;
+  border-radius: 20px;
+  padding: 2rem;
+  width: 100%; max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  position: relative;
+}
+.modal-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem; font-weight: 600; margin-bottom: 0.4rem;
+}
+.modal-sub { font-size: 0.83rem; color: var(--muted); margin-bottom: 1.3rem; }
+.modal-input {
+  width: 100%; padding: 10px 14px;
+  border: 1.5px solid var(--border); border-radius: 10px;
+  font-size: 1rem; font-family: 'DM Mono', monospace;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text); outline: none;
+  transition: border-color 0.2s;
+}
+.modal-input:focus { border-color: var(--teal); }
+.modal-input.error { border-color: #e04040; animation: shake 0.3s; }
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+.modal-error { font-size: 0.78rem; color: #c03030; margin-top: 6px; display: none; }
+.modal-error.show { display: block; }
+.modal-submit {
+  width: 100%; padding: 11px;
+  background: var(--teal); color: #fff; border: none; cursor: pointer;
+  border-radius: 10px; font-size: 0.9rem; font-weight: 500; font-family: inherit;
+  margin-top: 1rem; transition: background 0.18s;
+}
+.modal-submit:hover { background: var(--teal-dark); }
+.modal-close-btn {
+  position: absolute; top: 14px; right: 16px;
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 1.2rem;
+  line-height: 1; transition: color 0.18s;
+}
+.modal-close-btn:hover { color: var(--text); }
+
+/* Success flash */
+@keyframes success-pop {
+  0%   { transform: scale(0.8); opacity: 0; }
+  60%  { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.success-pop { animation: success-pop 0.4s ease both; }
+
+/* BLOCK 3 — RULES */
+.rule-card {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: 14px; padding: 1.5rem;
+  display: flex; gap: 1rem; align-items: flex-start;
+}
+.rule-num {
+  width: 32px; height: 32px; flex-shrink: 0;
+  border-radius: 50%; background: var(--moss);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700; color: var(--teal-dark);
+}
+.rule-text { font-size: 0.88rem; line-height: 1.7; color: var(--text); }
+.rule-text strong { color: var(--teal); font-weight: 600; }
+
+/* Notice box */
+.notice-box {
+  background: #fff8ec; border: 1px solid #f0dfa8;
+  border-radius: 12px; padding: 1.2rem 1.4rem;
+  font-size: 0.84rem; line-height: 1.75; color: #5a4a1a;
+}
+.notice-box strong { color: #7a5a00; }
+
+/* Mobile */
+#hamburger { display: none; }
+#mobile-menu {
+  display: none; position: fixed; inset: 0;
+  background: rgba(26,58,46,0.97); z-index: 200;
+  flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
+}
+#mobile-menu.show { display: flex; }
+.mobile-nav-link {
+  color: #e6eec9; font-size: 1.4rem; font-weight: 300;
+  letter-spacing: 0.1em; text-decoration: none; transition: color 0.2s;
+}
+
+@media (max-width: 640px) {
+  /* Stamp card: 圓章 + 任務並排，狀態按鈕獨佔一行 */
+  .stamp-row {
+    grid-template-columns: 56px 1fr;
+    grid-template-rows: auto auto;
+    gap: 10px 12px;
+  }
+  .stamp-circle { width: 56px; height: 56px; }
+  /* 任務格佔滿右側 */
+  .task-box { grid-column: 2 / 3; grid-row: 1 / 2; }
+  /* 狀態格跨兩欄，貼齊底部 */
+  .complete-box {
+    grid-column: 1 / 3;
+    grid-row: 2 / 3;
+    min-height: unset;
+    padding: 0.5rem 0.75rem;
+    flex-direction: row;
+    gap: 8px;
+    justify-content: center;
+  }
+  .done-label { flex-direction: row; gap: 6px; }
+  .code-btn { padding: 8px 16px; font-size: 0.78rem; white-space: nowrap; width: auto; }
+  /* Header 欄位標籤也同步調整 */
+  .stamp-row-header { grid-template-columns: 56px 1fr; }
+  .stamp-row-header .status-header { display: none; }
+  /* Stamp card container padding */
+  #stamp-card { padding: 1rem 1rem; }
+  .spinner-card { padding: 1.5rem; }
+  .route-slots { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <div style="max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px;">
+    <a href="index.html" style="text-decoration:none;display:flex;align-items:center;gap:10px;">
+      <div style="width:34px;height:34px;background:#c2d099;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M9 2C9 2 4 6 4 10.5C4 13.5 6.5 16 9 16C11.5 16 14 13.5 14 10.5C14 6 9 2 9 2Z" fill="#35858e"/>
+          <path d="M9 6C9 6 11 8 11 10C11 11.1 10.1 12 9 12C7.9 12 7 11.1 7 10C7 8 9 6 9 6Z" fill="#fff" opacity="0.7"/>
+        </svg>
+      </div>
+      <span style="font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;letter-spacing:0.05em;font-weight:600;">綠島續嶼</span>
+    </a>
+    <nav style="display:flex;gap:2rem;align-items:center;" class="desktop-nav">
+      <a href="index.html" class="nav-link">首頁</a>
+      <a href="news.html" class="nav-link">最新消息</a>
+      <a href="#" class="nav-link active">綠色旅遊</a>
+      <a href="index.html#map" class="nav-link">地圖</a>
+      <a href="index.html#faq" class="nav-link">FAQ</a>
+    </nav>
+    <button id="hamburger" style="display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;" onclick="toggleMenu()">
+      <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
+      <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
+      <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
+    </button>
+  </div>
+</header>
+
+<div id="mobile-menu">
+  <button onclick="toggleMenu()" style="position:absolute;top:20px;right:24px;background:none;border:none;color:#e6eec9;font-size:1.8rem;cursor:pointer;">✕</button>
+  <a href="index.html" class="mobile-nav-link">首頁</a>
+  <a href="news.html" class="mobile-nav-link">最新消息</a>
+  <a href="#" class="mobile-nav-link">綠色旅遊</a>
+  <a href="index.html#map" class="mobile-nav-link">地圖</a>
+  <a href="index.html#faq" class="mobile-nav-link">FAQ</a>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div style="position:relative;z-index:2;max-width:1200px;margin:0 auto;">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:50px;padding:5px 14px;margin-bottom:1rem;">
+      <span style="width:5px;height:5px;background:#c2d099;border-radius:50%;display:inline-block;"></span>
+      <span style="font-size:0.75rem;color:rgba(255,255,255,0.85);letter-spacing:0.1em;">GREEN TRAVEL · STAMP MISSION</span>
+    </div>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:#fff;font-weight:600;margin-bottom:0.5rem;">Explore Green Island: The Stamp Quest</h1>
+    <p style="font-size:0.9rem;color:rgba(255,255,255,0.7);">Spin your route, complete each mission, collect your island stamps</p>
+  </div>
+  <div class="page-hero-wave">
+    <svg viewBox="0 0 1440 50" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:50px;">
+      <path d="M0,25 C240,50 480,0 720,25 C960,50 1200,0 1440,25 L1440,50 L0,50 Z" fill="#f8faf3"/>
+    </svg>
+  </div>
+</div>
+
+<div style="max-width:860px;margin:0 auto;padding:3rem 2rem 6rem;">
+
+  <!-- ── BLOCK 1: ROUTE SPINNER ── -->
+  <div style="margin-bottom:4rem;">
+    <div class="block-label">Block 01</div>
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
+      <div>
+        <h2 class="section-title">Spin Your Route</h2>
+        <p style="font-size:0.88rem;color:var(--muted);">Randomly draw one of three eco-itineraries for your day on the island.</p>
+      </div>
+      <a href="#rules" class="rule-link-btn">
+        <span></span> View the rules
+      </a>
+      <button class="rule-link-btn" onclick="resetProgress()" id="reset-progress-btn">
+        <span></span> Reset Progress
+      </button>
+    </div>
+
+    <div class="spinner-card">
+      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+        <button class="spin-btn" id="spin-btn" onclick="spinRoute()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="transition:transform 0.3s" id="spin-icon">
+            <path d="M13.5 8A5.5 5.5 0 1 1 8 2.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M8 1l2.5 1.5L8 4" fill="#fff"/>
+          </svg>
+          Spin My Route!
+        </button>
+        <span style="font-size:0.8rem;color:var(--muted);" id="spin-hint">Haven't spun yet — press the button to start!</span>
+      </div>
+
+      <div class="route-display" id="route-display">
+        <p style="color:var(--muted);font-size:0.88rem;text-align:center;font-style:italic;">Your route will appear here after spinning</p>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="spin-btn" onclick="spinRoute()" style="background:#f0f7f0;color:var(--teal);font-size:0.82rem;padding:9px 20px;" id="respin-btn">
+          ↺ Respin
+        </button>
+        <button class="spin-btn" onclick="confirmRoute()" id="confirm-btn" style="display:none;">
+          ✓ Lock in this route
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BLOCK 2: STAMP TASKS ── -->
+  <div style="margin-bottom:4rem;" id="stamp-section">
+    <div class="block-label">Block 02</div>
+    <h2 class="section-title" style="margin-bottom:0.3rem;">My Stamp Card</h2>
+    <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1.5rem;">Complete each time-slot mission and collect your Green Island stamps.</p>
+
+    <div style="background:#fff;border:1px solid var(--border);border-radius:20px;padding:1.5rem 2rem;" id="stamp-card">
+      <!-- Header row -->
+      <div class="stamp-row-header" style="padding-bottom:0.8rem;border-bottom:2px solid var(--border);">
+        <div style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-align:center;">Stamp</div>
+        <div style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);">Mission</div>
+        <div class="status-header" style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-align:center;">Status</div>
+      </div>
+      <div id="stamp-rows"></div>
+    </div>
+
+    <div style="margin-top:1.2rem;padding:1rem 1.2rem;background:#f0f7f0;border-radius:12px;border:1px solid #c8e0c8;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:1.1rem;">💡</span>
+      <span style="font-size:0.83rem;color:#2d5a3a;line-height:1.6;">Spin and <strong>lock in</strong> your route first to activate the missions above. Find the daily codes at physical signboards around the island!</span>
+    </div>
+  </div>
+
+  <!-- ── BLOCK 3: RULES ── -->
+  <div id="rules" style="scroll-margin-top: 84px;">
+    <div class="block-label">Block 03</div>
+    <h2 class="section-title" style="margin-bottom:0.3rem;">Activity Rules & Notice</h2>
+    <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1.5rem;">Organized by 綠島鄉公所 (Green Island Township Office) · Codes reset daily at midnight</p>
+
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:1.5rem;" id="rules-list"></div>
+
+    <div class="notice-box">
+      <strong>⚠️ Important Notice</strong><br>
+      Daily passcodes are displayed on physical stamp boards located at each mission site. 
+      <strong>Please do NOT deface, remove, or photograph and redistribute the code boards</strong>
+       — doing so ruins the experience for fellow travellers and may result in disqualification. The 
+       township office reserves the right to change codes at any time if misuse is detected. 
+       Play fair, keep the island beautiful!
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+  <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeModal()">✕</button>
+    <div style="font-size:1.6rem;margin-bottom:0.6rem;" id="modal-stamp-icon">🏮</div>
+    <div class="modal-title" id="modal-title">Enter the passphrase</div>
+    <div class="modal-sub" id="modal-sub">Find the code at the mission site signboard</div>
+    <input type="text" class="modal-input" id="modal-input" placeholder="e.g. CRAB-2026" maxlength="12"
+           oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')submitCode()"/>
+    <div class="modal-error" id="modal-error">Incorrect passcode. Try again!</div>
+    <button class="modal-submit" onclick="submitCode()">Submit →</button>
+  </div>
+</div>
+
+<script>
+/* ── DATA ── */
+const ROUTES = [
+  {
+    id: 1,
+    badgeClass: 'badge-r1',
+    badgeIcon: '🌿',
+    badgeName: 'Eco Echo',
+    name: 'Eco & Landscape Photography',
+    subtitle: 'North Half-Ring Trail',
+    slots: {
+      morning:   'Green Island Lighthouse & Wuyou Cave — golden hour photography at the volcanic coast',
+      noon:      'Lunch near Zhongliao Village — savour fresh seafood in a quiet fishing hamlet',
+      afternoon: 'Yuzi Lake & Wangong Cave — oldest settlement ruins on the island',
+      dusk:      'Little Great Wall viewpoint — gaze at Sleeping Beauty Rock across the East Coast',
+      night:     null
+    }
+  },
+  {
+    id: 2,
+    badgeClass: 'badge-r2',
+    badgeIcon: '⚡',
+    badgeName: 'Iron Pulse',
+    name: 'Extreme Adventure Challenge',
+    subtitle: 'Full-Island Loop & Cross-Island Trail',
+    slots: {
+      morning:   'Niutou Mountain sunrise — greet the dawn from the northeast peak',
+      noon:      'Shilang Dive Site — challenge the underwater mailbox 18 m below the surface',
+      afternoon: 'Guoshan Historic Trail — cross the island spine on foot, east to west',
+      dusk:      'Dabai Sand Beach — a gentle beach walk to cool down after a hard day',
+      night:     'Chaori Hot Springs — soak in the rare seafront sodium bicarbonate spring'
+    }
+  },
+  {
+    id: 3,
+    badgeClass: 'badge-r3',
+    badgeIcon: '📖',
+    badgeName: 'Heritage Soul',
+    name: 'History, Culture & Slow Travel',
+    subtitle: 'Deep Full-Island Cultural Loop',
+    slots: {
+      morning:   'Green Island Human Rights Memorial Park — reflect on a poignant chapter of Taiwan\'s history',
+      noon:      'Resupply near the Lailai convenience store — grab a local bento and recharge',
+      afternoon: 'Confucius Rock & Sea Cucumber Bay — bizarre basalt formations meet turquoise shallows',
+      dusk:      'Fanchuan Cape Meadow — "Green Island\'s carpet"; watch the sun sink over Chaori Hot Springs',
+      night:     'Back to Nanliao town center — night market strolling and local shop culture'
+    }
+  }
+];
+
+const SLOT_META = [
+  { key: 'morning',   label: 'Morning',   icon: '🌅', stamp: '🦀',    stampName: 'CRAB',    code: 'CRAB2026'  },
+  { key: 'noon',      label: 'Noon',      icon: '☀️', stamp: '🌴',    stampName: 'PALM',    code: 'PALM2026'  },
+  { key: 'afternoon', label: 'Afternoon', icon: '🌤️', stamp: '🐢',    stampName: 'TURTLE',  code: 'TURT2026'  },
+  { key: 'dusk',      label: 'Dusk',      icon: '🌇', stamp: '🦋',    stampName: 'ORCHID',  code: 'ORCH2026'  },
+  { key: 'night',     label: 'Night',     icon: '🌙', stamp: '🌟',    stampName: 'STAR',    code: 'STAR2026'  },
+];
+
+const TASK_TO_TAG = {
+  'Green Island Lighthouse & Wuyou Cave — golden hour photography at the volcanic coast': 'lighthouse',
+  'Lunch near Zhongliao Village — savour fresh seafood in a quiet fishing hamlet': 'Zhongliao',
+  'Yuzi Lake & Wangong Cave — oldest settlement ruins on the island': 'Youzihu',
+  'Little Great Wall viewpoint — gaze at Sleeping Beauty Rock across the East Coast': 'L_greatwall',
+  'Niutou Mountain sunrise — greet the dawn from the northeast peak': 'Niutou_M',
+  'Shilang Dive Site — challenge the underwater mailbox 18 m below the surface': 'mailbox',
+  'Guoshan Historic Trail — cross the island spine on foot, east to west': 'Guoshan',
+  'Dabai Sand Beach — a gentle beach walk to cool down after a hard day': 'Dabaisha',
+  'Chaori Hot Springs — soak in the rare seafront sodium bicarbonate spring': 'hotspring',
+  'Green Island Human Rights Memorial Park — reflect on a poignant chapter of Taiwan\'s history': 'white_terror',
+  'Resupply near the Lailai convenience store — grab a local bento and recharge': 'lailai',
+  'Confucius Rock & Sea Cucumber Bay — bizarre basalt formations meet turquoise shallows': 'Confucious',
+  'Fanchuan Cape Meadow — "Green Island\'s carpet"; watch the sun sink over Chaori Hot Springs': 'Fanchuanbi',
+  'Back to Nanliao town center — night market strolling and local shop culture': 'Nanliao_A'
+};
+
+const API_URL = 'https://script.google.com/macros/s/AKfycbwQqf2AlZ5m9epZL7n8j6VQxZIqryTOt9eMK29xO5Qp4SnNOB7tSYzE4x0B6FKFc4b-/exec';
+
+function normalizeTag(tag) {
+  return String(tag || '').trim().toLowerCase();
+}
+
+function normalizeCode(code) {
+  return String(code || '').trim().toUpperCase();
+}
+
+function normalizeKey(key) {
+  return String(key || '').trim().toLowerCase();
+}
+
+function getRowDateValue(row) {
+  const dateKey = Object.keys(row).find(key => {
+    const normalized = normalizeKey(key);
+    return normalized === 'date' || normalized === 'day';
+  });
+  return dateKey ? row[dateKey] : undefined;
+}
+
+function normalizeDateStr(value) {
+  if (!value) return '';
+  const text = String(value).trim();
+  if (!text) return '';
+
+  const parsed = new Date(text);
+  if (!Number.isNaN(parsed.valueOf())) {
+    const year = parsed.getFullYear();
+    const month = String(parsed.getMonth() + 1).padStart(2, '0');
+    const day = String(parsed.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+
+  }
+
+  const cleaned = text.replace(/[^\d\.\/\-\s]/g, '').replace(/[\.\/]/g, '-').replace(/\s+/g, '');
+
+  let m = cleaned.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (m) return `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`;
+
+  m = cleaned.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+  if (m) return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+
+  m = cleaned.match(/^(\d{4})(\d{2})(\d{2})$/);
+  if (m) return `${m[1]}-${m[2]}-${m[3]}`;
+
+  return '';
+}
+
+function getTodayDateCandidates() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  return [
+    `${year}-${month}-${day}`,
+    `${year}/${month}/${day}`,
+    `${day}-${month}-${year}`,
+    `${day}/${month}/${year}`,
+    `${year}${month}${day}`
+  ];
+}
+
+function findDateRow(rows) {
+  const candidates = getTodayDateCandidates();
+  return rows.find(row => {
+    const dateValue = getRowDateValue(row);
+    const normalized = normalizeDateStr(dateValue);
+    return normalized && candidates.includes(normalized);
+  });
+}
+
+function objectFromRowArray(headers, row) {
+  return headers.reduce((obj, header, index) => {
+    obj[normalizeTag(header)] = row[index] != null ? String(row[index]).trim() : '';
+    return obj;
+  }, {});
+}
+
+function parseDailyCodes(rawData) {
+  if (!rawData || typeof rawData !== 'object') return {};
+
+  let source = rawData.codes || rawData;
+
+  if (Array.isArray(source)) {
+    console.log('[parseDailyCodes] Source is array, length:', source.length);
+    
+    if (source.length === 0) return {};
+
+    if (source.every(item => Array.isArray(item))) {
+      console.log('[parseDailyCodes] Branch: array of arrays (table)');
+      const headers = source[0].map(header => String(header).trim());
+      const rows = source.slice(1).map(row => objectFromRowArray(headers, row));
+      const todayRow = findDateRow(rows) || rows[0];
+      const result = Object.keys(todayRow).reduce((result, key) => {
+        if (key !== 'date') {
+          result[normalizeTag(key)] = normalizeCode(todayRow[key]);
+        }
+        return result;
+      }, {});
+      console.log('[parseDailyCodes] Result:', result);
+      return result;
+    }
+
+    if (source.every(item => item && typeof item === 'object' && !Array.isArray(item))) {
+      console.log('[parseDailyCodes] Branch: array of objects');
+      const todayRows = source.filter(item => {
+        const dateValue = getRowDateValue(item);
+        const normalized = normalizeDateStr(dateValue);
+        console.log('  Checking item date:', dateValue, 'normalized:', normalized, 'matches today?', normalized && getTodayDateCandidates().includes(normalized));
+        return normalized && getTodayDateCandidates().includes(normalized);
+      });
+
+      console.log('  Found', todayRows.length, 'rows for today');
+
+      if (todayRows.length > 0) {
+        const result = todayRows.reduce((result, item) => {
+          if (item.tag && item.code) {
+            result[normalizeTag(item.tag)] = normalizeCode(item.code);
+          } else {
+            Object.keys(item).forEach(key => {
+              if (!['date', 'Date', 'DATE', 'day', 'Day', 'DAY'].includes(key)) {
+                result[normalizeTag(key)] = normalizeCode(item[key]);
+              }
+            });
+          }
+          return result;
+        }, {});
+        console.log('[parseDailyCodes] Result:', result);
+        return result;
+      }
+
+      const todayRow = findDateRow(source);
+      if (todayRow) {
+        const result = Object.keys(todayRow).reduce((result, key) => {
+          if (!['date', 'Date', 'DATE', 'day', 'Day', 'DAY'].includes(normalizeKey(key))) {
+            result[normalizeTag(key)] = normalizeCode(todayRow[key]);
+          }
+          return result;
+        }, {});
+        console.log('[parseDailyCodes] Result (fallback):', result);
+        return result;
+      }
+
+      if (source[0].tag && source[0].code) {
+        console.log('[parseDailyCodes] Branch: fallback to first item');
+        const result = source.reduce((result, item) => {
+          if (item.tag && item.code) {
+            result[normalizeTag(item.tag)] = normalizeCode(item.code);
+          }
+          return result;
+        }, {});
+        console.log('[parseDailyCodes] Result:', result);
+        return result;
+      }
+    }
+  }
+
+  const dateKeys = Object.keys(source).filter(key => normalizeDateStr(key));
+  if (dateKeys.length > 0) {
+    console.log('[parseDailyCodes] Branch: object with date keys');
+    const todayKey = dateKeys.find(key => getTodayDateCandidates().includes(normalizeDateStr(key)));
+    const selected = source[todayKey || dateKeys[0]];
+    return parseDailyCodes(selected);
+  }
+
+  if (getRowDateValue(source) != null) {
+    console.log('[parseDailyCodes] Branch: object with date property');
+    const result = Object.keys(source).reduce((result, key) => {
+      if (!['date', 'day'].includes(normalizeKey(key))) {
+        result[normalizeTag(key)] = normalizeCode(source[key]);
+      }
+      return result;
+    }, {});
+    console.log('[parseDailyCodes] Result:', result);
+    return result;
+  }
+
+  console.log('[parseDailyCodes] Fallback branch');
+  const result = Object.keys(source).reduce((result, key) => {
+    result[normalizeTag(key)] = normalizeCode(source[key]);
+    return result;
+  }, {});
+  console.log('[parseDailyCodes] Result:', result);
+  return result;
+}
+
+async function fetchDailyCodes() {
+  try {
+    const response = await fetch(API_URL, { cache: 'no-store', mode: 'cors' });
+    if (!response.ok) throw new Error('Network response was not ok');
+    const data = await response.json();
+    console.log('Raw API data:', data);
+    console.log('API data type:', Array.isArray(data) ? 'Array' : typeof data);
+    console.log('API data keys:', Object.keys(data));
+    
+    if (Array.isArray(data)) {
+      console.log('First 3 array items:', data.slice(0, 3));
+      console.log('Sample item:', JSON.stringify(data[0], null, 2));
+    } else {
+      console.log('Sample keys and values:');
+      Object.keys(data).slice(0, 5).forEach(key => {
+        console.log(`  "${key}":`, typeof data[key] === 'object' ? JSON.stringify(data[key], null, 2) : data[key]);
+      });
+    }
+    
+    const parsed = parseDailyCodes(data);
+    console.log('Parsed result type:', Array.isArray(parsed) ? 'Array' : typeof parsed);
+    console.log('Parsed result keys:', Object.keys(parsed));
+    console.log('Parsed result sample:');
+    Object.keys(parsed).slice(0, 3).forEach(key => {
+      console.log(`  "${key}":`, typeof parsed[key] === 'object' ? JSON.stringify(parsed[key], null, 2) : parsed[key]);
+    });
+    
+    return parsed;
+  } catch (error) {
+    console.error('Failed to fetch daily codes:', error);
+    return {};
+  }
+}
+
+function updateCodes(codes) {
+  const normalizedCodes = parseDailyCodes(codes);
+  
+  console.log('updateCodes called with:', {
+    codesType: Array.isArray(codes) ? 'Array' : typeof codes,
+    normalizedCodesType: Array.isArray(normalizedCodes) ? 'Array' : typeof normalizedCodes,
+    normalizedCodes: normalizedCodes,
+    lockedRoute: lockedRoute
+  });
+  
+  SLOT_META.forEach((slot, slotIdx) => {
+    if (lockedRoute && lockedRoute.slots[slot.key]) {
+      const task = lockedRoute.slots[slot.key];
+      const tag = TASK_TO_TAG[task];
+      
+      console.log(`Slot ${slotIdx} (${slot.key}):`, {
+        task,
+        tag,
+        normalizedTag: tag ? normalizeTag(tag) : null
+      });
+      
+      if (tag) {
+        const normalizedTag = normalizeTag(tag);
+        const foundCode = normalizedCodes[normalizedTag];
+        
+        console.log(`Lookup result for '${normalizedTag}':`, {
+          found: !!foundCode,
+          code: foundCode,
+          allKeys: Object.keys(normalizedCodes)
+        });
+        
+        if (foundCode) {
+          slot.code = foundCode;
+          console.log(`✓ Set slot[${slotIdx}].code = ${foundCode}`);
+        } else {
+          console.warn(`✗ No daily code found for tag '${normalizedTag}'`);
+        }
+      }
+    }
+  });
+}
+
+
+const RULES = [
+  {
+    title: 'How to participate',
+    text: 'This activity is open to all visitors staying on Green Island. Spin your route once per day — you may respin before locking in. If you find the mission too difficult, feel free to click the <strong>"Reset Progress"</strong> button at the top of the page.'
+  },
+  {
+    title: 'Daily Passcodes & Progress',
+    text: 'Each mission slot has a unique daily passcode displayed on a physical signboard near the site. Codes reset at midnight (00:00 TST) every day, and previous days\' codes will not be accepted. Please note that if you cannot complete your selected mission on the same day, remember to <strong>respin your route</strong> the next day to keep your progress on track!'
+  },
+  {
+    title: 'Completing a Mission',
+    text: 'Visit the designated mission site, locate the signboard, and enter the code on this page. Once verified, your digital stamp will be awarded immediately. Collecting all five stamps earns you an <strong>exclusive, limited-edition souvenir</strong> from the township office!'
+  },
+  {
+    title: 'Reward Redemption',
+    text: 'Bring your completed digital stamp card (simply show your screen or a screenshot) to the <strong>Green Island Township Office (綠島鄉公所)</strong> service counter during office hours (Mon–Fri, 08:00–17:00) to claim your reward.'
+  },
+  {
+    title: 'Fair Play & Integrity',
+    text: 'Passcodes are meant for active participants only. To keep the event fun and fair for everyone, please do not share codes on social media or in public messaging groups. We kindly ask all participants to respect the spirit of the challenge and complete each mission genuinely.'
+  },
+  {
+    title: 'Environmental commitment',
+    text: 'This programme is a proud part of Green Island\'s sustainable tourism initiative. Please practice "Leave No Trace" at every site—avoid littering, do not touch the coral or local wildlife, and use eco-friendly bags for any waste you carry. Let\’s protect the beauty of the island together!'
+  }
+];
+
+/* ── STATE ── */
+let activeRoute = null;
+let lockedRoute = null;
+let currentModalSlotIdx = null;
+const completedSlots = new Set();
+const STORAGE_KEY = 'green-island-stamp-progress';
+
+function saveProgress() {
+  if (!lockedRoute) {
+    localStorage.removeItem(STORAGE_KEY);
+    return;
+  }
+  const payload = {
+    lockedRouteId: lockedRoute.id,
+    completedSlots: Array.from(completedSlots)
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+}
+
+async function loadProgress() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+
+  try {
+    const data = JSON.parse(raw);
+    const route = ROUTES.find(r => r.id === data.lockedRouteId);
+    if (!route) return;
+
+    lockedRoute = route;
+    completedSlots.clear();
+    (data.completedSlots || []).forEach(idx => {
+      const num = Number(idx);
+      if (Number.isFinite(num) && num >= 0 && num < SLOT_META.length) {
+        completedSlots.add(num);
+      }
+    });
+
+    renderRouteDisplay(lockedRoute);
+    document.getElementById('spin-hint').textContent = `✓ Route ${lockedRoute.badgeName} locked in! Head to Block 02 to start your missions.`;
+    document.getElementById('spin-btn').disabled = true;
+    document.getElementById('confirm-btn').style.display = 'none';
+    document.getElementById('respin-btn').style.display = 'none';
+
+    // Fetch daily codes and update
+    const codes = await fetchDailyCodes();
+    updateCodes(codes);
+
+    renderStampRows();
+  } catch (error) {
+    console.warn('Failed to load saved progress:', error);
+    const spinBtn = document.getElementById('spin-btn');
+    if (spinBtn) spinBtn.disabled = false;
+    const confirmBtn = document.getElementById('confirm-btn');
+    if (confirmBtn) confirmBtn.style.display = 'none';
+    const respinBtn = document.getElementById('respin-btn');
+    if (respinBtn) respinBtn.style.display = 'inline-flex';
+  }
+}
+
+function resetRouteDisplay() {
+  document.getElementById('route-display').innerHTML = `
+    <p style="color:var(--muted);font-size:0.88rem;text-align:center;font-style:italic;">
+      Your route will appear here after spinning
+    </p>
+  `;
+}
+
+function resetProgress() {
+  const confirmed = window.confirm('Are you sure you want to clear all stamp progress? This action cannot be undone.');
+  if (!confirmed) return;
+
+  localStorage.removeItem(STORAGE_KEY);
+  activeRoute = null;
+  lockedRoute = null;
+  currentModalSlotIdx = null;
+  completedSlots.clear();
+
+  resetRouteDisplay();
+  document.getElementById('spin-hint').textContent = `Haven't spun yet — press the button to start!`;
+  document.getElementById('spin-btn').disabled = false;
+  document.getElementById('confirm-btn').style.display = 'none';
+  document.getElementById('respin-btn').style.display = 'inline-flex';
+  renderStampRows();
+}
+
+/* ── ROUTE SPINNER ── */
+function spinRoute() {
+  console.log('spinRoute triggered');
+  const display = document.getElementById('route-display');
+  if (!display) return;
+  display.innerHTML = '<p style="color:var(--muted);font-size:0.88rem;text-align:center;font-style:italic;padding:2rem 0;">Drawing your route...</p>';
+  document.getElementById('spin-hint').textContent = 'Spinning...';
+  const confirmBtn = document.getElementById('confirm-btn');
+  if (confirmBtn) confirmBtn.style.display = 'none';
+
+  setTimeout(() => {
+    const idx = Math.floor(Math.random() * ROUTES.length);
+    activeRoute = ROUTES[idx];
+    renderRouteDisplay(activeRoute);
+    document.getElementById('spin-hint').textContent = `Route drawn! Lock it in to start your missions.`;
+    if (confirmBtn) confirmBtn.style.display = 'inline-flex';
+  }, 700);
+}
+
+function renderRouteDisplay(route) {
+  const display = document.getElementById('route-display');
+  const slots = SLOT_META
+    .filter(s => route.slots[s.key])
+    .map(s => `
+      <div class="slot-mini">
+        <div class="slot-mini-time">${s.icon} ${s.label || ''}</div>
+        <div class="slot-mini-text">${route.slots[s.key]}</div>
+      </div>
+    `).join('');
+
+  display.innerHTML = `
+    <div class="spin-reveal">
+      <div class="route-badge ${route.badgeClass}">${route.badgeIcon} ${route.badgeName} — ${route.subtitle}</div>
+      <div class="route-name">${route.name}</div>
+      <div class="route-slots">${slots}</div>
+    </div>
+  `;
+}
+
+async function confirmRoute() {
+  if (!activeRoute) return;
+  lockedRoute = activeRoute;
+  document.getElementById('confirm-btn').style.display = 'none';
+  document.getElementById('respin-btn').style.display = 'none';
+  document.getElementById('spin-btn').disabled = true;
+  document.getElementById('spin-hint').textContent = `✓ Route ${lockedRoute.badgeName} locked in! Head to Block 02 to start your missions.`;
+
+  // Fetch daily codes and update
+  const codes = await fetchDailyCodes();
+  updateCodes(codes);
+
+  renderStampRows();
+  saveProgress();
+  console.log('confirmRoute completed, codes:', codes);
+  document.getElementById('stamp-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ── STAMP ROWS ── */
+function renderStampRows() {
+  const container = document.getElementById('stamp-rows');
+  container.innerHTML = '';
+
+  SLOT_META.forEach((slot, idx) => {
+    const task = lockedRoute ? lockedRoute.slots[slot.key] : null;
+    const isDone = completedSlots.has(idx);
+    const isNight = slot.key === 'night';
+    const hasTask = !!task;
+    const slotLabel = slot.label || '';
+    const slotStampName = slot.stampName || slotLabel || '';
+
+    const row = document.createElement('div');
+    row.className = 'stamp-row';
+    row.id = `stamp-row-${idx}`;
+
+    row.innerHTML = `
+      <div class="stamp-circle ${isDone ? 'done' : ''}" id="circle-${idx}">
+        ${isDone
+          ? `<div class="stamp-icon">${slot.stamp}</div><div class="stamp-time-label">${slotStampName}</div>`
+          : `<div style="font-size:1.2rem;opacity:0.4;">${slot.icon}</div><div class="stamp-time-label">${slotLabel}</div>`}
+      </div>
+      <div class="task-box">
+        <div class="task-time-tag">${slot.icon} ${slot.label || ''}</div>
+        <div class="task-text ${!hasTask ? 'empty' : ''}">${hasTask ? task : (lockedRoute ? '— No mission for this slot —' : 'Spin and lock your route to reveal this mission')}</div>
+      </div>
+      <div class="complete-box ${isDone ? 'done' : ''}" id="complete-${idx}">
+        ${renderCompleteCell(idx, isDone, hasTask)}
+      </div>
+    `;
+    container.appendChild(row);
+  });
+}
+
+function renderCompleteCell(idx, isDone, hasTask) {
+  if (isDone) return `<div class="done-label success-pop"><span style="font-size:1.3rem;">✅</span><span>Completed</span></div>`;
+  if (!hasTask) return `<div style="font-size:0.72rem;color:var(--muted);text-align:center;padding:0.5rem;">—</div>`;
+  return `<button class="code-btn" onclick="openModal(${idx})"> Enter<br>Passphrase</button>`;
+}
+
+/* Initial render (empty state) */
+(async () => {
+  renderStampRows();
+  await loadProgress();
+  const spinBtn = document.getElementById('spin-btn');
+  const confirmBtn = document.getElementById('confirm-btn');
+  const resetBtn = document.getElementById('reset-progress-btn');
+  if (spinBtn) spinBtn.addEventListener('click', spinRoute);
+  if (confirmBtn) confirmBtn.addEventListener('click', confirmRoute);
+  if (resetBtn) resetBtn.addEventListener('click', resetProgress);
+  if (typeof window !== 'undefined') {
+    window.spinRoute = spinRoute;
+    window.confirmRoute = confirmRoute;
+    window.resetProgress = resetProgress;
+  }
+})();
+
+/* ── MODAL ── */
+function openModal(slotIdx) {
+  currentModalSlotIdx = slotIdx;
+  const slot = SLOT_META[slotIdx];
+  const slotLabel = slot.label || '';
+  const slotStampName = slot.stampName || slotLabel || '';
+  document.getElementById('modal-stamp-icon').textContent = slot.stamp;
+  document.getElementById('modal-title').textContent = `${slotLabel} Passphrase`;
+  document.getElementById('modal-sub').textContent = `Find the "${slotStampName}" code at the ${slotLabel.toLowerCase()} mission site`;
+  document.getElementById('modal-input').value = '';
+  document.getElementById('modal-error').classList.remove('show');
+  document.getElementById('modal-input').classList.remove('error');
+  document.getElementById('modal').classList.add('show');
+  setTimeout(() => document.getElementById('modal-input').focus(), 100);
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+  currentModalSlotIdx = null;
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modal')) closeModal();
+}
+
+function submitCode() {
+  const input = document.getElementById('modal-input');
+  const val = input.value.trim().toUpperCase();
+  const slot = SLOT_META[currentModalSlotIdx];
+
+  console.log('Submit code check:', {
+    userInput: val,
+    expectedCode: slot.code,
+    slotKey: slot.key,
+    slotLabel: slot.label,
+    match: val === slot.code
+  });
+
+  if (val === slot.code) {
+    completedSlots.add(currentModalSlotIdx);
+    closeModal();
+    renderStampRows();
+    saveProgress();
+    checkAllDone();
+  } else {
+    input.classList.add('error');
+    document.getElementById('modal-error').classList.add('show');
+    setTimeout(() => input.classList.remove('error'), 400);
+  }
+}
+
+function checkAllDone() {
+  const needed = SLOT_META.filter(s => lockedRoute && lockedRoute.slots[s.key]).length;
+  if (completedSlots.size >= needed) {
+    setTimeout(() => {
+      alert('🎉 Congratulations! You\'ve collected all stamps for today!\n\nBring this screen to the Green Island Township Office (綠島鄉公所) to claim your souvenir postcard.');
+    }, 500);
+  }
+}
+
+/* ── RULES RENDER ── */
+const rulesList = document.getElementById('rules-list');
+RULES.forEach((rule, i) => {
+  const card = document.createElement('div');
+  card.className = 'rule-card';
+  card.innerHTML = `
+    <div class="rule-num">${i + 1}</div>
+    <div>
+      <div style="font-weight:600;font-size:0.9rem;margin-bottom:4px;">${rule.title}</div>
+      <div class="rule-text">${rule.text}</div>
+    </div>
+  `;
+  rulesList.appendChild(card);
+});
+
+/* ── MOBILE ── */
+function toggleMenu() {
+  document.getElementById('mobile-menu').classList.toggle('show');
+}
+
+/* ── HAMBURGER RESPONSIVE ── */
+(function() {
+  const ham = document.getElementById('hamburger');
+  const nav = document.querySelector('.desktop-nav');
+  const mq = window.matchMedia('(max-width: 768px)');
+  function check(e) {
+    ham.style.display = e.matches ? 'flex' : 'none';
+    if (nav) nav.style.display = e.matches ? 'none' : 'flex';
+  }
+  mq.addListener(check); check(mq);
+})();
+</script>
+</body>
+</html>
