@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>最新消息 — 綠島續嶼</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal: #35858e;
+  --teal-dark: #1a5a62;
+  --sage: #7da78c;
+  --moss: #c2d099;
+  --cream: #e6eec9;
+  --bg: #f8faf3;
+  --text: #2d3a2e;
+  --muted: #6b7f6c;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); }
+html { scroll-behavior: smooth; }
+
+/* ── HEADER (same as homepage) ── */
+#header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  transition: background 0.3s, box-shadow 0.3s;
+  background: rgba(26,58,46,0.97);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+  backdrop-filter: blur(10px);
+}
+.nav-link {
+  position: relative; color: rgba(255,255,255,0.85);
+  font-weight: 400; font-size: 0.9rem; letter-spacing: 0.04em;
+  transition: color 0.2s; text-decoration: none; padding: 4px 0;
+}
+.nav-link::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: var(--moss); transform: scaleX(0); transition: transform 0.25s;
+}
+.nav-link:hover { color: #fff; }
+.nav-link:hover::after { transform: scaleX(1); }
+.nav-link.active { color: #fff; }
+.nav-link.active::after { transform: scaleX(1); }
+
+/* ── PAGE HERO ── */
+.page-hero {
+  background: linear-gradient(160deg, #1a4a4e 0%, #35858e 60%, #5ba396 100%);
+  padding: 120px 2rem 60px;
+  position: relative;
+  overflow: hidden;
+}
+.page-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 80% 50%, rgba(194,208,153,0.15) 0%, transparent 60%);
+}
+.page-hero-wave {
+  position: absolute; bottom: -2px; left: 0; right: 0;
+}
+
+/* ── LAYOUT ── */
+.main-layout {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem 6rem;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* ── NEWS LIST SIDEBAR ── */
+.list-panel {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #dde8d0;
+  overflow: hidden;
+  position: sticky;
+  top: 88px;
+}
+.list-header {
+  padding: 1.2rem 1.4rem;
+  border-bottom: 1px solid #eef3e6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.list-header h2 {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.news-count {
+  background: var(--moss);
+  color: var(--teal-dark);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 50px;
+}
+
+.news-list { max-height: calc(100vh - 200px); overflow-y: auto; }
+.news-list::-webkit-scrollbar { width: 4px; }
+.news-list::-webkit-scrollbar-track { background: transparent; }
+.news-list::-webkit-scrollbar-thumb { background: var(--moss); border-radius: 2px; }
+
+.news-item {
+  padding: 1rem 1.4rem;
+  border-bottom: 1px solid #f0f5e8;
+  cursor: pointer;
+  transition: background 0.18s;
+  position: relative;
+}
+.news-item:last-child { border-bottom: none; }
+.news-item:hover { background: #f7fbf0; }
+.news-item.active {
+  background: #f0f7e6;
+  border-left: 3px solid var(--teal);
+}
+.news-item.active .news-item-title { color: var(--teal); }
+
+.news-item-date {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.news-item-date .dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--moss);
+  display: inline-block;
+  flex-shrink: 0;
+}
+.news-item.active .news-item-date .dot { background: var(--teal); }
+
+.news-badge {
+  font-size: 0.62rem;
+  padding: 1px 7px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.badge-new {
+  background: #e8f5e0;
+  color: #35858e;
+  border: 1px solid #c2d099;
+}
+.badge-event {
+  background: #e8f0f5;
+  color: #3a6b8e;
+  border: 1px solid #b8d0e0;
+}
+.badge-intl {
+  background: #f5eee8;
+  color: #8e5c3a;
+  border: 1px solid #e0c8b8;
+}
+.badge-env {
+  background: #f0f5e8;
+  color: #5c7a3a;
+  border: 1px solid #c8e0b8;
+}
+
+.news-item-title {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--text);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-weight: 400;
+}
+.news-item.active .news-item-title { font-weight: 500; }
+
+/* ── DETAIL PANEL ── */
+.detail-panel {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #dde8d0;
+  overflow: hidden;
+  min-height: 600px;
+}
+
+.detail-image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/7;
+  overflow: hidden;
+}
+
+.detail-img-placeholder {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px;
+  transition: background 0.4s, transform 0.25s, box-shadow 0.25s;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.detail-img-placeholder:hover {
+  transform: scale(1.03);
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
+}
+.detail-img-placeholder::before {
+  content: '';
+  position: absolute; inset: 0;
+  opacity: 0.2;
+}
+.image-preview-overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 300;
+  cursor: pointer;
+}
+.image-preview-overlay.show { display: flex; }
+.image-preview-overlay::after {
+  content: '點擊背景或按 Esc 關閉';
+  position: absolute;
+  bottom: 18px;
+  color: rgba(255,255,255,0.85);
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+}
+.image-preview-overlay img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 16px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+  cursor: default;
+}
+.img-caption {
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 0.08em;
+  text-align: center;
+  padding: 0 2rem;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  line-height: 1.5;
+  z-index: 1;
+  position: relative;
+}
+.img-icon {
+  font-size: 3rem;
+  z-index: 1;
+  position: relative;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));
+}
+
+.detail-body { padding: 2rem 2.4rem; }
+
+.detail-meta {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 1rem; flex-wrap: wrap;
+}
+.detail-date {
+  font-size: 0.82rem; color: var(--muted);
+  display: flex; align-items: center; gap: 5px;
+}
+.detail-date svg { opacity: 0.6; }
+
+.detail-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  line-height: 1.4;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.detail-divider {
+  height: 1px; background: #eef3e6; margin-bottom: 1.5rem;
+}
+
+.detail-content {
+  font-size: 0.93rem;
+  line-height: 1.9;
+  color: #3d4e3e;
+}
+.detail-content p { margin-bottom: 1rem; }
+.detail-content strong { color: var(--teal); font-weight: 500; }
+
+.detail-tags {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1.8rem;
+}
+.detail-tag {
+  background: var(--cream);
+  color: var(--teal-dark);
+  font-size: 0.75rem;
+  padding: 5px 14px;
+  border-radius: 50px;
+  font-weight: 500;
+}
+
+/* ── FADE ANIMATION ── */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+.detail-animate { animation: fadeSlideIn 0.35s ease both; }
+
+/* ── MOBILE ── */
+#hamburger { display: none; }
+#mobile-menu {
+  display: none; position: fixed; inset: 0;
+  background: rgba(26,58,46,0.97);
+  z-index: 200; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2rem;
+}
+#mobile-menu.show { display: flex; }
+.mobile-nav-link {
+  color: #e6eec9; font-size: 1.4rem; font-weight: 300;
+  letter-spacing: 0.1em; text-decoration: none; transition: color 0.2s;
+}
+.mobile-nav-link:hover { color: #fff; }
+
+@media (max-width: 768px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 2rem 1rem 4rem;
+  }
+  .list-panel { position: static; }
+  .news-list { max-height: 360px; }
+  #hamburger { display: flex !important; }
+  nav.desktop-nav { display: none !important; }
+  .detail-body { padding: 1.4rem 1.4rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <div style="max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px;">
+    <a href="index.html" style="text-decoration:none;display:flex;align-items:center;gap:10px;">
+      <div style="width:34px;height:34px;background:#c2d099;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M9 2C9 2 4 6 4 10.5C4 13.5 6.5 16 9 16C11.5 16 14 13.5 14 10.5C14 6 9 2 9 2Z" fill="#35858e"/>
+          <path d="M9 6C9 6 11 8 11 10C11 11.1 10.1 12 9 12C7.9 12 7 11.1 7 10C7 8 9 6 9 6Z" fill="#fff" opacity="0.7"/>
+        </svg>
+      </div>
+      <span style="font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;letter-spacing:0.05em;font-weight:600;">綠島續嶼</span>
+    </a>
+
+    <nav class="desktop-nav" style="display:flex;gap:2rem;align-items:center;">
+      <a href="index.html" class="nav-link">首頁</a>
+      <a href="#" class="nav-link active">最新消息</a>
+      <a href="index.html#weather" class="nav-link">天氣</a>
+      <a href="index.html#map" class="nav-link">地圖</a>
+      <a href="index.html#faq" class="nav-link">FAQ</a>
+    </nav>
+
+    <button id="hamburger" style="flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;" onclick="toggleMenu()">
+      <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
+      <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
+      <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
+    </button>
+  </div>
+</header>
+
+<!-- MOBILE MENU -->
+<div id="mobile-menu">
+  <button onclick="toggleMenu()" style="position:absolute;top:20px;right:24px;background:none;border:none;color:#e6eec9;font-size:1.8rem;cursor:pointer;">✕</button>
+  <a href="index.html" class="mobile-nav-link">首頁</a>
+  <a href="#" class="mobile-nav-link">最新消息</a>
+  <a href="index.html#weather" class="mobile-nav-link">天氣</a>
+  <a href="index.html#map" class="mobile-nav-link">地圖</a>
+  <a href="index.html#faq" class="mobile-nav-link">FAQ</a>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div style="position:relative;z-index:2;max-width:1200px;margin:0 auto;">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:50px;padding:5px 14px;margin-bottom:1rem;">
+      <span style="width:5px;height:5px;background:#c2d099;border-radius:50%;display:inline-block;"></span>
+      <span style="font-size:0.75rem;color:rgba(255,255,255,0.85);letter-spacing:0.1em;">INSIGHTS & UPDATES</span>
+    </div>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:#fff;font-weight:600;margin-bottom:0.5rem;">Latest News</h1>
+    <p style="font-size:0.9rem;color:rgba(255,255,255,0.7);">Green Island: Events, Ecology, and Local Updates</p>
+  </div>
+  <div class="page-hero-wave">
+    <svg viewBox="0 0 1440 50" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:50px;">
+      <path d="M0,25 C240,50 480,0 720,25 C960,50 1200,0 1440,25 L1440,50 L0,50 Z" fill="#f8faf3"/>
+    </svg>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="main-layout">
+
+  <!-- 區塊一：活動列表 -->
+  <aside class="list-panel">
+    <div class="list-header">
+      <h2>Latest News</h2>
+      <span class="news-count">8 Articles</span>
+    </div>
+    <div class="news-list" id="news-list"></div>
+  </aside>
+
+  <!-- 區塊二：活動詳情 -->
+  <main class="detail-panel" id="detail-panel">
+    <!-- Filled by JS -->
+  </main>
+
+</div>
+
+<div id="image-preview-overlay" class="image-preview-overlay" onclick="overlayClick(event)">
+  <img id="image-preview-img" src="" alt="Full preview" onclick="event.stopPropagation()" />
+</div>
+
+<script>
+/* ── DATA ── */
+const newsData = [
+  {
+    id: 1,
+    date: '2026-05-04',
+    title: '2026 Green Island Open Water Swimming Event',
+    badge: 'new',
+    badgeLabel: 'new',
+    imgSrc: 'images/2026年綠島海上長泳.png',
+    imgGradient: 'linear-gradient(135deg, #1a6a7e 0%, #35858e 50%, #4aa8b5 100%)',
+    tags: ['Water Event', 'Eco Tourism', 'Community Involvement'],
+    content: `
+    <div class="event-section-en">
+    <p>Experience the stunning turquoise waters of the Pacific and explore Green Island's unique volcanic coastal landscapes. This annual event perfectly combines athletic challenge with eco-tourism.</p>
+
+    <hr>
+
+    <div class="event-details">
+        <h3>Event Details</h3>
+        <ul>
+            <li><strong>Date:</strong> May 4, 2026</li>
+            <li><strong>Highlight:</strong> One of the most anticipated aquatic events in Eastern Taiwan, offering a unique opportunity to swim across the vibrant waters of the Pacific.</li>
+        </ul>
+    </div>
+
+    <div class="swim-route">
+        <h3>Swim Route</h3>
+        <ul>
+            <li><strong>Route:</strong> Starting from Nanliao Fishing Harbor, swimming along the west coast of Green Island to the finish line.</li>
+            <li><strong>Distance:</strong> Approximately 3,000 meters.</li>
+        </ul>
+    </div>
+
+    <div class="safety-registration">
+        <h3>Safety & Registration</h3>
+        <ul>
+            <li><strong>Qualifications:</strong> Participants must demonstrate sufficient swimming proficiency and pass a physical fitness screening.</li>
+            <li><strong>Safety Measures:</strong> Professional safety personnel, rescue boats, and water stations will be stationed along the route to ensure participant safety.</li>
+            <li><strong>Registration:</strong> Please contact the East Coast National Scenic Area Administration. Limited spots available—register early!</li>
+        </ul>
+    </div>
+</div>
+
+<style>
+    /* Styling for clear, scannable layout */
+    .event-section-en {
+        line-height: 1.6;
+        color: #444;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 800px;
+    }
+    .event-section-en h2 {
+        color: #005a87;
+        border-left: 5px solid #005a87;
+        padding-left: 12px;
+        margin-bottom: 15px;
+    }
+    .event-section-en h3 {
+        color: #007ba7;
+        margin-top: 25px;
+        font-size: 1.2rem;
+    }
+    .event-section-en ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .event-section-en li {
+        margin-bottom: 10px;
+        position: relative;
+        padding-left: 20px;
+    }
+    .event-section-en li::before {
+        content: "•";
+        color: #007ba7;
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+    }
+    .event-section-en hr {
+        border: 0;
+        border-top: 1px solid #ddd;
+        margin: 25px 0;
+    }
+</style>
+    `
+  },
+  {
+    id: 2,
+    date: '2026-05-04',
+    title: 'Tech-Driven Discovery: Dive into Green Island’s Hidden Depths. A New Era of Multi-Sensory Digital Tourism—Where Island Heritage Meets the Deep Blue.',
+    badge: 'new',
+    badgeLabel: 'new',
+    imgSrc: 'images/探索綠島再升級.jpg',
+    imgGradient: 'linear-gradient(135deg, #0d3d52 0%, #1a6a7e 40%, #2a9db5 100%)',
+    tags: ['Digital Tourism', 'Technology Experience', 'Immersive'],
+    content: `
+      <p>The East Coast National Scenic Area Administration has upgraded its <strong>"Explore Green Island"</strong> digital service, 
+        blending AI technology with immersive storytelling to offer a seamless travel experience. A major highlight is the expanded underwater 
+        content in Chaikou and Shilang, featuring nine high-definition panoramic scenes like Atlantis. These visuals have been enhanced with 
+        hundred-megapixel AI technology, bringing even the finest seabed details to life.</p>
+      <p>The updated platform now features a refined UI/UX designed around three narrative themes: <strong>terrestrial ecology, historical heritage, 
+        and the underwater world.</strong> Additionally, the update includes new aerial footage of inland sites and a Japanese language interface to 
+        better serve international visitors.</p>
+      <p>Discover the natural and cultural wonders of Green Island from a whole new perspective—visit our official website for full access to all features.</p>
+    `
+  },
+  {
+    id: 3,
+    date: '2026-04-28',
+    title: '2026 Green Island Eco-Guardians: Healing Trails, Crab Rescue, and Beach Cleanups. Join Us and Support Local Businesses!',
+    badge: 'event',
+    badgeLabel: 'Event',
+    imgSrc: 'images/開啟115年綠島最美的山海守護之旅.png',
+    imgGradient: 'linear-gradient(135deg, #2d5a3e 0%, #4a8a5e 40%, #7da78c 100%)',
+    tags: ['Conservation', 'Beach Cleanup', 'Hiking', 'Local Support'],
+    content: `
+      <div class="eco-travel-section">
+    <p>From <strong>May 1st to October 31st, 2026</strong>, the East Coast 
+      National Scenic Area Administration presents the <strong>"Eco-Slow Travel 
+      Series."</strong> We invite travelers to engage their five senses, practice 
+      "Leave No Trace" principles, and foster local community well-being through 
+      three curated themes.</p>
+
+    <div class="activity-item">
+        <h3>Guided Treasure Hunt on Cross-Mountain Ancient Trail</h3>
+        <p>Experience "Forest Healing" with guided tours available daily 
+        (morning and afternoon sessions). Learn about native vegetation and 
+        reconnect with nature. This activity follows a "User Pays" model: 
+        <strong>NT$150 for adults</strong> (includes a NT$50 voucher for local 
+        partner shops). Minimum of two participants required for reservation.</p>
+    </div>
+
+    <div class="activity-item">
+        <h3>"Thank You for the Love" Crab Protection Action</h3>
+        <p>Join us for four special sessions between June and September to become a "Crab Guardian." Help mother land crabs safely cross the road to release their eggs, spreading a meaningful message of life education and environmental protection.</p>
+    </div>
+
+    <div class="activity-item">
+        <h3>Environmental Beach Cleanups</h3>
+        <p>Take action to protect our oceans. From now until the end of October, visitors can pick up cleanup supplies at the Green Island Visitor Center and turn environmental awareness into practical contributions to keep our beaches pristine.</p>
+    </div>
+
+    <div class="booking-info">
+        <h3>Activity Registration</h3>
+        <ul>
+            <li><strong>Booking Hotline:</strong> 089-672026</li>
+            <li><strong>More Information:</strong> Please visit the official ECNSA website or the "Guoshan Ancient Trail Treasure Hunt" Facebook fan page.</li>
+        </ul>
+    </div>
+</div>
+
+<style>
+    .eco-travel-section {
+        line-height: 1.7;
+        color: #333;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        max-width: 800px;
+        padding: 20px;
+    }
+    .eco-travel-section h2 {
+        color: #2e7d32; /* 綠色系呼應生態主題 */
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+    .eco-travel-section h3 {
+        color: #388e3c;
+        margin-top: 25px;
+        font-size: 1.3rem;
+        border-bottom: 2px solid #e8f5e9;
+        padding-bottom: 5px;
+    }
+    .eco-travel-section p {
+        margin-bottom: 15px;
+    }
+    .eco-travel-section hr {
+        border: 0;
+        border-top: 1px solid #ddd;
+        margin: 30px 0;
+    }
+    .booking-info {
+        background-color: #f1f8e9;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-top: 30px;
+    }
+    .booking-info ul {
+        list-style: none;
+        padding-left: 0;
+    }
+    .booking-info li {
+        margin-bottom: 8px;
+    }
+</style>
+
+      <!-- <p>配合民國115年，東管處精心規劃<strong>「山海守護雙重奏」</strong>，結合綠島古道療癒健行與海龜陸蟹護蟹淨灘，為旅客帶來兼具身心靈滋養與生態貢獻的深度旅遊體驗。</p>
+      <p>活動分為上午場與下午場。上午場沿柚子湖古道漫步，由在地解說員導覽沿途生態，探訪清代時期遺留的石砌灌溉系統；下午場則於大白沙海灘進行護蟹淨灘，參與者將協助記錄陸蟹族群數量並清除海漂垃圾。</p>
+      <p>完成全程活動的旅客可獲得紀念護照章，並享有島上合作友善商家的專屬消費折扣，鼓勵旅客以消費行動支持在地永續經濟。</p> --!>
+    `
+  },
+  {
+    id: 4,
+    date: '2026-04-27',
+    title: '2026 Green Island Ocean Swim: Maritime Traffic Control & Restrictions',
+    badge: 'event',
+    badgeLabel: 'Ann.',
+    imgSrc: 'images/115年綠島海上長泳活動海域管制.jpg',
+    imgGradient: 'linear-gradient(135deg, #3a4a6a 0%, #4a6a8e 50%, #6a8aae 100%)',
+    imgIcon: '',
+    imgCaption: '',
+    tags: ['Maritime Traffic Control', 'Safety Ann.', 'Traffic Restrictions'],
+    content: `
+      <p>The Green Island Township Office will host the <strong>"Green Island Ocean Swim"</strong> on May 17, 
+        2026, from 5:00 AM to 12:00 PM. To ensure participant safety, the Chaikou Snorkeling 
+        Area will be under maritime control during this period. Tourists are prohibited from 
+        entering the water for any aquatic activities. Please follow all on-site signage and 
+        prioritize your safety. We apologize for any inconvenience caused.</p>
+    `
+  },
+  {
+    id: 5,
+    date: '2025-12-02',
+    title: '2026 Green Island Dual Countdown Concert',
+    badge: 'event',
+    badgeLabel: 'Event',
+    imgSrc: 'images/2026綠島海陸跨年演唱會.jpg',
+    imgGradient: 'linear-gradient(135deg, #1a1a3e 0%, #2a2a6e 40%, #4a3a8e 100%)',
+    imgIcon: '',
+    imgCaption: '',
+    tags: ['New Year', 'Concert', 'Fireworks', 'Time-limited Event'],
+    content: `
+    <p><strong>The 2026 Green Island Dual Countdown Concert</strong> will grandly 
+      kick off on the evening of December 31, 2025. Experience Taiwan’s only synchronized 
+      underwater and onshore countdown, using the breathtaking Pacific starry sky and the 
+      deep blue ocean as your backdrop.</p>
+    <p>The main event takes place at the <strong>Plaza in front of the Green Island Duty-Free 
+      Shop</strong>. Beyond spectacular live performances from 8:00 PM onwards, the night is 
+      packed with exciting lucky draw prizes and authentic local Green Island delicacies. 
+      Whether you are dancing on land or diving deep, it’s a feast for the senses!</p>
+    <p>For diving enthusiasts, don’t miss the legendary <strong>Underwater Countdown
+      </strong> at the Shilang Diving Area (Pygmy Seahorse Underwater Postbox) starting 
+      from 10:30 PM. Celebrate the New Year in the most unique way possible—submerged in 
+      the beauty of the ocean.</p>
+    <p>Activity spots are limited! We recommend planning your trip early as island accommodations fill up fast. Come to Green Island to watch, eat, win, and welcome 2026 with joy!</p>
+    `
+  },
+  {
+    id: 6,
+    date: '2025-10-14',
+    title: 'Building a Sustainable Green Island: A New Model of Ocean Governance Through Multi-Party Partnership',
+    badge: 'env',
+    badgeLabel: 'Eco',
+    imgSrc: 'images/跨域共創綠島永續願景.jpg',
+    imgGradient: 'linear-gradient(135deg, #1a4a3a 0%, #2a6a5a 40%, #3a8a7a 100%)',
+    imgIcon: '',
+    imgCaption: '',
+    tags: ['Ocean Governance', 'Academic Collaboration', 'Sustainable Development', 'Academia Sinica'],
+    content: `
+      <p>On October 13, <strong>ECNSA</strong> hosted the "Green Island Sustainable 
+        Governance Workshop" at Dabaisha. This event brought together <strong>Academia 
+        Sinica</strong>, local diving associations, and cross-disciplinary experts to 
+        develop long-term strategies for balancing ecological conservation with industrial 
+        growth through immersive field experiences and professional dialogue.</p>
+    <p>The workshop achieved two core consensuses: First, a transition toward <strong>"High-Value Tourism,"</strong> 
+      shifting from price competition to high-quality, personalized experiences. Second, the establishment of a 
+      <strong>"Professional Dive Guide System"</strong> at Dabaisha as a pilot site, enhancing environmental 
+      responsibility among operators through certification and training mechanisms.</p>
+    <p>Director Lin Wei-ling of ECNSA emphasized that future efforts will focus on empowering 
+      local self-management and infrastructure improvements. By integrating academic monitoring 
+      with community collaboration, Green Island aims to become an internationally competitive 
+      destination that prioritizes both safety and marine sustainability.</p>
+    `
+  },
+  {
+    id: 7,
+    date: '2025-09-03',
+    title: 'Double Gold Winner! Green Island’s "My Favorite Scenery" Triumphs at the U.S. MUSE Creative Awards',
+    badge: 'intl',
+    badgeLabel: 'Global',
+    imgSrc: 'images/綠島‧天堂島嶼之美再登國際.jpg',
+    imgGradient: 'linear-gradient(135deg, #5a3a1a 0%, #8a6a2a 40%, #c2a040 100%)',
+    imgIcon: '',
+    imgCaption: '',
+    tags: ['International Awards', 'The Muse Creative Awards', 'Photography', 'Gold Award'],
+    content: `
+      <p>The promotional video <strong>"My Favorite Green Island Scenery,"</strong> produced 
+        by ECNSA, has won <strong>Double Gold</strong> at the 2025 Q1 MUSE Creative Awards in 
+        the "Video - Cultural" and "Video - Travel" categories. This prestigious international 
+        recognition highlights Green Island’s stunning natural landscapes and rich cultural 
+        heritage on a global stage.</p>
+    <p>Narrated from a local perspective, the film captures the island’s daily aesthetics, 
+      featuring low-carbon travel, the heritage of Dahu Village, and traditional crafts like 
+      peanut candy making. It weaves together the island's historical memory with the 
+      ecological wonders of the Kuroshio Current, showcasing the harmonious coexistence of 
+      people and nature in this <strong>"Emerald of the Pacific."</strong></p>
+    <p>ECNSA stated that this award is a milestone for the "Green Island • Paradise Island" 
+      brand. Moving forward, the focus will remain on sustainable tourism and digital 
+      marketing to enhance international brand value, inviting global travelers to experience 
+      this mysterious island known for its vibrant coral reefs and rare saltwater hot springs.</p>
+    `
+  },
+  {
+    id: 8,
+    date: '2025-06-04',
+    title: 'Green Island Ecosystem Revival: Long-term Dive Site Surveys Show Clownfish Recovery',
+    badge: 'env',
+    badgeLabel: 'Eco',
+    imgSrc: 'images/綠島小丑魚生態重現生機.jpg',
+    imgGradient: 'linear-gradient(135deg, #1a4a5e 0%, #2a7a8e 40%, #3aaa9e 100%)',
+    imgIcon: '',
+    imgCaption: '',
+    tags: ['Clownfish', 'Coral Reef', 'Ecosystem Monitoring', 'Marine Conservation'],
+    content: `
+      <p>Exciting news from Green Island’s famous dive site, <strong>"Clownfish Island"
+        </strong>! Since 2020, this area faced severe ecological crises due to port 
+        construction, extreme weather, and rising ocean temperatures, which led to siltation 
+        and mass anemone die-offs. However, after four years of fixed-point monitoring by 
+        the Taiwan Society for Coral Reefs, latest surveys show the site is exhibiting 
+        remarkable self-healing, with key species steadily returning.</p>
+    <p>The report indicates that anemone distributions have stabilized, accompanied by a 
+      significant increase in resident fish such as the <strong>clown anemonefish</strong> 
+      and threespot dascyllus. This journey from damage to recovery serves as vital empirical 
+      evidence for marine conservation and a cornerstone for environmental education and 
+      sustainable tourism.</p>
+    <p>ECNSA emphasizes the continued promotion of <strong>"Low-Disturbance"</strong> 
+      eco-friendly travel. Visitors are encouraged to explore responsibly, using resources 
+      like the book <i>11 Entrances to Diving in Green Island</i> as a guide. Through 
+      long-term monitoring and local collaboration, Green Island aims to balance conservation 
+      with tourism, protecting this vibrant "Deep Blue Kingdom."</p>
+    `
+  }
+];
+
+/* ── RENDER LIST ── */
+const badgeMap = { new: 'badge-new', event: 'badge-event', intl: 'badge-intl', env: 'badge-env' };
+
+const listEl = document.getElementById('news-list');
+newsData.forEach((item, idx) => {
+  const el = document.createElement('div');
+  el.className = 'news-item' + (idx === 0 ? ' active' : '');
+  el.dataset.id = item.id;
+  el.innerHTML = `
+    <div class="news-item-date">
+      <span class="dot"></span>
+      <span>${item.date}</span>
+      <span class="news-badge ${badgeMap[item.badge]}">${item.badgeLabel}</span>
+    </div>
+    <div class="news-item-title">${item.title}</div>
+  `;
+  el.addEventListener('click', () => selectNews(item.id));
+  listEl.appendChild(el);
+});
+
+/* ── RENDER DETAIL ── */
+function selectNews(id) {
+  const item = newsData.find(n => n.id === id);
+  if (!item) return;
+
+  document.querySelectorAll('.news-item').forEach(el => {
+    el.classList.toggle('active', parseInt(el.dataset.id) === id);
+  });
+
+  const panel = document.getElementById('detail-panel');
+  const imageStyle = item.imgSrc
+    ? `background-image: url('${item.imgSrc}'); background-size: cover; background-position: center; background-repeat: no-repeat;`
+    : `background: ${item.imgGradient};`;
+
+  panel.innerHTML = `
+    <div class="detail-animate">
+      <div class="detail-image-wrap">
+        <div class="detail-img-placeholder" style="${imageStyle}"
+             onclick="showFullImage('${item.imgSrc || ''}')">
+          <div class="img-icon">${item.imgIcon || ''}</div>
+          <div class="img-caption">${item.imgCaption || ''}</div>
+        </div>
+      </div>
+      <div class="detail-body">
+        <div class="detail-meta">
+          <div class="detail-date">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="2" stroke="#6b7f6c" stroke-width="1.3"/><path d="M5 2v2M11 2v2M2 7h12" stroke="#6b7f6c" stroke-width="1.3" stroke-linecap="round"/></svg>
+            ${item.date}
+          </div>
+          <span class="news-badge ${badgeMap[item.badge]}">${item.badgeLabel}</span>
+        </div>
+        <h1 class="detail-title">${item.title}</h1>
+        <div class="detail-divider"></div>
+        <div class="detail-content">${item.content}</div>
+        <div class="detail-tags">
+          ${ (item.tags || []).map(t => `<span class="detail-tag"># ${t}</span>`).join('') }
+        </div>
+      </div>
+    </div>
+  `;
+
+  if (window.innerWidth < 768) {
+    document.getElementById('detail-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function showFullImage(src) {
+  if (!src) return;
+  const overlay = document.getElementById('image-preview-overlay');
+  const img = document.getElementById('image-preview-img');
+  if (!overlay || !img) return;
+  img.src = src;
+  overlay.classList.add('show');
+}
+function hideFullImage() {
+  const overlay = document.getElementById('image-preview-overlay');
+  if (overlay) overlay.classList.remove('show');
+}
+function overlayClick(event) {
+  if (event.target.id === 'image-preview-overlay') {
+    hideFullImage();
+  }
+}
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    hideFullImage();
+  }
+});
+
+/* Init with first item */
+selectNews(1);
+
+/* ── MOBILE MENU ── */
+function toggleMenu() {
+  document.getElementById('mobile-menu').classList.toggle('show');
+}
+</script>
+</body>
+</html>
