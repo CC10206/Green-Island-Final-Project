@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>綠島續嶼 — 永續生態旅遊</title>
+<title>ISLE of ROAM — Sustainable Ecotourism</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -215,14 +215,14 @@
   <div style="position:relative;z-index:2;text-align:center;padding:2rem;max-width:800px;">
     <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:50px;padding:6px 18px;margin-bottom:1.5rem;">
       <span style="width:6px;height:6px;background:#c2d099;border-radius:50%;display:inline-block;"></span>
-      <span style="font-size:0.78rem;color:rgba(255,255,255,0.85);letter-spacing:0.1em;">永續生態旅遊平台</span>
+      <span style="font-size:0.78rem;color:rgba(255,255,255,0.85);letter-spacing:0.1em;">Eco-Travel Platform</span>
     </div>
     <h1 class="font-display" style="font-size:clamp(2.4rem,6vw,4.2rem);color:#fff;line-height:1.15;margin-bottom:1.2rem;font-weight:600;">
-      探索綠島<br>
-      <span style="color:#c2d099;">純淨之美</span>
+      Explore Green Island<br>
+      <span style="color:#c2d099;">Pristine Beauty</span>
     </h1>
-    <p style="font-size:clamp(0.95rem,2.2vw,1.15rem);color:rgba(255,255,255,0.78);line-height:1.8;margin-bottom:2.5rem;max-width:520px;margin-left:auto;margin-right:auto;">
-      在碧藍太平洋懷抱中，以永續的方式感受綠島的溫泉、珊瑚礁與星空，讓每一步旅程都成為守護自然的行動。
+    <p style="font-size:clamp(0.95rem,2.2vw,1.15rem);color:rgba(255,255,255,0.78);line-height:1.8;margin-bottom:2.5rem;max-width:600px;margin-left:auto;margin-right:auto;">
+      Embrace the blue Pacific and experience Green Island’s hot springs, coral reefs, and starry skies—where every step protects nature.
     </p>
     <a href="#explore" style="display:inline-flex;align-items:center;gap:10px;background:#c2d099;color:#1a4a4e;padding:14px 36px;border-radius:50px;font-weight:500;font-size:0.95rem;text-decoration:none;transition:all 0.25s;letter-spacing:0.03em;"
        onmouseover="this.style.background='#d4e8aa';this.style.transform='translateY(-2px)'"
@@ -243,12 +243,35 @@
 <!-- WEATHER SECTION -->
 <section id="weather" style="padding:6rem 2rem;max-width:1200px;margin:0 auto;" class="fade-in">
   <div style="margin-bottom:3rem;">
-    <span class="section-title">綠島即時氣象</span>
-    <p style="color:#6b7f6c;font-size:0.9rem;margin-top:1rem;">以下為近七日天氣預報（示意資料）</p>
+    <span class="section-title">Green Island Real-Time Weather</span>
+    <p style="color:#6b7f6c;font-size:0.9rem;margin-top:1rem;">The following is the real-time weather data for Green Island, Taitung County, obtained from the Central Weather Administration (CWA) OpenData API (F-D0047-039).</p>
   </div>
 
-  <div id="explore" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1rem;">
-    <!-- Day cards injected by JS -->
+  <div id="weather-info" style="display:grid;grid-template-columns:1fr;gap:1rem;margin-bottom:1.5rem;">
+    <div style="background:#fff;border:1px solid #dde8d0;border-radius:20px;padding:1.6rem;display:flex;flex-wrap:wrap;align-items:center;gap:1rem;">
+      <div style="flex:1;min-width:220px;">
+        <div id="weather-location" style="font-size:1.05rem;font-weight:600;color:#2d3a2e;">Green Island</div>
+        <div id="weather-status" style="font-size:0.9rem;color:#4a5c4b;margin-top:0.5rem;">Loading…</div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:flex-end;min-width:220px;">
+        <div style="background:#f0f7e6;border-radius:16px;padding:0.9rem 1.1rem;min-width:120px;text-align:center;">
+          <div style="font-size:0.75rem;color:#7da78c;letter-spacing:0.08em;">High</div>
+          <div id="weather-max" style="font-size:1.4rem;font-weight:600;color:#2d3a2e;">—</div>
+        </div>
+        <div style="background:#f0f7e6;border-radius:16px;padding:0.9rem 1.1rem;min-width:120px;text-align:center;">
+          <div style="font-size:0.75rem;color:#7da78c;letter-spacing:0.08em;">Low</div>
+          <div id="weather-min" style="font-size:1.4rem;font-weight:600;color:#2d3a2e;">—</div>
+        </div>
+        <div style="background:#f0f7e6;border-radius:16px;padding:0.9rem 1.1rem;min-width:120px;text-align:center;">
+          <div style="font-size:0.75rem;color:#7da78c;letter-spacing:0.08em;">Rain %</div>
+          <div id="weather-pop" style="font-size:1.4rem;font-weight:600;color:#2d3a2e;">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="weather-cards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;">
+    <!-- API weather cards injected by JS -->
   </div>
 </section>
 
@@ -329,6 +352,46 @@
   </div>
 </section>
 
+<!-- SDGS SECTION -->
+<section id="sdgs" style="padding:6rem 2rem;max-width:1200px;margin:0 auto;" class="fade-in">
+  <div style="margin-bottom:3rem;text-align:center;">
+    <span class="section-title">Our SustainableGoals</span>
+    <p style="color:#6b7f6c;font-size:0.95rem;margin-top:1rem;max-width:720px;margin-left:auto;margin-right:auto;">
+      This website aligns with UN Sustainable Development Goals<strong>11 (Sustainable Cities and Communities)</strong>and<strong>14 (Life Below Water)</strong>.
+      By integrating Green Island tourism info, marine ecology insights, and eco-friendly local communities, we aim to deliver a travel experience that is both 
+      enjoyable and ecologically responsible.
+    </p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;align-items:start;">
+    <div style="background:#fff;border:1px solid #dde8d0;border-radius:20px;overflow:hidden;min-height:320px;display:flex;flex-direction:column;">
+      <div style="height:200px;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+        <img src="images/11.png" alt="SDG 11" style="width:100%;height:200px;object-fit:cover;display:block;">
+      </div>
+      <div style="padding:1.5rem;">
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.25rem;color:#2d3a2e;margin-bottom:0.75rem;">SDG 11：Sustainable Cities and Communities</h3>
+        <p style="color:#4a5c4b;line-height:1.8;font-size:0.95rem;">
+          By providing local services, eco-friendly accommodations, and low-impact travel recommendations in Green Island, we seamlessly integrate urban and 
+          community sustainability into every traveler’s daily itinerary.
+        </p>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #dde8d0;border-radius:20px;overflow:hidden;min-height:320px;display:flex;flex-direction:column;">
+      <div style="height:200px;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+        <img src="images/14.png" alt="SDG 14" style="width:100%;height:200px;object-fit:cover;display:block;">
+      </div>
+      <div style="padding:1.5rem;">
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.25rem;color:#2d3a2e;margin-bottom:0.75rem;">SDG 14：Life Below Water</h3>
+        <p style="color:#4a5c4b;line-height:1.8;font-size:0.95rem;">
+          By highlighting Green Island’s ecological crises under global warming and high tourism pressure, we aim to inspire travelers to deeply 
+          understand the value of marine resources and actively take part in conservation efforts.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FAQ SECTION -->
 <section id="faq" style="padding:6rem 2rem;max-width:800px;margin:0 auto;" class="fade-in">
   <div style="margin-bottom:3rem;text-align:center;">
@@ -338,81 +401,40 @@
   <div id="faq-list"></div>
 </section>
 
-<!-- ABOUT -->
-<section style="padding:5rem 2rem;background:linear-gradient(135deg,#35858e,#4a9aa6);text-align:center;" class="fade-in">
+
+
+<!-- About ISLE of ROAM -->
+<section style="padding:5rem 2rem;background:linear-gradient(135deg,#35858e,#4a9aa6);text-align:center;">
   <div style="max-width:700px;margin:0 auto;">
-    <h2 class="font-display" style="font-size:2rem;color:#fff;margin-bottom:1.2rem;">關於綠島續嶼</h2>
-    <p style="color:rgba(255,255,255,0.82);line-height:1.9;font-size:0.95rem;margin-bottom:2rem;">
-      我們是一群熱愛綠島、關注生態保育的旅遊倡議者。致力於推廣低碳、友善環境的旅遊方式，連結在地友善商家與旅客，讓旅遊成為守護這座美麗島嶼的一股力量。
-    </p>
-    <div style="display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;">
-      <div style="text-align:center;">
-        <div style="font-family:'Playfair Display',serif;font-size:2.4rem;color:#c2d099;font-weight:600;">500+</div>
-        <div style="font-size:0.82rem;color:rgba(255,255,255,0.7);margin-top:4px;">生態旅遊路線</div>
-      </div>
-      <div style="text-align:center;">
-        <div style="font-family:'Playfair Display',serif;font-size:2.4rem;color:#c2d099;font-weight:600;">120+</div>
-        <div style="font-size:0.82rem;color:rgba(255,255,255,0.7);margin-top:4px;">友善在地商家</div>
-      </div>
-      <div style="text-align:center;">
-        <div style="font-family:'Playfair Display',serif;font-size:2.4rem;color:#c2d099;font-weight:600;">8,000+</div>
-        <div style="font-size:0.82rem;color:rgba(255,255,255,0.7);margin-top:4px;">旅遊者足跡</div>
-      </div>
-    </div>
+    <h2 style="font-family: 'Playfair Display', serif; font-size:2rem; color:#fff; margin-bottom:1.2rem;">About ISLE of ROAM</h2>
+    <p style="color:rgba(255,255,255,0.82);line-height:1.9;font-size:0.95rem;margin-bottom:2rem;">We are a group of travel advocates who love Green Island and are passionate about ecological conservation. We are dedicated to promoting low-carbon, eco-friendly travel by connecting local eco-conscious merchants with travelers, making tourism a powerful force for protecting this beautiful island.</p>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer style="background:#1a2e1e;color:#a8c4aa;padding:4rem 2rem 2rem;">
-  <div style="max-width:1200px;margin:0 auto;">
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:3rem;margin-bottom:3rem;">
+<!-- 共用頁尾 -->
+<footer class="site-footer" style="background: #1a2e1e; color: #a8c4aa; padding: 4rem 2rem 2rem;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; margin-bottom: 3rem; text-align: left;">
       <div>
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
           <div style="width:30px;height:30px;background:#c2d099;border-radius:50%;display:flex;align-items:center;justify-content:center;">
-            <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
-              <path d="M9 2C9 2 4 6 4 10.5C4 13.5 6.5 16 9 16C11.5 16 14 13.5 14 10.5C14 6 9 2 9 2Z" fill="#35858e"/>
-            </svg>
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 2C9 2 4 6 4 10.5C4 13.5 6.5 16 9 16C11.5 16 14 13.5 14 10.5C14 6 9 2 9 2Z" fill="#35858e"/></svg>
           </div>
-          <span style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#e6eec9;">綠島續嶼</span>
+          <span style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#e6eec9;">ISLE of ROAM</span>
         </div>
-        <p style="font-size:0.83rem;line-height:1.8;color:#7a9c7b;">以永續旅遊為核心，守護綠島純淨之美，讓旅行成為改變的力量。</p>
+        <p style="font-size:0.83rem;line-height:1.8;color:#7a9c7b;">Centered on sustainable tourism, we protect the pristine beauty of Green Island, making travel a power for change.</p>
       </div>
-
       <div>
-        <h4 style="font-size:0.78rem;letter-spacing:0.12em;color:#c2d099;margin-bottom:1rem;text-transform:uppercase;">快速連結</h4>
-        <div style="display:flex;flex-direction:column;gap:0.6rem;">
-          <a href="#weather" class="footer-link">天氣資訊</a>
-          <a href="#map" class="footer-link">分區導覽</a>
-          <a href="#faq" class="footer-link">常見問題</a>
-          <a href="#" class="footer-link">最新消息</a>
-        </div>
-      </div>
-
-      <div>
-        <h4 style="font-size:0.78rem;letter-spacing:0.12em;color:#c2d099;margin-bottom:1rem;text-transform:uppercase;">聯絡資訊</h4>
+        <h4 style="font-size:0.78rem;letter-spacing:0.12em;color:#c2d099;margin-bottom:1rem;text-transform:uppercase;">Contact Us</h4>
         <div style="display:flex;flex-direction:column;gap:0.6rem;font-size:0.85rem;">
-          <span>📧 hello@greenisland-eco.tw</span>
-          <span>📍 台東縣綠島鄉</span>
-          <span>📞 089-672-XXX</span>
-        </div>
-      </div>
-
-      <div>
-        <h4 style="font-size:0.78rem;letter-spacing:0.12em;color:#c2d099;margin-bottom:1rem;text-transform:uppercase;">社群連結</h4>
-        <div style="display:flex;gap:12px;">
-          <a href="#" style="width:36px;height:36px;border:1px solid rgba(194,208,153,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#c2d099;font-size:0.85rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='rgba(194,208,153,0.1)'" onmouseout="this.style.background='transparent'">IG</a>
-          <a href="#" style="width:36px;height:36px;border:1px solid rgba(194,208,153,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#c2d099;font-size:0.85rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='rgba(194,208,153,0.1)'" onmouseout="this.style.background='transparent'">FB</a>
-          <a href="#" style="width:36px;height:36px;border:1px solid rgba(194,208,153,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#c2d099;font-size:0.85rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='rgba(194,208,153,0.1)'" onmouseout="this.style.background='transparent'">YT</a>
+          <span>📧 Isle_of_Roam@gmail.com</span>
+          <span>📍 NCU MIS IM3029A Group6</span>
+          <span>113403023 蔡仁懋 / 112102526 陳俊岳 / 113403017 賴韋衡</span>
         </div>
       </div>
     </div>
-
     <div style="border-top:1px solid rgba(255,255,255,0.07);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
-      <span style="font-size:0.8rem;color:#5a7a5c;">© 2026 綠島續嶼. All rights reserved.</span>
-      <div style="display:flex;gap:1.5rem;">
-        <a href="#" class="footer-link" style="font-size:0.78rem;">隱私政策</a>
-        <a href="#" class="footer-link" style="font-size:0.78rem;">使用條款</a>
-      </div>
+      <span style="font-size:0.8rem;color:#5a7a5c;">© 2026 ISLE of ROAM. All rights reserved.</span>
     </div>
   </div>
 </footer>
@@ -445,32 +467,121 @@ function toggleMenu() {
 }
 
 /* ── WEATHER DATA ── */
-const weatherData = [
-  { day:'今天', date:'5/1', icon:'☀️', high:28, low:22, desc:'晴朗', wind:'微風' },
-  { day:'明天', date:'5/2', icon:'🌤️', high:27, low:21, desc:'多雲', wind:'微風' },
-  { day:'週四', date:'5/3', icon:'⛅', high:26, low:22, desc:'陰時多雲', wind:'東北風' },
-  { day:'週五', date:'5/4', icon:'🌦️', high:25, low:21, desc:'短暫陣雨', wind:'東北風' },
-  { day:'週六', date:'5/5', icon:'🌧️', high:24, low:20, desc:'陣雨', wind:'北風' },
-  { day:'週日', date:'5/6', icon:'⛅', high:26, low:21, desc:'多雲', wind:'微風' },
-  { day:'週一', date:'5/7', icon:'☀️', high:29, low:22, desc:'晴', wind:'微風' },
-];
+const weatherApiKey = 'CWA-F39595F5-0CF5-45FD-95C9-D54A56FA2AC3';
+const weatherApiUrl = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-D0047-039?Authorization=${weatherApiKey}`;
 
-const weatherGrid = document.getElementById('explore');
-weatherData.forEach((d, i) => {
-  const isToday = i === 0;
-  const card = document.createElement('div');
-  card.className = 'weather-card' + (isToday ? ' today' : '');
-  card.innerHTML = `
-    <div style="font-size:0.75rem;font-weight:500;opacity:${isToday?'0.9':'0.6'};margin-bottom:4px;">${d.day}</div>
-    <div style="font-size:0.7rem;opacity:0.6;margin-bottom:12px;">${d.date}</div>
-    <div style="font-size:2rem;margin-bottom:10px;">${d.icon}</div>
-    <div style="font-size:1.4rem;font-weight:600;margin-bottom:2px;">${d.high}°</div>
-    <div style="font-size:0.75rem;opacity:0.7;margin-bottom:8px;">${d.low}°</div>
-    <div style="font-size:0.7rem;opacity:0.75;line-height:1.4;">${d.desc}</div>
-    <div style="font-size:0.65rem;opacity:0.55;margin-top:4px;">${d.wind}</div>
-  `;
-  weatherGrid.appendChild(card);
-});
+const weatherCards = document.getElementById('weather-cards');
+const weatherStatus = document.getElementById('weather-status');
+const weatherMax = document.getElementById('weather-max');
+const weatherMin = document.getElementById('weather-min');
+const weatherPop = document.getElementById('weather-pop');
+
+function formatTimeLabel(isoString) {
+  const d = new Date(isoString);
+  const month = d.getMonth() + 1;
+  const day = d.getDate();
+  const hour = d.getHours();
+  return `${month}/${day} ${hour.toString().padStart(2, '0')}:00`;
+}
+
+function getParameterValue(param) {
+  return param?.parameterName || param?.parameterValue || '—';
+}
+
+function renderWeatherCards(periods, highTemps, lowTemps) {
+  weatherCards.innerHTML = '';
+  periods.forEach((period, i) => {
+    const maxTemp = highTemps[i]?.ElementValue?.[0]?.MaxTemperature || '—';
+    const minTemp = lowTemps[i]?.ElementValue?.[0]?.MinTemperature || '—';
+    const startTime = period.StartTime || '';
+    const card = document.createElement('div');
+    card.className = 'weather-card' + (i === 0 ? ' today' : '');
+    card.innerHTML = `
+      <div style="font-size:0.75rem;font-weight:500;opacity:${i === 0 ? '0.9' : '0.6'};margin-bottom:4px;">${i === 0 ? 'Current' : ''}</div>
+      <div style="font-size:0.7rem;opacity:0.6;margin-bottom:12px;">${formatTimeLabel(startTime)}</div>
+      <div style="font-size:2rem;margin-bottom:10px;">🌤️</div>
+      <div style="font-size:1.2rem;font-weight:600;margin-bottom:2px;">${maxTemp}° / ${minTemp}°</div>
+      <div style="font-size:0.7rem;opacity:0.75;line-height:1.4;">Forecast</div>
+    `;
+    weatherCards.appendChild(card);
+  });
+}
+
+function showWeatherError(message) {
+  weatherStatus.textContent = `Failed to load weather data: ${message}`;
+  weatherCards.innerHTML = '<div style="grid-column:1/-1; background:#fff8f0; border:1px solid #f3d2c1; border-radius:16px; padding:1.2rem; color:#8a4b3c;">請稍後重新整理頁面或檢查網路。若仍有問題，可能是氣象署API回傳格式異常。</div>';
+}
+
+function parseWeatherLocation(location) {
+  if (!location || !Array.isArray(location.WeatherElement)) {
+    showWeatherError('位置資料格式異常');
+    return;
+  }
+  
+  const findElement = (name) => location.WeatherElement.find(el => el.ElementName === name);
+  const maxTElement = findElement('最高溫度');
+  const minTElement = findElement('最低溫度');
+  
+  const maxTimes = maxTElement?.Time || [];
+  const minTimes = minTElement?.Time || [];
+  
+  if (maxTimes.length === 0) {
+    showWeatherError('無有效的天氣時間資料');
+    return;
+  }
+  
+  const firstMaxT = maxTimes[0];
+  const firstMinT = minTimes[0];
+  
+  const updateTime = firstMaxT?.StartTime || '';
+  weatherStatus.textContent = `資料更新：${updateTime ? updateTime.substring(0, 16).replace('T', ' ') : '未知'}`;
+  weatherMax.textContent = firstMaxT?.ElementValue?.[0]?.MaxTemperature || '—';
+  weatherMin.textContent = firstMinT?.ElementValue?.[0]?.MinTemperature || '—';
+  weatherPop.textContent = '—'; // 此API沒有降雨機率
+  
+  renderWeatherCards(
+    maxTimes.slice(0, 7).map((period, index) => ({
+      ...period,
+      minTemp: minTimes[index]?.ElementValue?.[0]?.MinTemperature || '—'
+    })),
+    maxTimes,
+    minTimes
+  );
+}
+
+async function fetchWeatherData() {
+  try {
+    const resp = await fetch(weatherApiUrl);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    
+    console.log('完整 API 回傳:', data);
+    
+    if (!data.records || !Array.isArray(data.records.Locations)) {
+      throw new Error('API 回傳結構異常：無 records.Locations');
+    }
+    
+    const locations = data.records.Locations[0]?.Location || [];
+    
+    if (!Array.isArray(locations) || locations.length === 0) {
+      throw new Error('無位置資料');
+    }
+    
+    console.log('所有位置:', locations.map(l => l.LocationName));
+    
+    const location = locations.find(loc => loc.LocationName === '綠島鄉');
+    if (!location) {
+      throw new Error(`找不到綠島鄉資料。可用的位置：${locations.map(l => l.LocationName).join(', ')}`);
+    }
+    
+    parseWeatherLocation(location);
+  } catch (error) {
+    console.error('天氣資料錯誤:', error);
+    showWeatherError(error.message);
+  }
+}
+
+fetchWeatherData();
 
 /* ── MAP DATA ── */
 const zoneData = {
