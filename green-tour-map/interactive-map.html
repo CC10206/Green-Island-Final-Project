@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Isle of Roam — Interactive Map · 綠島</title>
+
+  <!-- Bootstrap 5 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" />
+
+<style>
+
+:root {
+  /* ── Brand palette ── */
+  --vic-forest:      #195724;
+  --vic-forest-dark: #0d3d18;
+  --vic-forest-mid:  #2d7a3a;
+  --vic-grass:       #C2D099;
+  --vic-grass-light: #e2edc8;
+  --vic-sand:        #f5f0e8;
+  --vic-sand-dark:   #e8e0d0;
+  --vic-deep:        #0d2e15;
+  --vic-moss:        #4a7c59;
+  --vic-ocean:       #1a6b8a;
+  --vic-ocean-light: #d0eaf5;
+  --vic-ocean-mid:   #3a9bbf;
+  --vic-coral:       #e07b54;
+  --vic-coral-light: #fde8de;
+  --vic-amber:       #c8862a;
+  --vic-amber-light: #fdf0d8;
+  --vic-ink:         #1e2d1f;
+  --vic-muted:       #5a6b52;
+  --vic-white:       #ffffff;
+
+  /* ── Category colors ── */
+  --vic-cat-attraction: var(--vic-ocean);
+  --vic-cat-eco:        var(--vic-forest);
+  --vic-cat-lodging:    var(--vic-amber);
+
+  /* ── UI tokens ── */
+  --vic-radius-sm:   8px;
+  --vic-radius-md:   14px;
+  --vic-radius-lg:   20px;
+  --vic-radius-pill: 999px;
+  --vic-shadow-card: 0 4px 24px rgba(13,46,21,0.12);
+  --vic-shadow-float:0 12px 40px rgba(13,46,21,0.18);
+  --vic-transition:  0.28s cubic-bezier(.22,.68,0,.99);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Noto Sans TC', sans-serif;
+  background: var(--vic-deep);
+  color: var(--vic-ink);
+}
+
+/* ── Page shell ── */
+.vic-map-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--vic-deep);
+}
+
+/* ── Header ── */
+.vic-map-header {
+  background: linear-gradient(135deg, var(--vic-deep) 0%, var(--vic-forest-dark) 100%);
+  border-bottom: 1px solid rgba(194,208,153,0.15);
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  z-index: 1000;
+  position: relative;
+}
+.vic-map-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+.vic-map-logo-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--vic-forest-mid), var(--vic-grass));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: var(--vic-white);
+  flex-shrink: 0;
+}
+.vic-map-logo-text {
+  line-height: 1.2;
+}
+.vic-map-logo-en {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--vic-sand);
+  letter-spacing: 0.04em;
+}
+.vic-map-logo-zh {
+  font-size: 0.68rem;
+  color: var(--vic-grass);
+  letter-spacing: 0.22em;
+}
+.vic-map-header-tag {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--vic-grass);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+/* ── Layout wrapper ── */
+.vic-map-wrapper {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  height: calc(100vh - 66px);
+}
+
+/* ── Sidebar ── */
+.vic-sidebar {
+  width: 300px;
+  flex-shrink: 0;
+  background: var(--vic-sand);
+  border-right: 1px solid var(--vic-sand-dark);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  z-index: 900;
+}
+.vic-sidebar-section {
+  padding: 1.4rem 1.25rem;
+  border-bottom: 1px solid var(--vic-sand-dark);
+}
+.vic-sidebar-label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--vic-muted);
+  margin-bottom: 0.9rem;
+}
+
+/* ── Filter toggle buttons ── */
+.vic-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 0.45em 1em;
+  border-radius: var(--vic-radius-pill);
+  border: 1.5px solid;
+  cursor: pointer;
+  transition: var(--vic-transition);
+  background: transparent;
+  letter-spacing: 0.04em;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  justify-content: flex-start;
+}
+.vic-filter-btn-attraction.vic-active,
+.vic-filter-btn-attraction:hover {
+  background: #1a6b8a;   /* Eco Echo 海藍 */
+  color: white;
+}
+
+.vic-filter-btn-eco.vic-active,
+.vic-filter-btn-eco:hover {
+  background: #4a7c59;   /* Heritage Soul 淺綠 */
+  color: white;
+}
+
+.vic-filter-btn-lodging.vic-active,
+.vic-filter-btn-lodging:hover {
+  background: #e8d44d;   /* Iron Pulse 檸檬黃 */
+  color: #1e2d1f;        /* 黃色背景配深色文字比較好讀 */
+}
+
+/* ── Spot list cards ── */
+.vic-spot-card {
+  background: var(--vic-white);
+  border: 1px solid var(--vic-sand-dark);
+  border-radius: var(--vic-radius-md);
+  padding: 0.9rem 1rem;
+  margin-bottom: 0.6rem;
+  cursor: pointer;
+  transition: var(--vic-transition);
+  position: relative;
+  overflow: hidden;
+}
+.vic-spot-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  border-radius: 4px 0 0 4px;
+  transition: var(--vic-transition);
+}
+.vic-spot-card[data-cat="attraction"]::before { background: var(--vic-ocean); }
+.vic-spot-card[data-cat="eco"]::before        { background: var(--vic-forest); }
+.vic-spot-card[data-cat="lodging"]::before    { background: var(--vic-amber); }
+.vic-spot-card:hover {
+  transform: translateX(3px);
+  box-shadow: var(--vic-shadow-card);
+  border-color: rgba(25,87,36,0.2);
+}
+.vic-spot-card-name {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--vic-ink);
+  margin-bottom: 0.2rem;
+}
+.vic-spot-card-meta {
+  font-size: 0.7rem;
+  color: var(--vic-muted);
+}
+.vic-spot-card-badge {
+  display: inline-block;
+  font-size: 0.6rem;
+  padding: 0.15em 0.6em;
+  border-radius: var(--vic-radius-pill);
+  font-weight: 500;
+  margin-top: 0.3rem;
+  letter-spacing: 0.05em;
+}
+.vic-spot-card[data-cat="attraction"] .vic-spot-card-badge {
+  background: var(--vic-ocean-light);
+  color: var(--vic-ocean);
+}
+.vic-spot-card[data-cat="eco"] .vic-spot-card-badge {
+  background: var(--vic-grass-light);
+  color: var(--vic-forest);
+}
+.vic-spot-card[data-cat="lodging"] .vic-spot-card-badge {
+  background: var(--vic-amber-light);
+  color: var(--vic-amber);
+}
+
+/* ── Map container ── */
+.vic-map-container {
+  flex: 1;
+  position: relative;
+  min-width: 0;
+}
+#vic-leaflet-map {
+  width: 100%;
+  height: 100%;
+  background: #a8d8e8;
+}
+
+/* ── Leaflet popup overrides ── */
+.vic-popup .leaflet-popup-content-wrapper {
+  background: var(--vic-white);
+  border: none;
+  border-radius: var(--vic-radius-lg);
+  box-shadow: var(--vic-shadow-float);
+  padding: 0;
+  overflow: hidden;
+  min-width: 220px;
+}
+.vic-popup .leaflet-popup-tip-container { display: none; }
+.vic-popup .leaflet-popup-content { margin: 0; }
+
+.vic-popup-inner { padding: 1.2rem 1.3rem 1.1rem; }
+.vic-popup-cat {
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.2em 0.7em;
+  border-radius: var(--vic-radius-pill);
+  display: inline-block;
+  margin-bottom: 0.65rem;
+}
+.vic-popup-cat-attraction { background: var(--vic-ocean-light); color: var(--vic-ocean); }
+.vic-popup-cat-eco        { background: var(--vic-grass-light); color: var(--vic-forest); }
+.vic-popup-cat-lodging    { background: var(--vic-amber-light); color: var(--vic-amber); }
+
+.vic-popup-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--vic-ink);
+  margin-bottom: 0.4rem;
+  line-height: 1.35;
+}
+.vic-popup-desc {
+  font-size: 0.8rem;
+  color: var(--vic-muted);
+  line-height: 1.7;
+  margin-bottom: 0.9rem;
+}
+.vic-popup-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--vic-white);
+  background: var(--vic-forest);
+  border: none;
+  border-radius: var(--vic-radius-pill);
+  padding: 0.45em 1.1em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background var(--vic-transition);
+}
+.vic-popup-btn:hover { background: var(--vic-deep); color: var(--vic-white); }
+
+/* ── Custom Leaflet marker pins ── */
+.vic-marker-pin {
+  width: 34px;
+  height: 42px;
+  position: relative;
+}
+.vic-marker-pin svg { width: 100%; height: 100%; }
+
+/* ── Map legend ── */
+.vic-map-legend {
+  position: absolute;
+  bottom: 20px;
+  right: 14px;
+  z-index: 800;
+  background: rgba(255,255,255,0.94);
+  border: 1px solid var(--vic-sand-dark);
+  border-radius: var(--vic-radius-md);
+  padding: 0.7rem 0.9rem;
+  backdrop-filter: blur(8px);
+  box-shadow: var(--vic-shadow-card);
+  min-width: 150px;
+}
+.vic-legend-title {
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--vic-muted);
+  margin-bottom: 0.55rem;
+}
+.vic-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.73rem;
+  color: var(--vic-ink);
+  margin-bottom: 0.35rem;
+}
+.vic-legend-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Mobile: sidebar becomes bottom drawer ── */
+.vic-mobile-toggle {
+  display: none;
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 850;
+  background: var(--vic-white);
+  border: 1px solid var(--vic-sand-dark);
+  border-radius: var(--vic-radius-md);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--vic-forest);
+  cursor: pointer;
+  box-shadow: var(--vic-shadow-card);
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.vic-spot-count {
+  font-size: 0.72rem;
+  color: var(--vic-muted);
+  margin-bottom: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .vic-map-wrapper { flex-direction: column; height: auto; }
+  .vic-sidebar {
+    width: 100%;
+    max-height: 280px;
+    border-right: none;
+    border-bottom: 1px solid var(--vic-sand-dark);
+    order: 2;
+  }
+  #vic-leaflet-map { height: calc(100vh - 66px - 280px); }
+  .vic-map-container { order: 1; }
+  .vic-mobile-toggle { display: flex; }
+  .vic-map-legend { bottom: 10px; right: 10px; }
+}
+
+/* ── Scrollbar styling ── */
+.vic-sidebar::-webkit-scrollbar { width: 4px; }
+.vic-sidebar::-webkit-scrollbar-track { background: transparent; }
+.vic-sidebar::-webkit-scrollbar-thumb { background: var(--vic-grass); border-radius: 4px; }
+
+/* ── Entry animation ── */
+@keyframes vic-slide-in {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.vic-spot-card { animation: vic-slide-in 0.35s ease both; }
+</style>
+</head>
+<body>
+
+<div class="vic-map-page">
+
+  <!-- ── Header ── -->
+  <header class="vic-map-header">
+    <a href="#" class="vic-map-logo">
+      <div class="vic-map-logo-icon">
+        <i class="bi bi-geo-alt-fill"></i>
+      </div>
+      <div class="vic-map-logo-text">
+        <div class="vic-map-logo-en">Isle of Roam</div>
+        <div class="vic-map-logo-zh">綠島・續語</div>
+      </div>
+    </a>
+    <span class="vic-map-header-tag">
+      <i class="bi bi-map me-1"></i>Interactive Map · Green Island, Taiwan
+    </span>
+  </header>
+
+  <!-- ── Main layout ── -->
+  <div class="vic-map-wrapper">
+
+    <!-- ── Sidebar ── -->
+    <aside class="vic-sidebar" id="vic-sidebar">
+
+      <!-- Filter section -->
+      <div class="vic-sidebar-section">
+        <div class="vic-sidebar-label">
+          <i class="bi bi-funnel me-1"></i>Filter by Category
+        </div>
+        <!--
+          Filter buttons — each has data-cat matching the LOCATIONS array's `cat` field.
+          Add a new category: create a new button with a matching data-cat,
+          then add spots in the LOCATIONS array with the same cat value.
+        -->
+        <button class="vic-filter-btn vic-filter-btn-attraction vic-active" data-cat="attraction">
+          <span class="vic-filter-dot"></span>
+          <i class="bi bi-water me-1"></i>Eco Echo
+        </button>
+
+        <button class="vic-filter-btn vic-filter-btn-eco vic-active" data-cat="eco">
+          <span class="vic-filter-dot"></span>
+          <i class="bi bi-building-fill me-1"></i>Heritage Soul
+        </button>
+
+        <button class="vic-filter-btn vic-filter-btn-lodging vic-active" data-cat="lodging">
+          <span class="vic-filter-dot"></span>
+          <i class="bi bi-lightning-charge-fill me-1"></i>Iron Pulse
+        </button>
+
+      <!-- Spot list section -->
+      <div class="vic-sidebar-section" style="flex:1;">
+        <div class="vic-sidebar-label">
+          <i class="bi bi-list-ul me-1"></i>Locations
+        </div>
+        <div class="vic-spot-count" id="vic-spot-count">Showing <strong>0</strong> locations</div>
+        <div id="vic-spot-list">
+          <!-- Cards are injected by JS -->
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ── Map ── -->
+    <div class="vic-map-container">
+      <div id="vic-leaflet-map"></div>
+
+      <!-- Legend -->
+      <div class="vic-map-legend">
+        <div class="vic-legend-title">Legend</div>
+        <div class="vic-legend-item">
+          <div class="vic-legend-dot" style="background:var(--vic-ocean)"></div>
+          Eco Echo
+        </div>
+        <div class="vic-legend-item">
+          <div class="vic-legend-dot" style="background:var(--vic-forest)"></div>
+          Heritage Soul
+        </div>
+        <div class="vic-legend-item">
+          <div class="vic-legend-dot" style="background:var(--vic-amber)"></div>
+          Iron Pulse
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.vic-map-wrapper -->
+</div><!-- /.vic-map-page -->
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Leaflet JS -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+
+<script>
+
+  const LOCATIONS = [
+
+    /* ── Attractions ─────────────────────────────────────── */
+    {
+      id:      "green-island-lighthouse",
+      name:    "Green Island Lighthouse",
+      name_zh: "綠島燈塔",
+      cat:     "attraction",
+      lat:     22.67662362457269,
+      lng:     121.46612487074835,
+      desc:    "Standing approximately 33.3 meters tall, this minimalist pure white tower serves as a crucial navigational guide, ensuring the safety of passing vessels along the island's coastline.",
+      link:    "http://127.0.0.1:5500/green-tour-map/destination-simple.html"
+    },
+    {
+      id:      "wuyouku",
+      name:    "Wuyouku",
+      name_zh: "烏油窟",
+      cat:     "attraction",
+      lat:     22.677028580504082, 
+      lng:     121.466725652943,
+      desc:    "Located north of the lighthouse, Wuyouku is a serene turquoise lagoon enclosed by coral reefs. Despite its name, this peaceful intertidal haven features calm, shimmering waters that glisten like a brilliant gem.",
+      link:    "http://127.0.0.1:5500/green-tour-map/destination-simple%20wuyouku.html"
+    },
+    {
+      id:      "zhongliao-fishery-harbor",
+      name:    "Zhongliao Fishery Harbor",
+      name_zh: "中寮漁港",
+      cat:     "attraction",
+      lat:     22.675704702969668,
+      lng:     121.47258504696184,
+      desc:    "Located on the north coast, Zhongliao Fishing Port is a peaceful haven famous for its emerald, crystal-clear waters. While still a functional harbor, its calm, protected tides offer an authentic local escape, perfect for a refreshing summer swim or the thrill of harbor jumping.",
+      link:    "http://127.0.0.1:5500/green-tour-map/destination-simple%20zhongliao-fishery-harbor%20.html"
+    },
+    {
+      id:      "wangong-dong-sea-cave",
+      name:    "Wangong Dong Sea Cave",
+      name_zh: "彎弓洞",
+      cat:     "attraction",
+      lat:     22.669394999981556, 
+      lng:     121.5095120809669,
+      desc:    "Known as the Eye of Green Island, Wanggung Cave is the largest sea-eroded arch on the island, located within the historic Yuzihu area. This spectacular natural formation provides a cool, shaded retreat with a breathtaking view of the turquoise Pacific framed perfectly by its massive stone opening.",
+      link:    "http://127.0.0.1:5500/green-tour-map/destination-simple%20wangong-dong-sea-cave.html"
+    },
+    {
+      id:      "youzihu",
+      name:    "Youzihu",
+      name_zh: "柚子湖",
+      cat:     "attraction",
+      lat:     22.66579328311717, 
+      lng:     121.51005542410705,
+      desc:    "Located on the eastern coast just steps from Wanggung Cave, Yuzihu is a historic, abandoned settlement featuring traditional coral and volcanic stone houses. Framed by dramatic coastal cliffs and white sand beaches, this scenic valley offers a peaceful glimpse into the island's early pioneer lifestyle.",
+      link:    "http://127.0.0.1:5500/green-tour-map/destination-simple%20youzihu.html"
+    },
+
+    /* ── Eco Activities ───────────────────────────────────── */
+    {
+      id:      "nanliao-street",
+      name:    "Nanliao Street",
+      name_zh: "南寮大街",
+      cat:     "eco",
+      lat:     22.66733466105616, 
+      lng:     121.46959223240864,
+      desc:    "Located right next to the primary ferry port, Nanliao Street is the vibrant commercial hub and ultimate base camp of Green Island. This bustling strip is packed with local eateries, scooter rentals, and dive shops, making it the perfect starting point for every traveler's adventure.",
+      link:    "http://127.0.0.1:5500/green-tour-map/destination-simple%20nanliao-street.html"
+    },
+    {
+      id:      "green-island-white-terror-memorial-park",
+      name:    "Green Island White Terror Memorial Park",
+      name_zh: "白色恐怖綠島紀念園區",
+      cat:     "eco",
+      lat:     22.67451567616765, 
+      lng:     121.49767399527173,
+      desc:    "Located on the northern coast, this profound historical site preserves the former prisons where political dissidents were held during the authoritarian era. Dedicated to Taiwan’s journey toward democracy and human rights, it serves as a powerful space for reflection and a tribute to the resilience of the human spirit.",
+      link:    "http://127.0.0.1:5500/green-tour-map/destination-simple%20green-island-white-terror-memorial-park.html"
+    },
+    {
+      id:      "haishenping",
+      name:    "Haishenping",
+      name_zh: "海參坪",
+      cat:     "eco",
+      lat:     22.658223101861665, 
+      lng:     121.50492524907722,
+      desc:    "Located on the eastern coast, Haishenping is a breathtaking moon-shaped bay formed by a collapsed volcanic crater. This scenic destination offers the most iconic vantage point for viewing the Pekingese Dog and Sleeping Beauty rock formations, beautifully showcasing the island's dramatic volcanic geology.",
+      link:    "http://127.0.0.1:5500/green-tour-map/destination-simple%20haishenping.html"
+    },
+    {
+      id:      "mini-great-wall",
+      name:    "Mini Great Wall",
+      name_zh: "小長城",
+      cat:     "eco",
+      lat:     22.660840646711677, 
+      lng:     121.5068138556743,
+      desc:    "Built along a steep coastal ridge, the Mini Great Wall is a scenic stone trail named for its striking resemblance to the iconic landmark. Leading to ocean-view pavilions, it offers a panoramic vantage point over Haishenping Bay and the famous Sleeping Beauty and Pekingese Dog rock formations.",
+      link:    "http://127.0.0.1:5500/green-tour-map/destination-simple%20mini-great-wall.html"
+    },
+     {
+      id:      "confucius-rock",
+      name:    "Confucius Rock",
+      name_zh: "孔子岩",
+      cat:     "eco",
+      lat:     22.652145889095692, 
+      lng:     121.50494326643535,
+      desc:    "Located on the eastern coast, Confucius Rock is a sea-eroded pillar shaped by wind and waves. Named for its striking silhouette that resembles the ancient philosopher standing in traditional robes, it stands as a fascinating natural sculpture along the island's scenic ring road.",
+      link:    "http://127.0.0.1:5500/green-tour-map/destination-simple%20confucius-rock.html"
+    },
+     {
+      id:      "lailai-convenience-store",
+      name:    "Lai-lai Convenience Store",
+      name_zh: "綠島來來便利商店",
+      cat:     "eco",
+      lat:     22.647972179942133, 
+      lng:     121.49892696690578,
+      desc:    "As a legendary local landmark, Lai-lai Convenience Store is a popular pit stop for travelers to grab island-exclusive snacks and cold refreshments. Known for its welcoming atmosphere and wide variety of souvenirs, it is the perfect spot to refuel before heading out to explore the island's scenic wonders.",
+      link:    "http://127.0.0.1:5500/green-tour-map/destination-simple%20lailai-convenience-store.html"
+    },
+
+    /* ── Eco Lodging ──────────────────────────────────────── */
+    {
+      id:      "niutou-hill",
+      name:    "Niutou Hill",
+      name_zh: "牛頭山",
+      cat:     "lodging",
+      lat:     22.677233565244794,
+      lng:     121.50677916643616,
+      desc:    "Located on the northeastern coast, Niutou Hill is an iconic volcanic headland named for its striking resemblance to a resting ox facing the ocean. This prominent natural landmark stands as one of Green Island's most famous and recognizable coastal wonders.",
+      link:    "http://127.0.0.1:5500/green-tour-map/destination-simple%20niutou-hill.html"
+    },
+    {
+      id:      "zhaori-hot-spring",
+      name:    "Zhaori Hot Spring",
+      name_zh: "朝日溫泉",
+      cat:     "lodging",
+      lat:     22.637030,
+      lng:     121.50418,
+      desc:    "One of only three known saltwater submarine hot springs in the world. Tide pools fill with natural geothermal water — best enjoyed at low tide after sunset.",
+      link:    "http://127.0.0.1:5500/green-tour-map/destination-simple%20zhaori-hot-spring.html"
+    },
+    {
+      id:      "across-mountain-ancient-trail",
+      name:    "Across Mountain Ancient Trail",
+      name_zh: "過山古道步道口",
+      cat:     "lodging",
+      lat:     22.65631380521942, 
+      lng:     121.48620555479143,
+      desc:    "Historically, the Guoshan Ancient Trail served as the vital overland link between Nanliao and the Hot Springs area. Today, it has transformed into a scenic forest trail renowned for its rich biodiversity.",
+      link:    "http://127.0.0.1:5500/green-tour-map/destination-simple%20across-mountain-ancient-trail.html"
+    },
+    {
+      id:      "dabaisha",
+      name:    "Dabaisha",
+      name_zh: "大白沙",
+      cat:     "lodging",
+      lat:     22.637768399748236, 
+      lng:     121.49368550291383,
+      desc:    "Located at the prominent southwestern tip of Green Island, Dabaisha is not only one of the island's most famous snorkeling destinations but also its largest and most beautiful sandy shoreline.",
+      link:    "http://127.0.0.1:5500/green-tour-map/destination-simple%20dabaisha.html"
+    },
+    {
+      id:      "shilang-diving-area",
+      name:    "Shilang Diving Area",
+      name_zh: "石朗潛水區",
+      cat:     "lodging",
+      lat:     22.65703659485427, 
+      lng:     121.47394088874016 ,
+      desc:    "Shilang is Green Island’s premier diving site, famous for its vibrant coral reefs and unique underwater landmarks. It offers divers the incredible opportunity to send a waterproof postcard from the world-renowned Underwater Mailbox or explore the romantic Heart of the Ocean.",
+      link:    "http://127.0.0.1:5500/green-tour-map/destination-simple%20shilang-diving-area.html"
+    },
+  ];
+
+ const CAT_CONFIG = {
+  attraction: { color: "#1a6b8a", label: "Eco Echo",      icon: "bi-water"                },
+  eco:        { color: "#4a7c59", label: "Heritage Soul",  icon: "bi-building-fill"        },
+  lodging:    { color: "#e8d44d", label: "Iron Pulse",     icon: "bi-lightning-charge-fill"}
+};
+
+  /* ── Active filter state ── */
+  const activeFilters = new Set(["attraction", "eco", "lodging"]);
+
+  /* ── Initialise Leaflet map ─────────────────────────────── */
+  const map = L.map("vic-leaflet-map", {
+    center:    [22.6675, 121.4899],
+    zoom:      13,
+    zoomControl: true,
+    attributionControl: true
+  });
+
+  /* Ocean tile — CartoDB Positron (clean, light, no heavy labels) */
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
+    subdomains:  "abcd",
+    maxZoom:     19
+  }).addTo(map);
+
+  /* ── Build SVG marker icon ── */
+  function buildIcon(cat) {
+    const c = CAT_CONFIG[cat];
+    const svg = `
+      <svg viewBox="0 0 34 42" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17 0C8.16 0 1 7.16 1 16c0 10.5 14.08 24.36 15.22 25.48a1.1 1.1 0 0 0 1.56 0C18.92 40.36 33 26.5 33 16 33 7.16 25.84 0 17 0z"
+              fill="${c.color}" stroke="white" stroke-width="1.5"/>
+        <circle cx="17" cy="16" r="8" fill="white" fill-opacity="0.25"/>
+        <text x="17" y="21" text-anchor="middle" font-size="11"
+              font-family="bootstrap-icons" fill="white">
+        </text>
+      </svg>`;
+    return L.divIcon({
+      className: "",
+      html: `<div class="vic-marker-pin">${svg}</div>`,
+      iconSize:   [34, 42],
+      iconAnchor: [17, 42],
+      popupAnchor:[0, -44]
+    });
+  }
+
+  /* ── Marker emoji fallback (BS Icons in SVG text is unreliable cross-browser) ── */
+  const CAT_EMOJI = { attraction: "🌊", eco: "🏛️", lodging: "🫀" };
+
+  function buildIconWithEmoji(cat) {
+  const c = CAT_CONFIG[cat];
+  const html = `
+    <div style="
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: ${c.color};
+      border: 2.5px solid rgba(255,255,255,0.85);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    ">
+      <i class="bi ${c.icon}" style="
+        font-size: 1rem;
+        color: #ffffff;
+        line-height: 1;
+      "></i>
+    </div>`;
+  return L.divIcon({
+    className:   "",
+    html:        html,
+    iconSize:    [36, 36],
+    iconAnchor:  [18, 18],
+    popupAnchor: [0, -22]
+  });
+}
+
+  /* ── Build popup HTML ── */
+  function buildPopup(loc) {
+    const c = CAT_CONFIG[loc.cat];
+    return `
+      <div class="vic-popup-inner">
+        <span class="vic-popup-cat vic-popup-cat-${loc.cat}">${c.label}</span>
+        <div class="vic-popup-title">${loc.name}${loc.name_zh ? `<br><span style="font-size:0.7em;font-weight:400;color:#5a6b52;">${loc.name_zh}</span>` : ""}</div>
+        <p class="vic-popup-desc">${loc.desc}</p>
+        <a href="${loc.link}" class="vic-popup-btn">
+          View More <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>`;
+  }
+
+  /* ── Marker store ── */
+  const markerMap = {};   // id → L.Marker
+  const layerGroups = {   // cat → L.LayerGroup
+    attraction: L.layerGroup().addTo(map),
+    eco:        L.layerGroup().addTo(map),
+    lodging:    L.layerGroup().addTo(map)
+  };
+
+  /* ── Render all markers ── */
+  LOCATIONS.forEach(loc => {
+    const marker = L.marker([loc.lat, loc.lng], { icon: buildIconWithEmoji(loc.cat) });
+    marker.bindPopup(buildPopup(loc), {
+      className:   "vic-popup",
+      maxWidth:    280,
+      minWidth:    220,
+      closeButton: true
+    });
+    marker.addTo(layerGroups[loc.cat]);
+    markerMap[loc.id] = marker;
+  });
+
+  /* ── Render sidebar spot list ── */
+  function renderSpotList() {
+    const list    = document.getElementById("vic-spot-list");
+    const counter = document.getElementById("vic-spot-count");
+    list.innerHTML = "";
+
+    const visible = LOCATIONS.filter(l => activeFilters.has(l.cat));
+    counter.innerHTML = `Showing <strong>${visible.length}</strong> location${visible.length !== 1 ? "s" : ""}`;
+
+    if (visible.length === 0) {
+      list.innerHTML = `<div style="font-size:0.8rem;color:var(--vic-muted);text-align:center;padding:1.5rem 0;">
+        No locations match the active filters.</div>`;
+      return;
+    }
+
+    visible.forEach((loc, i) => {
+      const c    = CAT_CONFIG[loc.cat];
+      const card = document.createElement("div");
+      card.className = "vic-spot-card";
+      card.dataset.cat = loc.cat;
+      card.style.animationDelay = `${i * 0.04}s`;
+      card.innerHTML = `
+        <div class="vic-spot-card-name">${loc.name}</div>
+        <div class="vic-spot-card-meta">${loc.lat.toFixed(4)}°N, ${loc.lng.toFixed(4)}°E</div>
+        <span class="vic-spot-card-badge">${c.label}</span>`;
+
+      /* Clicking the card flies the map to that marker and opens its popup */
+      card.addEventListener("click", () => {
+        map.flyTo([loc.lat, loc.lng], 15, { duration: 1.2 });
+        setTimeout(() => markerMap[loc.id].openPopup(), 1300);
+      });
+
+      list.appendChild(card);
+    });
+  }
+
+  /* ── Filter button logic ── */
+  document.querySelectorAll(".vic-filter-btn").forEach(btn => {
+    const cat = btn.dataset.cat;
+    btn.classList.add("vic-active");     // start active
+
+    btn.addEventListener("click", () => {
+      if (activeFilters.has(cat)) {
+        activeFilters.delete(cat);
+        btn.classList.remove("vic-active");
+        map.removeLayer(layerGroups[cat]);
+      } else {
+        activeFilters.add(cat);
+        btn.classList.add("vic-active");
+        layerGroups[cat].addTo(map);
+      }
+      renderSpotList();
+    });
+  });
+
+  /* ── Initial render ── */
+  renderSpotList();
+
+</script>
+</body>
+</html>
