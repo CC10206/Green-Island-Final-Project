@@ -16,11 +16,6 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" />
 
 <style>
-/* ============================================================
-   Isle of Roam — Interactive Map
-   CSS Namespace: --vic-  |  All classes prefixed: vic-
-   Dependencies: Bootstrap 5, Bootstrap Icons, Leaflet 1.9
-   ============================================================ */
 
 :root {
   /* ── Brand palette ── */
@@ -182,45 +177,23 @@ body {
   margin-bottom: 0.5rem;
   justify-content: flex-start;
 }
-.vic-filter-btn .vic-filter-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  transition: var(--vic-transition);
-}
-.vic-filter-btn-attraction {
-  color: var(--vic-ocean);
-  border-color: var(--vic-ocean);
-}
 .vic-filter-btn-attraction.vic-active,
 .vic-filter-btn-attraction:hover {
-  background: var(--vic-ocean);
-  color: var(--vic-white);
+  background: #1a6b8a;   /* Eco Echo 海藍 */
+  color: white;
 }
-.vic-filter-btn-attraction .vic-filter-dot { background: var(--vic-ocean); }
 
-.vic-filter-btn-eco {
-  color: var(--vic-forest);
-  border-color: var(--vic-forest);
-}
 .vic-filter-btn-eco.vic-active,
 .vic-filter-btn-eco:hover {
-  background: var(--vic-forest);
-  color: var(--vic-white);
+  background: #4a7c59;   /* Heritage Soul 淺綠 */
+  color: white;
 }
-.vic-filter-btn-eco .vic-filter-dot { background: var(--vic-forest); }
 
-.vic-filter-btn-lodging {
-  color: var(--vic-amber);
-  border-color: var(--vic-amber);
-}
 .vic-filter-btn-lodging.vic-active,
 .vic-filter-btn-lodging:hover {
-  background: var(--vic-amber);
-  color: var(--vic-white);
+  background: #e8d44d;   /* Iron Pulse 檸檬黃 */
+  color: #1e2d1f;        /* 黃色背景配深色文字比較好讀 */
 }
-.vic-filter-btn-lodging .vic-filter-dot { background: var(--vic-amber); }
 
 /* ── Spot list cards ── */
 .vic-spot-card {
@@ -491,17 +464,18 @@ body {
         -->
         <button class="vic-filter-btn vic-filter-btn-attraction vic-active" data-cat="attraction">
           <span class="vic-filter-dot"></span>
-          <i class="bi bi-binoculars me-1"></i>Eco Echo
+          <i class="bi bi-water me-1"></i>Eco Echo
         </button>
+
         <button class="vic-filter-btn vic-filter-btn-eco vic-active" data-cat="eco">
           <span class="vic-filter-dot"></span>
-          <i class="bi bi-tree me-1"></i>Heritage Soul
+          <i class="bi bi-building-fill me-1"></i>Heritage Soul
         </button>
+
         <button class="vic-filter-btn vic-filter-btn-lodging vic-active" data-cat="lodging">
           <span class="vic-filter-dot"></span>
-          <i class="bi bi-house-heart me-1"></i>Iron Pulse
+          <i class="bi bi-lightning-charge-fill me-1"></i>Iron Pulse
         </button>
-      </div>
 
       <!-- Spot list section -->
       <div class="vic-sidebar-section" style="flex:1;">
@@ -548,33 +522,6 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
 
 <script>
-/* ============================================================
-   Isle of Roam — Interactive Map Script
-   ============================================================
-
-   HOW TO ADD NEW LOCATIONS
-   ─────────────────────────
-   Add a new object to the LOCATIONS array below.
-   Each object requires these fields:
-
-   {
-     id:    "unique-id-string",           // kebab-case, used internally
-     name:  "Display Name",               // shown in card & popup title
-     name_zh: "中文名稱",                  // (optional) Chinese name shown in popup
-     cat:   "attraction" | "eco" | "lodging", // determines marker colour & filter group
-     lat:   22.6760,                      // latitude  (decimal degrees, WGS84)
-     lng:   121.4770,                     // longitude (decimal degrees, WGS84)
-     desc:  "Short description (1–2 sentences).",
-     link:  "#"                           // URL for the "View More" button
-   }
-
-   Latitude / Longitude reference for Green Island:
-     Centre ≈ 22.6675° N, 121.4899° E
-     North tip (Gongguan Lighthouse area) ≈ 22.6890° N, 121.4800° E
-     South tip ≈ 22.6440° N, 121.5000° E
-     West shore  ≈ 22.665° N, 121.463° E
-     East shore  ≈ 22.670° N, 121.510° E
-   ============================================================ */
 
   const LOCATIONS = [
 
@@ -745,12 +692,11 @@ body {
     },
   ];
 
-  /* ── Category config (colours, labels, icons) ── */
-  const CAT_CONFIG = {
-    attraction: { color: "#1a6b8a", label: "Eco Echo",      icon: "bi-binoculars" },
-    eco:        { color: "#195724", label: "Heritage Soul",  icon: "bi-tree"       },
-    lodging:    { color: "#c8862a", label: "Iron Pulse",     icon: "bi-house-heart"}
-  };
+ const CAT_CONFIG = {
+  attraction: { color: "#1a6b8a", label: "Eco Echo",      icon: "bi-water"                },
+  eco:        { color: "#4a7c59", label: "Heritage Soul",  icon: "bi-building-fill"        },
+  lodging:    { color: "#e8d44d", label: "Iron Pulse",     icon: "bi-lightning-charge-fill"}
+};
 
   /* ── Active filter state ── */
   const activeFilters = new Set(["attraction", "eco", "lodging"]);
@@ -792,24 +738,36 @@ body {
   }
 
   /* ── Marker emoji fallback (BS Icons in SVG text is unreliable cross-browser) ── */
-  const CAT_EMOJI = { attraction: "🔭", eco: "🌿", lodging: "🏡" };
+  const CAT_EMOJI = { attraction: "🌊", eco: "🏛️", lodging: "🫀" };
 
   function buildIconWithEmoji(cat) {
-    const c = CAT_CONFIG[cat];
-    const svg = `
-      <svg viewBox="0 0 36 46" xmlns="http://www.w3.org/2000/svg">
-        <path d="M18 1C8.61 1 1 8.61 1 18c0 11.2 15.1 26.1 16.3 27.3a.95.95 0 0 0 1.4 0C19.9 44.1 35 29.2 35 18 35 8.61 27.39 1 18 1z"
-              fill="${c.color}" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/>
-        <text x="18" y="24" text-anchor="middle" font-size="14" font-family="serif">${CAT_EMOJI[cat]}</text>
-      </svg>`;
-    return L.divIcon({
-      className:  "",
-      html:       `<div style="width:36px;height:46px">${svg}</div>`,
-      iconSize:   [36, 46],
-      iconAnchor: [18, 46],
-      popupAnchor:[0, -48]
-    });
-  }
+  const c = CAT_CONFIG[cat];
+  const html = `
+    <div style="
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: ${c.color};
+      border: 2.5px solid rgba(255,255,255,0.85);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    ">
+      <i class="bi ${c.icon}" style="
+        font-size: 1rem;
+        color: #ffffff;
+        line-height: 1;
+      "></i>
+    </div>`;
+  return L.divIcon({
+    className:   "",
+    html:        html,
+    iconSize:    [36, 36],
+    iconAnchor:  [18, 18],
+    popupAnchor: [0, -22]
+  });
+}
 
   /* ── Build popup HTML ── */
   function buildPopup(loc) {
