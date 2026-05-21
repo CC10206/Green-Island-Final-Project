@@ -68,6 +68,7 @@
     text-align: center;
     transition: transform 0.2s, box-shadow 0.2s;
     cursor: default;
+    width: 180px;
   }
   .weather-card:hover {
     transform: translateY(-4px);
@@ -151,7 +152,9 @@
   }
   .section-title::after {
     content: '';
-    position: absolute; bottom: -6px; left: 0;
+    position: absolute; bottom: -6px; 
+    left: 50%; 
+    transform: translateX(-50%);
     width: 40px; height: 2px;
     background: var(--teal);
     border-radius: 1px;
@@ -247,7 +250,7 @@
     <p style="color:#6b7f6c;font-size:0.9rem;margin-top:1rem;">The following is the real-time weather data for Green Island, Taitung County, obtained from the Central Weather Administration (CWA) OpenData API (F-D0047-039).</p>
   </div>
 
-  <div id="weather-info" style="display:grid;grid-template-columns:1fr;gap:1rem;margin-bottom:1.5rem;">
+  <div id="weather-info" style="display:grid;grid-template-columns:1fr;gap:1rem;margin-bottom:3rem;">
     <div style="background:#fff;border:1px solid #dde8d0;border-radius:20px;padding:1.6rem;display:flex;flex-wrap:wrap;align-items:center;gap:1rem;">
       <div style="flex:1;min-width:220px;">
         <div id="weather-location" style="font-size:1.05rem;font-weight:600;color:#2d3a2e;">Green Island</div>
@@ -270,80 +273,67 @@
     </div>
   </div>
 
-  <div id="weather-cards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;">
+  <div id="weather-cards" style="display:flex; flex-wrap:wrap; justify-content:center; gap:1.2rem; max-width:800px; margin:0 auto;"></div>
     <!-- API weather cards injected by JS -->
   </div>
 </section>
 
-<!-- MAP SECTION -->
-<section id="map" style="padding:5rem 2rem;background:#fff;">
+
+<!-- MAP Section -->
+<section id="map" style="padding:5rem 2rem;">
   <div style="max-width:1200px;margin:0 auto;" class="fade-in">
+    
     <div style="margin-bottom:3rem;text-align:center;">
-      <span class="section-title">綠島分區導覽</span>
-      <p style="color:#6b7f6c;font-size:0.9rem;margin-top:1rem;">將滑鼠移至地圖各分區，探索在地特色</p>
+      <span class="section-title">Green Island Map Guide</span>
+      <p style="color:#6b7f6c;font-size:0.9rem;margin-top:1rem;">Hover over the map zones to discover local features.</p>
     </div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;" id="map-grid">
-      <!-- SVG Map -->
-      <div style="display:flex;justify-content:center;">
-        <svg viewBox="0 0 280 380" style="width:100%;max-width:300px;" xmlns="http://www.w3.org/2000/svg">
-          <!-- 綠島輪廓（由幾個多邊形拼成）-->
+      <div style="display:flex;justify-content:center; position: relative;">
+        
+        <style>
+          .map-pin { cursor: pointer; }
+          .map-pin .pin-bg, .map-pin .pin-core, .map-pin .pin-text {
+            transition: all 0.25s ease;
+          }
+          .map-pin:hover .pin-bg { transform: scale(1.2); fill: #e07a5f; opacity: 0.2; }
+          .map-pin:hover .pin-core { transform: scale(1.15); fill: #e07a5f; }
+          .map-pin:hover .pin-text { fill: #e07a5f; }
+          
+          .map-pin.active .pin-bg { transform: scale(1.2); fill: #e07a5f; opacity: 0.25; }
+          .map-pin.active .pin-core { transform: scale(1.15); fill: #e07a5f; }
+          .map-pin.active .pin-text { fill: #e07a5f; }
+        </style>
+        <!-- SVG path 謹慎開啟 -->
+        <svg viewBox="0 0 1495 1583" style="width:100%;max-width:450px;filter:drop-shadow(0 8px 16px rgba(53,133,142,0.15));" xmlns="http://www.w3.org/2000/svg">
+          <path d="M851.459 90.8311L854.667 89.4688L857.859 95.2529L851.057 103.534L853.501 107.214L847.268 126.568L867.449 116.164L872.098 124.423L861.435 130.723L853.352 140.481L857.167 167.789L871.338 183.319L905.42 195.758L877.433 217.422L862.02 210.226L855.766 216.723L858.908 221.861L864.676 223.377L872.71 220.699L884.993 234.16H899.209L906.611 228.361L907.747 223.743L901.175 212.747L909.65 199.857L943.75 199.723L942.031 194.818L948.602 182.424L954.25 179.125L957.954 184.548L968.479 168.748L977.438 173.006L982.664 172.095V181.33L979.37 188.547L983.374 189.504L990.123 197.537L997.517 194.024L1004.74 196.894L1019.37 191.282L1022.55 197.329L1028.6 190.565L1030.7 194.47L1032.69 187.088L1042.17 191.648L1051.98 191.327L1052.95 184.457L1058.17 180.566H1069.4L1078.65 176.299L1114.9 178.76L1133.25 177.004L1152.73 165.311L1168.02 161.952L1176.25 164.606L1180.54 158.33L1197.26 150.462L1194.15 146.617L1200.5 140.262L1207.44 139.815L1209.18 143.625L1249.37 136.627L1260.34 139.099L1277.89 133.614L1280.41 126.533L1284.77 133.438L1291.05 117.771L1304.48 112.979L1316.47 118.431L1328.15 118.059L1341.13 122.185L1345.13 118.505L1362.71 118.11L1367.85 137.422L1376.35 147.352L1382.06 160.225L1380.39 164.898L1384.75 169.295L1380.92 172.684L1381.87 182.682L1389.84 188.393L1385.84 196.735L1386.24 282.904L1389.92 292.111L1387.48 297.362L1392.29 305.598L1394.03 328.501L1399.78 343.186L1400.52 358.348L1398.07 366.392L1403.04 394.859L1402.01 400.74L1410.15 413.73L1410.52 423.129L1400.41 437.365L1405.92 442.563L1424.16 475.795L1433.54 483.288L1456.27 473.784L1461.33 480.649L1460.64 484.077L1467.79 491.012L1473.51 484.231L1481.84 491.674L1481.79 502.883L1468.41 506.751L1466.89 502.504H1463.66L1446.11 524.255L1426.46 538.624L1425.71 543.849L1407.39 548.869L1396.03 565.82L1388.16 568.572L1379.32 607.729L1374.58 614.189L1376.14 620.134L1369.74 622.63L1380.16 625.475L1377.34 631.692L1372.19 634.9L1383.35 648.602L1384.3 663.4L1375.35 664.303L1360.54 660.872L1355.34 666.097L1356.7 670.927L1350.55 679.969L1351.63 692.689L1343.31 699.834L1347.05 708.817L1341.65 716.684L1315.07 718.147L1302.16 735.586L1296.95 751.956L1296.29 764.166L1299.05 771.215L1305.72 773.306L1311.29 785.625L1309.43 803.536L1322.03 832.258L1328.82 838.285L1327.41 849.108L1341.95 853.765L1347.66 853.127L1354.59 847.209L1361.08 834.613L1369.61 829.175L1389.04 830.463L1394.96 826.441L1400.07 816.488L1407.2 817.897L1411.49 826.931L1408.49 830.637L1410.6 838.653L1406.68 846.896L1395.08 859.318L1396.62 861.957L1407.59 861.66L1409.63 867.761L1407.76 869.992L1409.13 877.628L1403.75 889.833L1404.12 895.274L1397.22 900.482L1385.79 897.653L1382.29 903.548L1365.49 903.958L1356.09 893.092L1355.78 902.066L1346.56 898.668L1343.28 893.298L1341.91 883.03L1331.11 877.302L1330.77 869.554L1325.16 866.558L1322.29 883.77L1323.92 896.198L1320.38 901.253L1310.96 898.633L1305.94 911.271L1299.44 915.748L1287.25 915.069L1282.03 926.565L1288.57 938.588L1283.22 947.165L1279.59 940.716L1275.98 943.375L1270.17 937.639L1273.12 944.938L1277.94 947.172L1276.69 955.67L1280.32 960.034L1272.7 967.656L1266.52 966.192L1258.38 972.57L1252.59 971.843L1245.06 976.866L1233.64 974.87L1231.23 983.384L1223.35 976.299L1218.23 978.284L1212.68 987.16H1206.51L1210.86 975.412L1202.16 977.892L1201.84 980.562L1192.43 985.097L1194.27 998.03L1183.06 999.368L1176.39 991.755L1173.37 996.764L1173.75 1004.75L1166.95 1012.62V1019.02L1158.77 1026.16L1160.33 1030.44L1151.12 1032.98L1146.07 1050.58L1142.69 1049.73L1147.74 1060.14L1144.35 1074.81L1139.38 1082.73L1144.73 1090.2L1141.29 1096.09L1126.46 1097.33L1125.38 1106.03L1118.4 1108.61L1116.95 1112.71L1120.83 1114.46L1117.85 1124.25L1101.24 1144L1101.59 1157.36L1094.94 1163.57L1083.5 1165.22L1093.62 1166.2L1104.26 1161.48L1124.4 1177.54L1139.13 1182.45L1135.65 1186.39L1140.33 1191.88L1147.02 1187.28L1151.77 1191.98L1147.53 1198.19L1159.01 1203.4L1171.6 1223.97L1181.97 1233.62L1188.24 1244.42L1193.55 1246.19L1206 1261.12L1204.22 1270.37L1214.2 1277.95L1217.49 1286.71L1241.5 1318.51L1248.68 1308.94L1257.08 1314.87L1248.01 1324.67L1249.01 1335.92L1259.96 1353.91L1257.73 1361.03L1264.36 1389.47L1273.37 1396.34L1273.02 1410.99L1281.19 1424.81L1282.61 1438.95L1293.32 1453.48L1313.35 1468.96L1327.23 1474.7L1332.56 1472.04L1342.99 1485.02L1345.43 1483.46L1340.79 1476.94L1339.92 1470.07L1344.04 1466.39L1353.29 1465.57L1356.95 1470.13V1476.33L1365.04 1484.11L1366.23 1495.3L1358.99 1503.9L1360.99 1500.14L1370.82 1500.54L1371.24 1514.33L1367.42 1519.85L1370.51 1536.56L1367.3 1540.25L1357.44 1539.85L1353.95 1535.47L1353.36 1528.42L1348.82 1530.84L1341.68 1528.68L1334.57 1532.59L1318.14 1548.66L1323.1 1549.67L1317.6 1556.82L1320.61 1561.83L1318.64 1569.69L1311.95 1567.6L1304.79 1570.82L1302.09 1565.8L1288.96 1568.94L1277.43 1567.81L1269.9 1563.44L1263.81 1549.86L1235.34 1544.73L1223.51 1551.55L1209.4 1547.94L1188.04 1552.13L1171.51 1560.49L1163.09 1557.26L1155.64 1548.04L1138.46 1543.22H1123.26L1119.18 1540.86L1110.8 1543.64L1105.37 1541.95L1093.25 1551.31L1066.43 1559.94L1065.72 1564.93L1060.49 1567.15L1058.09 1572.64L1047.84 1581.39L1036.43 1582.55L1015.66 1567.49L1003.14 1567.17L985.543 1572.25L969.987 1567.71L958.577 1555.92L939.247 1551.29L934.24 1545.44L937.226 1536.04L923.004 1514.91L911.159 1479.41L897.272 1450.85L878.701 1395.58L858.266 1362.97L857.57 1354.7L852.415 1351.03L822.127 1344.54L811.626 1331.12L803.55 1325.97L795.24 1314.76L785.09 1316.3L784.727 1308.78L781.815 1313.97L772.128 1307.19L772.434 1302.75L764.934 1300.03L761.967 1289.71L733.174 1271.73L725.811 1270.58L722.846 1263.87L647.791 1224.22L598.287 1214.96L564.796 1204.16L559.264 1200.38L512.121 1190.55L507.986 1193.63L477.547 1192.51L408.611 1183.1L400.54 1175.03L397.421 1165.64L400.639 1156.7L396.618 1143.15L390.503 1140.72L375.35 1141.93L373.413 1159.86L376.285 1175.2L362.669 1181.84L346.694 1178.49L319.329 1165.33L315.076 1157.16L299.952 1152.66L297.974 1145.22L283.84 1125.62L283.175 1110.13L286.1 1102.8L288.976 1075.29L298.071 1053.05L306.393 1044.39L305.682 1035.91L311.47 1028.67L312.178 1013.56L315.735 1004.63L316.079 994.279L320.676 981.599L318.945 958.465L325.195 948.008L320.59 935.559L325.65 925.785L320.639 895.595L329.37 860.425L338.356 847.134L341.478 831.471L346.097 826.133L347.528 796.609L351.434 790.253L352.81 770.834L349.037 750.221L326.08 736.929L330.005 731.285H340.062L368.895 744.821L357.792 725.914L353.97 725.102L346.862 729.829L339.404 719.622L328.668 712.881L333.849 705.336L333.114 701.727L327.721 701.466L320.069 707.581L301.133 692.425L266.312 645.043L242.414 602.235L203.62 555.589L181.343 532.597L169.29 511.66L146.106 493.469L140.689 485.187L121.366 466.583L115.651 456.215L82.626 423.175L54.6689 404.213L44.0156 386.19L42.2246 376.136L16.3047 323.948L18.4424 318.54L0 277.37L0.367188 261.746L14.9541 249.007L19.2861 240.343L25.416 236.361L29.9297 229.253L28.54 221.338L31.7891 207.268L32.1768 172.145L34.9697 164.406L33.875 156.675L39.6641 148.733L40.4424 134.688L60.1035 128.303L64.8389 130.504L67.084 126.66L105.091 125.547L115.187 131.32L136.134 132.379L141.241 129.666L142.417 123.889L152.358 120.87L166.996 122.759L179.48 130.593L222.791 141.637L234.566 137.973L235.353 144.613L258.801 149.472L270.46 147.904L271.746 152.713L279.647 148.417L293.556 163.082L307.348 172.362L306.968 177.878L311.895 188.53L288.151 210.067L286.453 215.214L291.142 219.551L291.787 224.381L303.277 222.424L315.07 192.806L323.222 187.371L343.271 187.715L347.619 185.176L379.024 188.467L404.264 196.255L423.34 194.493L461.716 201.671L484.263 203.114L487.06 209.044L491.354 203.397L499.057 203.769L544.915 179.436L576.689 153.004L606.83 134.212L611.4 126.207L620.152 126.973L636.981 121.012L653.312 108.487L671.849 106.385L676.542 101.692L687.76 107.066L684.599 109.859L692.904 113.532L694.058 107.795L699.685 101.716L705.731 107.763L720.501 106.777L727.412 114.071L730.266 113.69L728.701 108.666L738.708 101.036L740.924 107.725L765.676 116.988L791.036 117.699L804.006 114.027L806.872 107.985L813.074 106.058L816.016 109.536L819.948 99.292L824.445 109.109L827.849 101.215L833.372 104.702L831.999 96.9932L846.373 89.0195L851.459 90.8311ZM1334.07 1561.83L1338.84 1565.11L1338.67 1569.58L1330.7 1568.41L1336.66 1574.44L1336 1578.36L1329.68 1580.57L1323.17 1574.6L1324.46 1565.73L1330.83 1560.41L1334.07 1561.83ZM34.3926 169.462L89.624 217.683L120.937 263.585L205.454 369.599L241.17 395.672L271.302 430.409L299.767 450.948L369.401 490.595L420.896 531.435L432.057 542.944L455.855 579.899L495.764 629.519L516.781 649.452L555.806 671.854L582.311 681.561L602.286 672.726L618.087 655.42L623.805 630.045L629.49 620.992L640.208 616.531L650.169 621.34L667.176 622.387L678.335 628.866L697.918 629.903L705.539 634.35L721.79 655.439L730.792 680.285L741.979 690.7L783.319 704.369L817.631 725.025L830.741 743.452L854.987 763.062L864.771 781.253L866.134 794.884L860.143 830.393L836.459 890.489L821.442 911.441L753.142 974.774L724.619 994.272L717.78 1006.34L720.731 1018.99L767.011 1049L794.818 1079.97L811.285 1109.4L813.272 1118.67L810.852 1140.4L795.233 1173.19L795.79 1233.34L773.929 1308.89L778.731 1310.28L800.798 1234.03L800.245 1174.48L815.736 1141.62L818.315 1118.34L816.017 1107.62L798.912 1077.05L770.29 1045.16L725.143 1015.89L723.094 1007.11L728.397 997.746L756.306 978.67L825.144 914.863L840.843 892.957L865.018 831.625L871.169 794.991L869.675 780.052L858.742 759.669L834.419 739.994L821.101 721.278L785.411 699.792L744.609 686.317L735.081 677.446L726.285 653.17L725.98 631.585L723.339 625.568L699.989 605.528L690 582.45L686.395 559.371L662.729 523.514L655.627 499.594L645.047 497.294L625.191 508.324L607.943 512.737L596.31 509.517L587.966 503.177L562.9 470.329L547.709 438.137L529.198 427.974L499.573 393.438L497.586 380.85L499.015 334.069L494.609 305.439L489.119 297.203L432.486 256.863L426.159 240.215L427.044 195.88L422.045 195.78L421.143 241.086L428.388 260.154L485.325 300.527L489.836 307.293L494.002 334.379L492.574 381.167L494.872 395.721L525.962 431.901L543.88 441.738L558.687 473.115L584.336 506.697L593.851 513.929L607.929 517.851L627.109 512.979L645.828 502.58L651.675 503.852L658.146 525.647L681.621 561.217L685.159 583.853L695.885 608.632L719.102 628.354L721.34 646.664L708.904 630.524L699.385 624.971L679.682 623.866L668.698 617.488L651.419 616.392L640.666 611.2L625.669 617.454L619.211 627.688L613.501 653.027L599.302 668.577L582.135 676.171L557.923 667.305L519.807 645.423L499.395 626.067L460.017 577.116L435.959 539.786L424.267 527.729L372.184 486.421L302.551 446.793L274.57 426.606L244.704 392.061L208.991 365.99L124.936 260.575L93.3936 214.336L37.6816 165.696L34.3926 169.462ZM1233.59 1279.22L1229.73 1289.95L1225.17 1292.46L1220.88 1290.16L1219.65 1286.12L1224.7 1279.17L1229.1 1277.31L1233.59 1279.22ZM1311.82 1024.91L1317.75 1028.29L1321.83 1036.18L1314.5 1041.28L1306.48 1040.7L1297.41 1034.77L1299.01 1026.96L1307.12 1023.92L1311.82 1024.91ZM365.615 715.786L374.607 738.35L370.082 745.379L375.464 747.905L376.51 770.401L386.142 770.359L387.485 745.638L371.076 713.64L365.615 715.786ZM1337.23 740.121L1339.9 747.084L1322.35 758.956L1317.53 756.465L1309.77 757.753L1306.2 755.68L1302.68 759.253L1299.04 758.281L1297.14 753.734C1299.67 747.141 1300.55 736.602 1310.07 738.981L1322.9 742.256L1332.75 737.203L1337.23 740.121ZM726.285 653.17L721.499 653.285L721.34 646.664L726.285 653.17ZM1455.08 582.147L1460.36 586.818L1466.06 607.383L1463.24 613.021L1465.09 618.625L1463.41 622.038L1453.57 622.879C1450.87 620.171 1448.71 618.625 1445.54 616.566L1438.65 617.594L1432.55 613.295L1431.3 603.67L1435.7 599.568L1435.17 586.953L1438.5 582.688L1455.08 582.147ZM1430.41 547.343L1440.38 550.066L1437.48 563.556L1432.63 567.031L1426.7 566.326L1423.82 558.617L1419.25 555.026L1423.96 546.589L1430.41 547.343ZM1422.31 408.091L1429.01 408.796L1430.23 413.356L1426.49 421.622L1417.79 421.298L1414.01 417.832L1415.85 409.174L1421.01 406.324L1422.31 408.091ZM1445.85 78.2256L1447.35 82.1729L1445.61 86.6914L1449.59 89.4844L1450.81 94.5352L1445.29 100.137L1431.02 98.0752L1418.67 85.6406L1418.38 90.1416L1422.39 95.5469L1412.16 108.724L1407.25 108.969L1392.02 99.3086L1390.79 95.2793L1397.11 88.3633L1397.64 78.7939L1402.4 76.168L1418.51 83.9473L1423.8 74.6914L1431.26 76.8164L1442.37 74.3164L1445.85 78.2256ZM817.651 73.5225L818.797 76.6221L832.202 86.1611L834.515 94.5039L830.055 96.2354L805.529 94.7129L802.508 92.4795L804.487 80.2939C804.655 80.685 806.844 80.5768 804.487 80.2939C804.487 73.1008 813.14 73.2208 817.651 73.5225ZM1476.42 54.4023L1479.5 59.5166L1486.22 55.1328L1491.07 57.0342L1490.37 60.542L1494.7 68.832L1487.08 78.6934L1463.27 76.4219L1463.02 71.2129L1469.47 53.7559L1473.29 52.3701L1476.42 54.4023ZM1427.43 2.1709L1436.1 26.1553L1436.03 38.8799L1432.38 39.7129L1431.35 43.7803L1443.9 43.4727C1446.46 52.4868 1448.47 64.0471 1444.95 69.207L1431.34 71.5039L1410.22 59.8164L1403.89 53.4316L1391.35 62.3926L1379.39 62.6602L1378.5 58.5566L1386.03 54.0596L1381.33 47.46L1383.75 42.3906L1392.81 39.3848L1392.87 35.6289L1384.16 34.1982L1380.3 24.0176L1382.02 18.0322L1388.27 12.4102L1406.04 15.3477L1422.63 0L1427.43 2.1709Z" fill="#c2d099" stroke="#7da78c" stroke-width="6" stroke-linejoin="round"/>
 
-          <!-- 南寮區 North -->
-          <path class="map-zone" id="zone-nanliao"
-            d="M120,30 C135,20 165,22 180,35 C195,48 205,65 200,85 C195,100 185,110 170,115 C155,120 140,118 128,108 C115,98 108,80 110,60 Z"
-            onmouseover="highlightZone('nanliao')" onmouseout="resetZone()"/>
-
-          <!-- 公館區 East -->
-          <path class="map-zone" id="zone-gongguan"
-            d="M175,115 C192,110 210,120 222,138 C234,155 235,175 225,190 C215,205 198,210 183,205 C168,200 158,185 158,168 C158,150 162,128 175,115 Z"
-            onmouseover="highlightZone('gongguan')" onmouseout="resetZone()"/>
-
-          <!-- 中寮區 Central -->
-          <path class="map-zone" id="zone-zhongliao"
-            d="M110,110 C125,105 145,108 160,118 C175,128 178,148 172,165 C166,182 150,192 132,190 C115,188 100,175 96,158 C92,140 96,120 110,110 Z"
-            onmouseover="highlightZone('zhongliao')" onmouseout="resetZone()"/>
-
-          <!-- 大白沙區 South -->
-          <path class="map-zone" id="zone-baisha"
-            d="M115,195 C132,188 155,190 170,200 C185,210 190,230 185,248 C180,265 165,278 148,280 C131,282 115,272 107,258 C99,244 100,225 115,195 Z"
-            onmouseover="highlightZone('baisha')" onmouseout="resetZone()"/>
-
-          <!-- 溫泉區 Southwest -->
-          <path class="map-zone" id="zone-hotspring"
-            d="M95,200 C108,195 118,205 120,220 C122,235 115,250 103,258 C91,266 77,262 70,250 C63,238 65,220 75,210 C80,205 88,202 95,200 Z"
-            onmouseover="highlightZone('hotspring')" onmouseout="resetZone()"/>
-
-          <!-- 小島標籤 -->
-          <text x="155" y="72" text-anchor="middle" font-size="10" fill="#1a4a4e" font-family="Noto Sans TC" font-weight="500">南寮</text>
-          <text x="200" y="162" text-anchor="middle" font-size="10" fill="#1a4a4e" font-family="Noto Sans TC" font-weight="500">公館</text>
-          <text x="134" y="152" text-anchor="middle" font-size="10" fill="#1a4a4e" font-family="Noto Sans TC" font-weight="500">中寮</text>
-          <text x="148" y="238" text-anchor="middle" font-size="10" fill="#1a4a4e" font-family="Noto Sans TC" font-weight="500">大白沙</text>
-          <text x="89" y="230" text-anchor="middle" font-size="10" fill="#1a4a4e" font-family="Noto Sans TC" font-weight="500">溫泉</text>
-
-          <!-- Compass -->
-          <g transform="translate(240,30)">
-            <circle cx="0" cy="0" r="16" fill="white" stroke="#dde8d0" stroke-width="1"/>
-            <text x="0" y="-5" text-anchor="middle" font-size="8" fill="#35858e" font-weight="700" font-family="Arial">N</text>
-            <path d="M0,-13 L3,-3 L0,0 Z" fill="#35858e"/>
-            <path d="M0,13 L-3,3 L0,0 Z" fill="#c2d099"/>
+          <g id="pin-zhongliao" class="map-pin" transform="translate(390, 400)" onmouseover="previewZone('zhongliao')" onmouseout="clearPreview()" onclick="lockZone('zhongliao')">
+            <circle class="pin-bg" cx="0" cy="0" r="70" fill="#35858e" opacity="0.15"/>
+            <circle class="pin-core" cx="0" cy="0" r="30" fill="#35858e" stroke="#fff" stroke-width="5"/>
+            <text class="pin-text" x="-70" y="-85" text-anchor="middle" font-size="55" fill="#1a4a4e" font-weight="700" font-family="'Playfair Display', serif" style="pointer-events: none;">Zhongliao</text>
           </g>
 
-          <!-- Scale -->
-          <line x1="40" y1="360" x2="100" y2="360" stroke="#7da78c" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="40" y1="356" x2="40" y2="364" stroke="#7da78c" stroke-width="1.5"/>
-          <line x1="100" y1="356" x2="100" y2="364" stroke="#7da78c" stroke-width="1.5"/>
-          <text x="70" y="355" text-anchor="middle" font-size="9" fill="#7da78c" font-family="Arial">2 km</text>
+          <g id="pin-gongguan" class="map-pin" transform="translate(1050, 700)" onmouseover="previewZone('gongguan')" onmouseout="clearPreview()" onclick="lockZone('gongguan')">
+            <circle class="pin-bg" cx="0" cy="0" r="70" fill="#35858e" opacity="0.15"/>
+            <circle class="pin-core" cx="0" cy="0" r="30" fill="#35858e" stroke="#fff" stroke-width="5"/>
+            <text class="pin-text" x="0" y="120" text-anchor="middle" font-size="55" fill="#1a4a4e" font-weight="700" font-family="'Playfair Display', serif" style="pointer-events: none;">Gongguan</text>
+          </g>
+
+          <g id="pin-nanliao" class="map-pin" transform="translate(550, 900)" onmouseover="previewZone('nanliao')" onmouseout="clearPreview()" onclick="lockZone('nanliao')">
+            <circle class="pin-bg" cx="0" cy="0" r="70" fill="#35858e" opacity="0.15"/>
+            <circle class="pin-core" cx="0" cy="0" r="30" fill="#35858e" stroke="#fff" stroke-width="5"/>
+            <text class="pin-text" x="0" y="120" text-anchor="middle" font-size="55" fill="#1a4a4e" font-weight="700" font-family="'Playfair Display', serif" style="pointer-events: none;">Nanliao</text>
+          </g>
         </svg>
       </div>
 
-      <!-- Info Panel -->
       <div>
         <div id="zone-info" style="background:#f0f7e6;border-left:3px solid #35858e;border-radius:0 12px 12px 0;padding:1.8rem;min-height:220px;transition:all 0.3s;">
           <div id="zone-icon" style="font-size:2rem;margin-bottom:0.8rem;">🗺️</div>
-          <h3 id="zone-name" style="font-size:1.2rem;font-weight:600;color:#2d3a2e;margin-bottom:0.5rem;font-family:'Playfair Display',serif;">探索綠島各區</h3>
+          <h3 id="zone-name" style="font-size:1.2rem;font-weight:600;color:#2d3a2e;margin-bottom:0.5rem;font-family:'Playfair Display',serif;">Explore Local Features</h3>
           <p id="zone-desc" style="font-size:0.9rem;line-height:1.8;color:#4a5c4b;">
-            將滑鼠移至左側地圖的任一分區，即可查看該區域的特色景點、生態環境與旅遊建議。綠島面積雖小，但每個角落都有獨特的自然魅力等您發掘。
+            Hover over a pin on the map for a quick preview, and <strong>click a pin</strong> to lock in the detailed information of that village. Green Island may be small, but every corner has its unique natural charm waiting to be discovered.
           </p>
           <div id="zone-tags" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem;"></div>
         </div>
@@ -355,21 +345,22 @@
 <!-- SDGS SECTION -->
 <section id="sdgs" style="padding:6rem 2rem;max-width:1200px;margin:0 auto;" class="fade-in">
   <div style="margin-bottom:3rem;text-align:center;">
-    <span class="section-title">Our SustainableGoals</span>
+    <span class="section-title">Our Sustainable Goals</span>
     <p style="color:#6b7f6c;font-size:0.95rem;margin-top:1rem;max-width:720px;margin-left:auto;margin-right:auto;">
-      This website aligns with UN Sustainable Development Goals<strong>11 (Sustainable Cities and Communities)</strong>and<strong>14 (Life Below Water)</strong>.
+      This website aligns with UN Sustainable Development Goals <strong>11 (Sustainable Cities and Communities)</strong> and <strong>14 (Life Below Water)</strong>.
       By integrating Green Island tourism info, marine ecology insights, and eco-friendly local communities, we aim to deliver a travel experience that is both 
       enjoyable and ecologically responsible.
     </p>
   </div>
 
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;align-items:start;">
-    <div style="background:#fff;border:1px solid #dde8d0;border-radius:20px;overflow:hidden;min-height:320px;display:flex;flex-direction:column;">
-      <div style="height:200px;overflow:hidden;display:flex;align-items:center;justify-content:center;">
-        <img src="images/11.png" alt="SDG 11" style="width:100%;height:200px;object-fit:cover;display:block;">
+    
+    <div style="background:#fff;border:1px solid #dde8d0;border-radius:20px;overflow:hidden;min-height:320px;display:flex;flex-direction:column;transition:transform 0.2s;">
+      <div style="padding: 3rem 1.5rem 1rem; display:flex; justify-content:center;">
+        <img src="images/11.png" alt="SDG 11" style="width: 200px; height: 200px; object-fit: contain;">
       </div>
       <div style="padding:1.5rem;">
-        <h3 style="font-family:'Playfair Display',serif;font-size:1.25rem;color:#2d3a2e;margin-bottom:0.75rem;">SDG 11：Sustainable Cities and Communities</h3>
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.25rem;color:#2d3a2e;margin-bottom:1rem;text-align:center;">SDG 11：Sustainable Cities and Communities</h3>
         <p style="color:#4a5c4b;line-height:1.8;font-size:0.95rem;">
           By providing local services, eco-friendly accommodations, and low-impact travel recommendations in Green Island, we seamlessly integrate urban and 
           community sustainability into every traveler’s daily itinerary.
@@ -377,25 +368,26 @@
       </div>
     </div>
 
-    <div style="background:#fff;border:1px solid #dde8d0;border-radius:20px;overflow:hidden;min-height:320px;display:flex;flex-direction:column;">
-      <div style="height:200px;overflow:hidden;display:flex;align-items:center;justify-content:center;">
-        <img src="images/14.png" alt="SDG 14" style="width:100%;height:200px;object-fit:cover;display:block;">
+    <div style="background:#fff;border:1px solid #dde8d0;border-radius:20px;overflow:hidden;min-height:320px;display:flex;flex-direction:column;transition:transform 0.2s;">
+      <div style="padding: 3rem 1.5rem 1rem; display:flex; justify-content:center;">
+        <img src="images/14.png" alt="SDG 14" style="width: 200px; height: 200px; object-fit: contain;">
       </div>
       <div style="padding:1.5rem;">
-        <h3 style="font-family:'Playfair Display',serif;font-size:1.25rem;color:#2d3a2e;margin-bottom:0.75rem;">SDG 14：Life Below Water</h3>
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.25rem;color:#2d3a2e;margin-bottom:1rem;text-align:center;">SDG 14：Life Below Water</h3>
         <p style="color:#4a5c4b;line-height:1.8;font-size:0.95rem;">
           By highlighting Green Island’s ecological crises under global warming and high tourism pressure, we aim to inspire travelers to deeply 
           understand the value of marine resources and actively take part in conservation efforts.
         </p>
       </div>
     </div>
+
   </div>
 </section>
 
 <!-- FAQ SECTION -->
 <section id="faq" style="padding:6rem 2rem;max-width:800px;margin:0 auto;" class="fade-in">
   <div style="margin-bottom:3rem;text-align:center;">
-    <span class="section-title">常見問題</span>
+    <span class="section-title">Frequently Asked Questions</span>
   </div>
 
   <div id="faq-list"></div>
@@ -497,7 +489,7 @@ function renderWeatherCards(periods, highTemps, lowTemps) {
     const card = document.createElement('div');
     card.className = 'weather-card' + (i === 0 ? ' today' : '');
     card.innerHTML = `
-      <div style="font-size:0.75rem;font-weight:500;opacity:${i === 0 ? '0.9' : '0.6'};margin-bottom:4px;">${i === 0 ? 'Current' : ''}</div>
+      <div style="font-size:0.75rem;font-weight:500;opacity:${i === 0 ? '0.9' : '0.6'};margin-bottom:4px;">${i === 0 ? 'Current' : '&nbsp;'}</div>
       <div style="font-size:0.7rem;opacity:0.6;margin-bottom:12px;">${formatTimeLabel(startTime)}</div>
       <div style="font-size:2rem;margin-bottom:10px;">🌤️</div>
       <div style="font-size:1.2rem;font-weight:600;margin-bottom:2px;">${maxTemp}° / ${minTemp}°</div>
@@ -587,43 +579,27 @@ fetchWeatherData();
 const zoneData = {
   nanliao: {
     icon: '⛵',
-    name: '南寮港區',
-    desc: '綠島的主要出入門戶，設有南寮漁港與碼頭。船班從台東富岡漁港出發，航程約50分鐘。港口周邊有商店、機車租借，是旅遊的起點。',
-    tags: ['交通樞紐', '漁港', '機車租借', '特產購買']
+    name: 'Nanliao Village',
+    desc: 'The main gateway to Green Island, featuring Nanliao Fishing Harbor and the pier. Ferries depart from Taitung Fugang Fishery Harbor, taking about 50 minutes. The harbor area is surrounded by shops and scooter rental services, making it the perfect starting point for your journey.',
+    tags: ['Transport Hub', 'Fishing Harbor', 'Scooter Rental', 'Souvenirs']
   },
   gongguan: {
     icon: '🐠',
-    name: '公館海岸',
-    desc: '東側海岸線擁有壯麗的火山岩地形與豐富珊瑚礁。朝日溫泉就位於此區，是全台少見的海底湧出溫泉，被列為世界三大海底溫泉之一。',
-    tags: ['朝日溫泉', '珊瑚礁', '浮潛', '火山地形']
+    name: 'Gongguan Village',
+    desc: 'The eastern coastline boasts magnificent volcanic rock formations and vibrant coral reefs. Zhaori Hot Spring is located here, which is a rare underwater hot spring and one of only three saltwater hot springs in the world.',
+    tags: ['Zhaori Hot Spring', 'Coral Reefs', 'Snorkeling', 'Volcanic Terrain']
   },
   zhongliao: {
     icon: '🌿',
-    name: '中寮生態區',
-    desc: '島嶼中央的農業聚落與自然生態保護區。這裡可見到綠島特有的黑頭文鳥，以及熱帶林相生態。推薦以自行車慢行探索鄉間小路。',
-    tags: ['生態保護', '自行車道', '有機農業', '賞鳥']
-  },
-  baisha: {
-    icon: '🏊',
-    name: '大白沙海灘',
-    desc: '綠島最著名的純白沙灘，海水清澈見底，沙質潔白細軟。適合浮潛、立槳衝浪與觀賞熱帶魚群。黃昏時分景色尤其迷人。',
-    tags: ['白沙灘', '浮潛', '立槳衝浪', '夕陽觀賞']
-  },
-  hotspring: {
-    icon: '♨️',
-    name: '溫泉海岸',
-    desc: '全世界僅三處的海底湧泉之一，海水溫泉從礁岩縫隙自然湧出，溫度約45-65°C。沿岸設有室外溫泉泡湯池，可邊泡湯邊聽海浪聲。',
-    tags: ['海底溫泉', '世界三大', '礁岩景觀', '夜泡溫泉']
+    name: 'Zhongliao Village',
+    desc: 'An agricultural settlement and nature conservation area in the center of the island. You can spot the endemic Chestnut Munia and explore the tropical forest ecosystem here. Exploring the country roads at a slow pace on a bicycle is highly recommended.',
+    tags: ['Eco-conservation', 'Bike Paths', 'Organic Farming', 'Birdwatching']
   }
 };
 
-let activeZone = null;
+let lockedZone = null;
 
-function highlightZone(id) {
-  document.querySelectorAll('.map-zone').forEach(z => z.classList.remove('active'));
-  const zone = document.getElementById('zone-' + id);
-  if (zone) zone.classList.add('active');
-
+function updateSidePanel(id) {
   const data = zoneData[id];
   if (!data) return;
 
@@ -637,48 +613,61 @@ function highlightZone(id) {
   ).join('');
 }
 
-function resetZone() {
-  document.querySelectorAll('.map-zone').forEach(z => z.classList.remove('active'));
-  document.getElementById('zone-icon').textContent = '🗺️';
-  document.getElementById('zone-name').textContent = '探索綠島各區';
-  document.getElementById('zone-desc').textContent = '將滑鼠移至左側地圖的任一分區，即可查看該區域的特色景點、生態環境與旅遊建議。綠島面積雖小，但每個角落都有獨特的自然魅力等您發掘。';
-  document.getElementById('zone-tags').innerHTML = '';
+function previewZone(id) {
+  updateSidePanel(id);
 }
 
-/* ── MAP TOUCH SUPPORT ── */
-document.querySelectorAll('.map-zone').forEach(zone => {
-  zone.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    const id = zone.id.replace('zone-', '');
-    highlightZone(id);
+function clearPreview() {
+  if (lockedZone) {
+    updateSidePanel(lockedZone);
+  } else {
+    document.getElementById('zone-icon').textContent = '🗺️';
+    document.getElementById('zone-name').textContent = 'Explore Local Features';
+    document.getElementById('zone-desc').innerHTML = 'Hover over a pin on the map for a quick preview, and <strong>click a pin</strong> to lock in the detailed information of that village. Green Island may be small, but every corner has its unique natural charm waiting to be discovered.';
+    document.getElementById('zone-tags').innerHTML = '';
+  }
+}
+
+function lockZone(id) {
+  lockedZone = id;
+  updateSidePanel(id);
+  
+  // 移除圖釘active state
+  document.querySelectorAll('.map-pin').forEach(pin => {
+    pin.classList.remove('active');
   });
-});
+  
+  const activePin = document.getElementById(`pin-${id}`);
+  if (activePin) {
+    activePin.classList.add('active');
+  }
+}
 
 /* ── FAQ DATA ── */
 const faqs = [
   {
-    q: '如何前往綠島？',
-    a: '可從台東富岡漁港搭乘客輪（約50分鐘），或從台東機場搭乘小型飛機（約15分鐘）。建議提前訂票，旺季（5-9月）尤其需要至少一週前預訂。'
+    q: 'How do I get to Green Island?',
+    a: 'Travel to Taitung first, then transfer by ferry (approx. 50 mins) from Fugang Fishery Harbor to Nanliao Harbor, or by 19-seater plane (approx. 15 mins) from Taitung Airport. Ferries are most recommended but can be rough — take motion sickness medication 30 minutes before boarding. Flights are faster but seats are very limited and weather-dependent; book several months in advance.'
   },
   {
-    q: '綠島最佳旅遊季節是什麼時候？',
-    a: '5月至10月為旺季，天氣晴朗、能見度佳，適合浮潛與水上活動。冬季（11月至翌年3月）因東北季風較強，海況不穩，但溫泉體驗更舒適，旅遊人潮較少、費用也較低。'
+    q: 'When is the best time to visit Green Island?',
+    a: 'April to October is peak season. Spring and summer bring calm seas, excellent underwater visibility, and blooming wild Taiwan Lilies — ideal for diving and snorkeling. Autumn and winter (October – March) are quieter, with stronger winds but perfect conditions for the Zhaori Hot Spring, stargazing, and exploring local cultural history.'
   },
   {
-    q: '島內交通如何安排？',
-    a: '島上最主要的交通方式是租借機車，費用約 NT$350-500/天。也可租借自行車進行環島（全長約20公里），更環保但較費體力。部分旅宿提供接駁服務，建議事先確認。'
+    q: 'How do I arrange local transportation on the island?',
+    a: 'The scenic ring road is approximately 19 km long. Scooters (gas or electric) are the most popular option and let you circle the island in about 40 minutes — most guesthouses include rentals in their packages. For low-carbon travel, we strongly recommend electric scooters or bicycles to reduce emissions, noise pollution, and disturbance to local wildlife such as land crabs.'
   },
   {
-    q: '綠島有哪些永續旅遊的方式？',
-    a: '建議優先選擇電動機車減少廢氣排放；選擇認證的生態友善旅宿；浮潛或潛水時絕對不碰觸珊瑚礁；自備環保餐具減少一次性用品；購買在地小農或手工藝品支持在地經濟。'
+    q: 'What are the ways to practice sustainable tourism in Green Island?',
+    a: 'Bring reusable utensils and a water bottle — many local shops offer refill stations. Use reef-safe sunscreen or wear a rash guard when snorkeling or diving to protect the coral ecosystem. Choose eco-friendly accommodations, join local-guide-led eco-tours, and support community businesses when shopping for souvenirs.'
   },
   {
-    q: '綠島的溫泉有什麼特別之處？',
-    a: '朝日溫泉是全世界僅三處的海底碳酸氫鈉泉之一（其餘兩處分別在義大利與日本），溫泉從海底礁岩自然湧出，帶有海潮香氣，被譽為世界三大海底溫泉。建議黃昏或清晨時段前往欣賞日落或日出。'
+    q: 'What makes Green Island\'s hot spring so special?',
+    a: 'Zhaori Hot Spring is one of only three known saltwater submarine hot springs in the world, alongside Sicily, Italy and Kyushu, Japan. Pacific seawater seeps into the volcanic crust, warms under geothermal heat, and surges back up along the shore. The open-air terraced pools sit directly on the intertidal coral reef — best experienced at dawn for a Pacific sunrise, or late at night under a Milky Way sky.'
   },
   {
-    q: '造訪時有什麼注意事項？',
-    a: '珊瑚礁生態脆弱，浮潛時請務必不踩踏、不觸碰珊瑚；防曬乳建議選用礁岩友善（Reef Safe）產品。島上淡水資源有限，請節約用水。並請將所有垃圾帶出，尤其是海邊不要留下任何垃圾。'
+    q: 'Are there any important notices when visiting?',
+    a: 'Medical resources are limited to one local clinic — know your limits when diving or hiking. Slow down on scooters especially at dusk and dawn in summer and autumn, when land crabs cross the road to release eggs into the sea. Never touch or step on coral reefs or collect marine creatures — leave everything as you found it and take nothing but memories.'
   },
 ];
 
