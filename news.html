@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>最新消息 — 綠島續嶼</title>
+<title>Latest News</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Lora:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
   --teal: #35858e;
@@ -21,7 +21,7 @@
 body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); }
 html { scroll-behavior: smooth; }
 
-/* ── HEADER (same as homepage) ── */
+/* ── HEADER ── */
 #header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   transition: background 0.3s, box-shadow 0.3s;
@@ -45,7 +45,7 @@ html { scroll-behavior: smooth; }
 
 /* ── PAGE HERO ── */
 .page-hero {
-  background: linear-gradient(160deg, #1a4a4e 0%, #35858e 60%, #5ba396 100%);
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images/news.jpg') center/cover no-repeat;
   padding: 120px 2rem 60px;
   position: relative;
   overflow: hidden;
@@ -57,6 +57,20 @@ html { scroll-behavior: smooth; }
 }
 .page-hero-wave {
   position: absolute; bottom: -2px; left: 0; right: 0;
+}
+.page-hero h1 {
+  font-family: 'Lora', serif;
+}
+.page-hero p {
+  font-family: 'Playfair Display', serif;
+}
+.detail-hint {
+  margin: 0.9rem 2.4rem 0 2.4rem;
+  color: var(--muted);
+  font-size: 0.86rem;
+  letter-spacing: 0.02em;
+  font-style: italic;
+  text-align: center;
 }
 
 /* ── LAYOUT ── */
@@ -391,8 +405,8 @@ html { scroll-behavior: smooth; }
       <span style="width:5px;height:5px;background:#c2d099;border-radius:50%;display:inline-block;"></span>
       <span style="font-size:0.75rem;color:rgba(255,255,255,0.85);letter-spacing:0.1em;">INSIGHTS & UPDATES</span>
     </div>
-    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:#fff;font-weight:600;margin-bottom:0.5rem;">Latest News</h1>
-    <p style="font-size:0.9rem;color:rgba(255,255,255,0.7);">Green Island: Events, Ecology, and Local Updates</p>
+    <h1 style="font-family:'Lora',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:#fff;font-weight:600;margin-bottom:0.5rem;">Latest News</h1>
+    <p style="font-family:'Playfair Display',serif;font-size:0.9rem;color:rgba(255,255,255,0.7);">Green Island: Events, Ecology, and Local Updates</p>
   </div>
   <div class="page-hero-wave">
     <svg viewBox="0 0 1440 50" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:50px;">
@@ -423,6 +437,35 @@ html { scroll-behavior: smooth; }
 <div id="image-preview-overlay" class="image-preview-overlay" onclick="overlayClick(event)">
   <img id="image-preview-img" src="" alt="Full preview" onclick="event.stopPropagation()" />
 </div>
+
+<!-- 共用頁尾 -->
+
+<footer class="site-footer" style="background: #1a2e1e; color: #a8c4aa; padding: 4rem 2rem 2rem;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; margin-bottom: 3rem; text-align: left;">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
+          <div style="width:30px;height:30px;background:#c2d099;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 2C9 2 4 6 4 10.5C4 13.5 6.5 16 9 16C11.5 16 14 13.5 14 10.5C14 6 9 2 9 2Z" fill="#35858e"/></svg>
+          </div>
+          <span style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#e6eec9;">ISLE of ROAM</span>
+        </div>
+        <p style="font-size:0.83rem;line-height:1.8;color:#7a9c7b;">Centered on sustainable tourism, we protect the pristine beauty of Green Island, making travel a power for change.</p>
+      </div>
+      <div>
+        <h4 style="font-size:0.78rem;letter-spacing:0.12em;color:#c2d099;margin-bottom:1rem;text-transform:uppercase;">Contact Us</h4>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;font-size:0.85rem;">
+          <span>📧 Isle_of_Roam@gmail.com</span>
+          <span>📍 NCU MIS IM3029A Group6</span>
+          <span>113403023 蔡仁懋 / 112102526 陳俊岳 / 113403017 賴韋衡</span>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,0.07);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+      <span style="font-size:0.8rem;color:#5a7a5c;">© 2026 ISLE of ROAM. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
 
 <script>
 /* ── DATA ── */
@@ -800,6 +843,7 @@ function selectNews(id) {
           <div class="img-caption">${item.imgCaption || ''}</div>
         </div>
       </div>
+      <div class="detail-hint">Click the photo to get more info</div>
       <div class="detail-body">
         <div class="detail-meta">
           <div class="detail-date">
