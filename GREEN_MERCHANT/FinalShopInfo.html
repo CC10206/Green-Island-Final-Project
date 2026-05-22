@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ISLE of ROAM</title>
+<title>Merchant - ISLE of ROAM</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:wght@400;600&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -113,18 +113,24 @@
 </head>
 <body>
 
-<!-- 頂部導覽列 -->
-<header id="header" class="site-header">
-  <div class="header-container">
-    <a href="#" class="logo-link">
-      <img src="images/logo.png" alt="ISLE of ROAM Logo" style="height: 36px; width: auto;">
-      <span class="logo-text">ISLE of ROAM</span>
+<!-- 共用頁首 -->
+<header id="header" style="position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(26,58,46,0.97);transition:background 0.3s,box-shadow 0.3s;" class="hero-header">
+  <div style="max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px;">
+    <a href="#" style="text-decoration:none;display:flex;align-items:center;gap:10px;">
+      <img src="images/logo.png" alt="Logo" style="height: 34px; width: auto; object-fit: contain;">
+      <span style="font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;letter-spacing:0.05em;font-weight:600;">ISLE of ROAM</span>
     </a>
-    <nav class="hidden md:flex" style="display:flex;gap:2rem;align-items:center;">
-      <a href="#" class="nav-link">Home</a>
-      <a href="#merchants-section" class="nav-link">Eco Merchants</a>
-      <a href="#" class="nav-link">Carbon Footprint</a>
+
+   <nav style="display:flex;gap:1.4rem;align-items:center;" class="hidden md:flex">
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/homepage" class="nav-link">Home</a>
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/news" class="nav-link">News</a>
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/greenintro2" class="nav-link">About Eco</a>
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/green-tour-map/interactive-map" class="nav-link">Green Map</a>
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/trans" class="nav-link">Transportation</a>
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/GREEN_MERCHANT/FinalShopInfo.html" class="nav-link">Merchant</a>
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/stampColl" style="background:#c2d099;color:#2d3a2e;padding:8px 20px;border-radius:50px;font-size:0.85rem;font-weight:500;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background='#d4e3a8'" onmouseout="this.style.background='#c2d099'">Mission</a>
     </nav>
+
     <button id="hamburger" style="display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;" onclick="toggleMenu()">
       <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
       <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
@@ -219,18 +225,10 @@
     </div>
 </div>
 
-<!-- 關於我們 -->
-<section style="padding:5rem 2rem;background:linear-gradient(135deg,#35858e,#4a9aa6);text-align:center;">
-  <div style="max-width:700px;margin:0 auto;">
-    <h2 class="font-display" style="font-size:2rem;color:#fff;margin-bottom:1.2rem;">About ISLE of ROAM</h2>
-    <p style="color:rgba(255,255,255,0.82);line-height:1.9;font-size:0.95rem;margin-bottom:2rem;">We are a group of travel advocates who love Green Island and are passionate about ecological conservation. We are dedicated to promoting low-carbon, eco-friendly travel by connecting local eco-conscious merchants with travelers, making tourism a powerful force for protecting this beautiful island.</p>
-  </div>
-</section>
-
 <!-- 頁尾 -->
-<footer class="site-footer">
-  <div style="max-width:1200px;margin:0 auto;">
-    <div class="footer-grid">
+<footer class="site-footer" style="background: #1a2e1e; color: #a8c4aa; padding: 4rem 2rem 2rem;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; margin-bottom: 3rem; text-align: left;">
       <div>
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
           <div style="width:30px;height:30px;background:#c2d099;border-radius:50%;display:flex;align-items:center;justify-content:center;">
@@ -243,9 +241,9 @@
       <div>
         <h4 style="font-size:0.78rem;letter-spacing:0.12em;color:#c2d099;margin-bottom:1rem;text-transform:uppercase;">Contact Us</h4>
         <div style="display:flex;flex-direction:column;gap:0.6rem;font-size:0.85rem;">
-          <span>📧 hello@greenisland-eco.tw</span>
-          <span>📍 Green Island Township, Taitung County</span>
-          <span>📞 089-672-XXX</span>
+          <span>📧 Isle_of_Roam@gmail.com</span>
+          <span>📍 NCU MIS IM3029A Group6</span>
+          <span>113403023 蔡仁懋 / 112102526 陳俊岳 / 113403017 賴韋衡</span>
         </div>
       </div>
     </div>

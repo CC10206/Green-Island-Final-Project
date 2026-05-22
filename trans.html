@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carbon Footprint - ISLE of ROAM</title>
+<title>Transportation - ISLE of ROAM</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:wght@400;600&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
 <style>
   /* 全域變數：ISLE of ROAM 的專屬配色 */
   :root { --teal: #35858e; --sage: #7da78c; --moss: #c2d099; --cream: #e6eec9; }
-  body { font-family: 'Noto Sans TC', sans-serif; background-color: var(--cream); color: #2d3a2e; margin: 0; padding-top: 120px; }
+  body { font-family: 'Noto Sans TC', sans-serif; background-color: var(--cream); color: #2d3a2e; margin: 0; }
   
 /* 導覽列與特效樣式 */
 .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(26,58,46,0.97); height: 64px; box-shadow: 0 2px 20px rgba(0,0,0,0.1); transition: background 0.3s, box-shadow 0.3s; }
@@ -28,6 +28,24 @@
   /* 頁首大標題 */
   .page-header { text-align: center; margin-bottom: 50px; }
   .page-header h1 { color: var(--teal); font-family: 'Lora', serif; font-size: 2.5rem; font-weight: bold; }
+
+  /* Page hero 橫幅與波浪 */
+  .page-hero {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images/Transbanner.jpg') center/cover no-repeat;
+    padding: 130px 2rem 60px;
+    position: relative; overflow: hidden;
+    color: #f8f8f8;
+    text-align: center;
+  }
+  .page-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 50%, rgba(255,255,255,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .page-hero-wave {
+    position: absolute; bottom: -2px; left: 0; right: 0;
+  }
 
   /* 左右分佈的排版容器 */
   .layout-container { display: flex; flex-wrap: wrap; gap: 40px; justify-content: center; max-width: 1100px; margin: 0 auto; padding-bottom: 80px; }
@@ -58,23 +76,49 @@
 </head>
 <body>
 <!-- 共用頁首 -->
-<header id="header" class="site-header">
-  <div class="header-container">
-    <a href="FinalShopInfo.html" class="logo-link">
-      <img src="GREEN_MERCHANT/images/logo.png" alt="ISLE of ROAM Logo" style="height: 36px; width: auto;">
-      <span class="logo-text">ISLE of ROAM</span>
+<header id="header" style="position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(26,58,46,0.97);transition:background 0.3s,box-shadow 0.3s;" class="hero-header">
+  <div style="max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px;">
+    <a href="#" style="text-decoration:none;display:flex;align-items:center;gap:10px;">
+      <img src="images/logo.png" alt="Logo" style="width:34px;height:34px;">
+      <span style="font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;letter-spacing:0.05em;font-weight:600;">ISLE of ROAM</span>
     </a>
-    <nav class="hidden md:flex" style="display:flex;gap:2rem;align-items:center;">
-      <a href="FinalShopInfo.html" class="nav-link">Home</a>
-      <a href="FinalShopInfo.html#merchants-section" class="nav-link">Eco Merchants</a>
-      <a href="#" class="nav-link" style="color:#fff; border-bottom:1px solid #c2d099;">Carbon Footprint</a>
+
+   <nav style="display:flex;gap:1.4rem;align-items:center;" class="hidden md:flex">
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/homepage" class="nav-link">Home</a>
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/news" class="nav-link">News</a>
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/greenintro2" class="nav-link">About Eco</a>
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/green-tour-map/interactive-map" class="nav-link">Green Map</a>
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/trans" class="nav-link">Transportation</a>
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/GREEN_MERCHANT/FinalShopInfo.html" class="nav-link">Merchant</a>
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/stampColl" style="background:#c2d099;color:#2d3a2e;padding:8px 20px;border-radius:50px;font-size:0.85rem;font-weight:500;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background='#d4e3a8'" onmouseout="this.style.background='#c2d099'">Mission</a>
     </nav>
+
+    <button id="hamburger" style="display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;" onclick="toggleMenu()">
+      <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
+      <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
+      <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
+    </button>
   </div>
 </header>
 
+<div class="page-hero">
+  <div style="position:relative;z-index:2;max-width:1200px;margin:0 auto;">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:50px;padding:5px 14px;margin-bottom:1.5rem;">
+      <span style="width:5px;height:5px;background:#c2d099;border-radius:50%;display:inline-block;"></span>
+      <span style="font-size:0.75rem;color:rgba(255,255,255,0.85);letter-spacing:0.1em;">GREEN TRAVEL · CARBON FOOTPRINT</span>
+    </div>
+    <h1 style="font-family:'Lora',serif;font-size:clamp(2rem,4vw,3.2rem);color:#fff;font-weight:600;margin-bottom:0.8rem;">Trip Planner</h1>
+  </div>
+  <div class="page-hero-wave">
+    <svg viewBox="0 0 1440 50" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:50px;">
+      <path d="M0,25 C240,50 480,0 720,25 C960,50 1200,0 1440,25 L1440,50 L0,50 Z" fill="#e6eec9"/>
+    </svg>
+  </div>
+</div>
+
 <div class="page-header">
-    <h1>Trip Planner</h1>
-    <p>Select your city on the map to estimate your journey's carbon footprint.</p>
+    <p style="font-family: 'Playfair Display', serif;font-weight: 600;font-size: 1.5rem; margin-top: 25px;color
+    :#35858e;">Select your city on the map to estimate your journey's carbon footprint.</p>
 </div>
 
 <div class="layout-container">
@@ -103,13 +147,6 @@
 </div>
 
 <!-- 共用頁尾 -->
-<section style="padding:5rem 2rem;background:linear-gradient(135deg,#35858e,#4a9aa6);text-align:center;">
-  <div style="max-width:700px;margin:0 auto;">
-    <h2 style="font-family: 'Playfair Display', serif; font-size:2rem; color:#fff; margin-bottom:1.2rem;">About ISLE of ROAM</h2>
-    <p style="color:rgba(255,255,255,0.82);line-height:1.9;font-size:0.95rem;margin-bottom:2rem;">We are a group of travel advocates who love Green Island and are passionate about ecological conservation. We are dedicated to promoting low-carbon, eco-friendly travel by connecting local eco-conscious merchants with travelers, making tourism a powerful force for protecting this beautiful island.</p>
-  </div>
-</section>
-
 <footer class="site-footer" style="background: #1a2e1e; color: #a8c4aa; padding: 4rem 2rem 2rem;">
   <div style="max-width: 1200px; margin: 0 auto;">
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; margin-bottom: 3rem; text-align: left;">
