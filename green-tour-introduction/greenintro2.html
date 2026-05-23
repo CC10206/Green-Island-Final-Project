@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&family=Lora:wght@400;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&family=Playfair+Display:wght@400;600;700&display=swap" />
 </head>
 <body style="margin:0; background:#0d2e15;">
 
@@ -57,16 +58,16 @@
     font-family: 'Noto Sans TC', sans-serif;
   }
   .hero-title {
-    font-family: 'Lora', serif;
+    font-family: 'Playfair Display', serif;
     font-size: clamp(3rem, 6vw, 5rem);
     color: #fff;
     line-height: 1.15;
     margin-bottom: 1.2rem;
-    font-weight: 700;
+    font-weight: 600;
     margin-top: 0;
   }
   .hero-desc {
-    font-family: 'Lora', serif;
+    font-family: 'Playfair Display', serif;
     font-size: clamp(1rem, 2.2vw, 1.2rem);
     color: rgba(255,255,255,0.85);
     line-height: 1.8;
@@ -112,9 +113,9 @@
     margin-bottom: 0.6rem;
   }
   .vic-section-title {
-    font-family: 'Noto Serif TC', serif;
+    font-family: 'Playfair Display', serif;
     font-size: clamp(1.9rem, 4vw, 2.8rem);
-    font-weight: 700;
+    font-weight: 600;
     color: var(--vic-forest);
     line-height: 1.25;
     margin-bottom: 1rem;
@@ -123,7 +124,7 @@
     display: block;
     font-size: 0.48em;
     font-weight: 400;
-    font-family: 'Noto Sans TC', sans-serif;
+    font-family: 'Playfair Display', sans-serif;
     letter-spacing: 0.12em;
     color: var(--vic-moss);
     margin-top: 0.2rem;
@@ -265,6 +266,10 @@
   .vic-stat-label { font-size: 0.85rem; color: var(--vic-moss); letter-spacing: 0.08em; }
   .vic-stat-divider { width: 1px; height: 48px; background: rgba(25,87,36,0.2); }
 
+  /* Footer */
+  .footer-link { color: #a8c4aa; font-size: 0.85rem; text-decoration: none; transition: color 0.2s; }
+  .footer-link:hover { color: #e6eec9; }
+
   @keyframes vic-fade-up {
     from { opacity: 0; transform: translateY(28px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -372,6 +377,34 @@
 
   </div>
 </section>
+
+<!-- 共用頁尾 -->
+<footer class="site-footer" style="background: #1a2e1e; color: #a8c4aa; padding: 4rem 2rem 2rem;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; margin-bottom: 3rem; text-align: left;">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
+          <div style="width:30px;height:30px;background:#c2d099;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 2C9 2 4 6 4 10.5C4 13.5 6.5 16 9 16C11.5 16 14 13.5 14 10.5C14 6 9 2 9 2Z" fill="#35858e"/></svg>
+          </div>
+          <span style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#e6eec9;">ISLE of ROAM</span>
+        </div>
+        <p style="font-size:0.83rem;line-height:1.8;color:#7a9c7b;">Centered on sustainable tourism, we protect the pristine beauty of Green Island, making travel a power for change.</p>
+      </div>
+      <div>
+        <h4 style="font-size:0.78rem;letter-spacing:0.12em;color:#c2d099;margin-bottom:1rem;text-transform:uppercase;">Contact Us</h4>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;font-size:0.85rem;">
+          <span>📧 Isle_of_Roam@gmail.com</span>
+          <span>📍 NCU MIS IM3029A Group6</span>
+          <span>113403023 蔡仁懋 / 112102526 陳俊岳 / 113403017 賴韋衡</span>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,0.07);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+      <span style="font-size:0.8rem;color:#5a7a5c;">© 2026 ISLE of ROAM. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
