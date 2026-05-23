@@ -28,6 +28,8 @@
       url('images/hero-banner.jpg');
     background-size: cover;
     background-position: center;
+    /*parallax */
+    background-attachment: fixed;
     position: relative;
     overflow: hidden;
     min-height: 60vh;
@@ -35,6 +37,13 @@
     align-items: center;
     justify-content: center;
   }
+
+  @media (max-width: 768px) {
+    .hero-bg {
+      background-attachment: scroll;
+    }
+  }
+
   .hero-content-box {
     position: relative;
     z-index: 2;
@@ -270,15 +279,20 @@
   .footer-link { color: #a8c4aa; font-size: 0.85rem; text-decoration: none; transition: color 0.2s; }
   .footer-link:hover { color: #e6eec9; }
 
-  @keyframes vic-fade-up {
-    from { opacity: 0; transform: translateY(28px); }
-    to   { opacity: 1; transform: translateY(0); }
+  .vic-animate {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
   }
-  .vic-animate { opacity: 0; animation: vic-fade-up 0.7s ease forwards; }
-  .vic-delay-1 { animation-delay: 0.1s; }
-  .vic-delay-2 { animation-delay: 0.25s; }
-  .vic-delay-3 { animation-delay: 0.4s; }
-  .vic-delay-4 { animation-delay: 0.55s; }
+  .vic-animate.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .vic-delay-1 { transition-delay: 0.1s; }
+  .vic-delay-2 { transition-delay: 0.25s; }
+  .vic-delay-3 { transition-delay: 0.4s; }
+  .vic-delay-4 { transition-delay: 0.55s; }
 
   @media (max-width: 576px) {
     .vic-stat-divider { display: none; }
@@ -298,7 +312,8 @@
     <p class="hero-desc">
       A journey beyond tourism — discovering the living, breathing ecosystem of Green Island and the communities that protect it.
     </p>
-  </div> <div class="hero-wave">
+  </div>
+  <div class="hero-wave">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" preserveAspectRatio="none" style="width:100%;display:block;">
       <path d="M0 40 C360 80 1080 0 1440 40 L1440 80 L0 80 Z" fill="#f5f0e8"/>
     </svg>
@@ -352,25 +367,32 @@
 
     </div>
 
-    <!-- Stats row -->
     <div class="vic-stat-row vic-animate vic-delay-4">
       <div class="vic-stat-item">
-        <div class="vic-stat-number">800<sup>+</sup></div>
+        <div class="vic-stat-number">
+          <span class="counter" data-target="800">0</span><sup>+</sup>
+        </div>
         <div class="vic-stat-label">Marine Fish Species</div>
       </div>
       <div class="vic-stat-divider d-none d-sm-block"></div>
       <div class="vic-stat-item">
-        <div class="vic-stat-number">15<sup>km²</sup></div>
+        <div class="vic-stat-number">
+          <span class="counter" data-target="15">0</span><sup>km²</sup>
+        </div>
         <div class="vic-stat-label">Total Island Area</div>
       </div>
       <div class="vic-stat-divider d-none d-sm-block"></div>
       <div class="vic-stat-item">
-        <div class="vic-stat-number">35<sup>萬+</sup></div>
+        <div class="vic-stat-number">
+          <span class="counter" data-target="35">0</span><sup>萬+</sup>
+        </div>
         <div class="vic-stat-label">Annual Visitors</div>
       </div>
       <div class="vic-stat-divider d-none d-sm-block"></div>
       <div class="vic-stat-item">
-        <div class="vic-stat-number">300<sup>+</sup></div>
+        <div class="vic-stat-number">
+          <span class="counter" data-target="300">0</span><sup>+</sup>
+        </div>
         <div class="vic-stat-label">Coral Reef Species</div>
       </div>
     </div>
@@ -407,5 +429,86 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  
+  (function () {
+    const revealObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            // 觸發後解除觀察，確保動畫只執行一次
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        rootMargin: '0px 0px -40px 0px', 
+        threshold: 0
+      }
+    );
+
+    document.querySelectorAll('.vic-animate').forEach(function (el) {
+      revealObserver.observe(el);
+    });
+  })();
+
+
+  (function () {
+    /**
+     * @param {HTMLElement} el   - .counter span 元素
+     * @param {number}      target - 目標數值
+     * @param {number}      duration - 動畫持續毫秒
+     */
+    function animateCounter(el, target, duration) {
+      var startTime = null;
+      var startValue = 0;
+
+      function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        var elapsed = timestamp - startTime;
+        var progress = Math.min(elapsed / duration, 1);
+
+        var eased = 1 - Math.pow(1 - progress, 4);
+        var current = Math.round(startValue + (target - startValue) * eased);
+
+        el.textContent = current;
+
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          el.textContent = target; 
+        }
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    
+    var statRow = document.querySelector('.vic-stat-row');
+    if (!statRow) return;
+
+    var counterObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+           
+            entry.target.querySelectorAll('.counter').forEach(function (counterEl) {
+              var target = parseInt(counterEl.getAttribute('data-target'), 10);
+              animateCounter(counterEl, target, 1800); // 1.8 seconds duration
+            });
+            counterObserver.unobserve(entry.target);
+          }
+        });
+      },
+      {
+      }
+    );
+
+    counterObserver.observe(statRow);
+  })();
+</script>
+
 </body>
 </html>
