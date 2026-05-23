@@ -3,31 +3,89 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>綠島續語 — about-eco 預覽</title>
+  <title>綠島續語 — Eco Tourism</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&family=Lora:wght@400;700&display=swap" />
 </head>
 <body style="margin:0; background:#0d2e15;">
 
-  <!-- 模擬 Hero 下方波浪 -->
-  <div style="background:#195724; height:80px; clip-path:ellipse(55% 100% at 50% 0%);"></div>
-
-  <!-- ============================================================
-     綠島續語 (ISLE of ROAM) — about-eco 區塊（改版）
-     前綴: vic-  |  依賴: Bootstrap 5、Bootstrap Icons
-     ============================================================ -->
-
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap');
   :root {
     --vic-forest:   #195724;
     --vic-grass:    #C2D099;
     --vic-moss:     #4a7c59;
-    --vic-sage:     #e8f0dd;
     --vic-sand:     #f5f0e8;
     --vic-deep:     #0d2e15;
     --vic-white:    #ffffff;
   }
+
+  /* ── Hero ── */
+  .hero-bg {
+    background-image:
+      linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+      url('images/hero-banner.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-content-box {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2rem;
+    max-width: 800px;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50px;
+    padding: 6px 18px;
+    margin-bottom: 1.5rem;
+    color: var(--vic-grass);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  .hero-title {
+    font-family: 'Lora', serif;
+    font-size: clamp(3rem, 6vw, 5rem);
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 1.2rem;
+    font-weight: 700;
+    margin-top: 0;
+  }
+  .hero-desc {
+    font-family: 'Lora', serif;
+    font-size: clamp(1rem, 2.2vw, 1.2rem);
+    color: rgba(255,255,255,0.85);
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-wave { 
+    position: absolute; 
+    bottom: -1px; 
+    left: 0; 
+    right: 0; 
+    width: 100%;
+    line-height: 0; 
+    z-index: 10; 
+  }
+
+  /* ── About Eco ── */
   .vic-about-eco {
     background: linear-gradient(180deg, #f5f0e8 0%, #edf4e3 60%, #deecd0 100%);
     padding: 100px 0 120px;
@@ -46,7 +104,6 @@
     pointer-events: none;
   }
   .vic-section-eyebrow {
-    font-family: 'Noto Sans TC', sans-serif;
     font-size: 0.72rem;
     font-weight: 500;
     letter-spacing: 0.25em;
@@ -82,14 +139,14 @@
     max-width: 560px;
     margin: 0 auto 3.5rem;
     color: #4a5540;
-    font-size: 0.97rem;
-    line-height: 1.85;
+    font-size: 1rem;
+    line-height: 1.9;
   }
   .vic-card {
     background: rgba(255,255,255,0.82);
     border: 1px solid rgba(25,87,36,0.12);
     border-radius: 20px;
-    padding: 2.6rem 2.2rem 2.4rem;
+    padding: 3.2rem 2.8rem 3rem;
     height: 100%;
     position: relative;
     overflow: hidden;
@@ -105,10 +162,8 @@
   .vic-card::after {
     content: '';
     position: absolute;
-    top: -36px;
-    right: -36px;
-    width: 120px;
-    height: 120px;
+    top: -36px; right: -36px;
+    width: 120px; height: 120px;
     border-radius: 50%;
     background: radial-gradient(circle, rgba(194,208,153,0.35) 0%, transparent 70%);
     pointer-events: none;
@@ -117,8 +172,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 60px;
-    height: 60px;
+    width: 60px; height: 60px;
     border-radius: 16px;
     margin-bottom: 1.5rem;
     font-size: 1.6rem;
@@ -136,100 +190,32 @@
     box-shadow: 0 4px 16px rgba(133,100,4,0.15);
   }
   .vic-card-tag {
-    font-size: 0.68rem;
+    font-size: 0.72rem;
     letter-spacing: 0.2em;
     font-weight: 500;
     color: var(--vic-moss);
     text-transform: uppercase;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
   }
   .vic-card-title {
     font-family: 'Noto Serif TC', serif;
-    font-size: 1.35rem;
+    font-size: 1.55rem;
     font-weight: 700;
     color: var(--vic-forest);
-    margin-bottom: 0.9rem;
-    line-height: 1.4;
+    margin-bottom: 1.2rem;
+    line-height: 1.5;
   }
   .vic-card-body {
     color: #4a5540;
-    font-size: 0.92rem;
-    line-height: 1.9;
-    margin-bottom: 1.4rem;
+    font-size: 1rem;
+    line-height: 2;
+    margin-bottom: 1.8rem;
   }
-
-  /* === 新增：三格特色卡 === */
-  .vic-trio {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.6rem;
-    margin-bottom: 1.4rem;
-  }
-  .vic-trio-box {
-    background: rgba(25,87,36,0.05);
-    border: 1px solid rgba(25,87,36,0.13);
-    border-radius: 12px;
-    padding: 0.9rem 0.6rem;
-    text-align: center;
-  }
-  .vic-trio-icon {
-    font-size: 1.4rem;
-    margin-bottom: 0.35rem;
-    display: block;
-    color: var(--vic-forest);
-  }
-  .vic-trio-name {
-    font-family: 'Noto Serif TC', serif;
-    font-size: 0.78rem;
-    font-weight: 700;
-    color: var(--vic-forest);
-    margin-bottom: 0.3rem;
-    line-height: 1.3;
-  }
-  .vic-trio-desc {
-    font-size: 0.68rem;
-    color: var(--vic-moss);
-    line-height: 1.55;
-  }
-
-  /* === 新增：分隔線 === */
-  .vic-inner-divider {
-    height: 1px;
-    background: rgba(25,87,36,0.1);
-    margin-bottom: 1.2rem;
-  }
-
-  /* === 改版：feature list 加粗標題 === */
-  .vic-feature-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 1.4rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-  }
-  .vic-feature-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.55rem;
-    font-size: 0.88rem;
-    color: #3d5140;
-  }
-  .vic-feature-list li i {
-    margin-top: 0.2rem;
-    flex-shrink: 0;
-    color: var(--vic-forest);
-    font-size: 0.95rem;
-  }
-  .vic-feature-list li strong {
-    color: var(--vic-forest);
-  }
-
   .vic-pill {
     display: inline-block;
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 500;
-    padding: 0.28em 0.85em;
+    padding: 0.3em 0.9em;
     border-radius: 999px;
     border: 1px solid;
     letter-spacing: 0.05em;
@@ -246,7 +232,7 @@
   }
   .vic-stat-row {
     margin-top: 5rem;
-    padding: 2.4rem 2rem;
+    padding: 2.6rem 2rem;
     background: linear-gradient(135deg, rgba(25,87,36,0.06) 0%, rgba(194,208,153,0.18) 100%);
     border: 1px solid rgba(25,87,36,0.1);
     border-radius: 20px;
@@ -276,13 +262,9 @@
     margin-bottom: 0.3rem;
   }
   .vic-stat-number sup { font-size: 0.65em; vertical-align: super; }
-  .vic-stat-label { font-size: 0.8rem; color: var(--vic-moss); letter-spacing: 0.08em; }
+  .vic-stat-label { font-size: 0.85rem; color: var(--vic-moss); letter-spacing: 0.08em; }
   .vic-stat-divider { width: 1px; height: 48px; background: rgba(25,87,36,0.2); }
-  @media (max-width: 576px) {
-    .vic-stat-divider { display: none; }
-    .vic-stat-row { gap: 2rem; }
-    .vic-trio { grid-template-columns: 1fr; }
-  }
+
   @keyframes vic-fade-up {
     from { opacity: 0; transform: translateY(28px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -292,11 +274,37 @@
   .vic-delay-2 { animation-delay: 0.25s; }
   .vic-delay-3 { animation-delay: 0.4s; }
   .vic-delay-4 { animation-delay: 0.55s; }
-  .vic-delay-5 { animation-delay: 0.7s; }
+
+  @media (max-width: 576px) {
+    .vic-stat-divider { display: none; }
+    .vic-stat-row { gap: 2rem; }
+  }
 </style>
 
+<!-- ── Hero Banner ── -->
+<section class="hero-bg">
+  
+  <div class="hero-content-box">
+    <div class="hero-badge">
+      <i class="bi bi-geo-alt-fill"></i>
+      Green Island · Taiwan
+    </div>
+    <h1 class="hero-title">Isle of Roam</h1>
+    <p class="hero-desc">
+      A journey beyond tourism — discovering the living, breathing ecosystem of Green Island and the communities that protect it.
+    </p>
+  </div> <div class="hero-wave">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" preserveAspectRatio="none" style="width:100%;display:block;">
+      <path d="M0 40 C360 80 1080 0 1440 40 L1440 80 L0 80 Z" fill="#f5f0e8"/>
+    </svg>
+  </div>
+
+</section>
+
+<!-- ── About Eco Section ── -->
 <section id="about-eco" class="vic-about-eco">
   <div class="container">
+
     <div class="text-center vic-animate vic-delay-1">
       <p class="vic-section-eyebrow"><i class="bi bi-geo-alt me-1"></i>Green Island · Taiwan</p>
       <h2 class="vic-section-title">
@@ -311,104 +319,60 @@
 
     <div class="row g-4">
 
-      <!-- 左卡：生態環境概況（改版） -->
+      <!-- Left card -->
       <div class="col-md-6 vic-animate vic-delay-2">
         <div class="vic-card">
           <div class="vic-card-badge vic-badge-eco"><i class="bi bi-tree-fill"></i></div>
           <p class="vic-card-tag"><i class="bi bi-water me-1"></i>Introduction · Ecological Overview</p>
           <h3 class="vic-card-title">Where the Kuroshio Meets: An Ecological Ark in the Pacific</h3>
           <p class="vic-card-body">
-            Nurtured by the Kuroshio Current, this volcanic island has emerged as a premier hotspot for marine biodiversity in Taiwan.
+            Nurtured by the warm Kuroshio Current flowing up from the tropics, this small volcanic island punches far above its weight as one of Taiwan's most biodiverse marine and terrestrial ecosystems.
           </p>
-
-          <!-- 三格特色卡 -->
-          <div class="vic-trio">
-            <div class="vic-trio-box">
-              <i class="bi bi-water vic-trio-icon"></i>
-              <div class="vic-trio-name">Ecosystems</div>
-              <div class="vic-trio-desc">Sea turtles, coral communities, Tsuda's giant stick insects, coconut crabs.</div>
-            </div>
-            <div class="vic-trio-box">
-              <i class="bi bi-geo-fill vic-trio-icon"></i>
-              <div class="vic-trio-name">Geological Landscapes</div>
-              <div class="vic-trio-desc">Volcanic terrain, pristine coastal forests, outdoor geology museum.</div>
-            </div>
-            <div class="vic-trio-box">
-              <i class="bi bi-thermometer-sun vic-trio-icon"></i>
-              <div class="vic-trio-name">Natural Resources</div>
-              <div class="vic-trio-desc">One of only three submarine hot springs worldwide; a world-class natural marvel.</div>
-            </div>
-          </div>
-
-          <div class="vic-inner-divider"></div>
-
-          <ul class="vic-feature-list">
-            <li>
-              <i class="bi bi-bug"></i>
-              <span><strong>Biodiversity Hotspot:</strong>From the deep blue to the emerald forest.</span>
-            </li>
-            <li>
-              <i class="bi bi-tree"></i>
-              <span><strong>Research Value:</strong>A natural laboratory of volcanic forests.</span>
-            </li>
-            <li>
-              <i class="bi bi-award"></i>
-              <span><strong>Rare Global Asset:</strong>One of the world's three saltwater hot springs.</span>
-            </li>
-          </ul>
-
           <span class="vic-pill vic-pill-green"><i class="bi bi-award me-1"></i>Biodiversity Hotspot</span>
         </div>
       </div>
 
-      <!-- 右卡：保育現況（維持原版） -->
+      <!-- Right card -->
       <div class="col-md-6 vic-animate vic-delay-3">
         <div class="vic-card">
           <div class="vic-card-badge vic-badge-alert"><i class="bi bi-exclamation-triangle-fill"></i></div>
-          <p class="vic-card-tag"><i class="bi bi-shield-exclamation me-1"></i>面臨問題 · 保育現況</p>
-          <h3 class="vic-card-title">環境壓力與永續保育的抉擇</h3>
+          <p class="vic-card-tag"><i class="bi bi-shield-exclamation me-1"></i>Ongoing Crises · Conservation Status</p>
+          <h3 class="vic-card-title">Four Threats Pushing Green Island's Ecosystems to the Brink</h3>
           <p class="vic-card-body">
-            每年超過 <strong>35 萬名</strong>遊客湧入這座僅 15 平方公里的小島，
-            帶來的過度開發、垃圾汙染與珊瑚礁破壞，已使部分生態系統瀕臨崩潰臨界。
-            如何在觀光收益與環境承載量之間取得平衡，是綠島當前最迫切的課題。
+            Over <strong>350,000 visitors</strong> descend on this 15 km² island every year. The cumulative weight of mass tourism, climate change, and habitat loss has elevated four ecological emergencies to critical status.
           </p>
-          <ul class="vic-feature-list">
-            <li><i class="bi bi-thermometer-high"></i><span>海水溫度上升導致珊瑚白化現象逐年加劇</span></li>
-            <li><i class="bi bi-trash3"></i><span>廢水與固體廢棄物處理設施不足，生態壓力沉重</span></li>
-            <li><i class="bi bi-people"></i><span>旅遊承載量管制起步中，社區保育意識持續提升</span></li>
-          </ul>
-          <span class="vic-pill vic-pill-amber"><i class="bi bi-binoculars me-1"></i>永續觀光迫切需求</span>
+          <span class="vic-pill vic-pill-amber"><i class="bi bi-binoculars me-1"></i>Urgent Need for Sustainable Tourism</span>
         </div>
       </div>
 
     </div>
 
-    <!-- 數據列 -->
+    <!-- Stats row -->
     <div class="vic-stat-row vic-animate vic-delay-4">
       <div class="vic-stat-item">
         <div class="vic-stat-number">800<sup>+</sup></div>
-        <div class="vic-stat-label">海域魚類物種</div>
+        <div class="vic-stat-label">Marine Fish Species</div>
       </div>
       <div class="vic-stat-divider d-none d-sm-block"></div>
       <div class="vic-stat-item">
         <div class="vic-stat-number">15<sup>km²</sup></div>
-        <div class="vic-stat-label">全島面積</div>
+        <div class="vic-stat-label">Total Island Area</div>
       </div>
       <div class="vic-stat-divider d-none d-sm-block"></div>
       <div class="vic-stat-item">
         <div class="vic-stat-number">35<sup>萬+</sup></div>
-        <div class="vic-stat-label">年均遊客人次</div>
+        <div class="vic-stat-label">Annual Visitors</div>
       </div>
       <div class="vic-stat-divider d-none d-sm-block"></div>
       <div class="vic-stat-item">
         <div class="vic-stat-number">300<sup>+</sup></div>
-        <div class="vic-stat-label">珊瑚礁種類</div>
+        <div class="vic-stat-label">Coral Reef Species</div>
       </div>
     </div>
 
   </div>
 </section>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
