@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>綠島續語 — Eco Tourism</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&family=Lora:wght@400;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&family=Playfair+Display:wght@400;600;700&display=swap" />
+</head>
+<body style="margin:0; background:#0d2e15;">
+
+<style>
+  :root {
+    --vic-forest:   #195724;
+    --vic-grass:    #C2D099;
+    --vic-moss:     #4a7c59;
+    --vic-sand:     #f5f0e8;
+    --vic-deep:     #0d2e15;
+    --vic-white:    #ffffff;
+  }
+
+  /* ── Hero ── */
+  .hero-bg {
+    background-image:
+      linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+      url('images/hero-banner.jpg');
+    background-size: cover;
+    background-position: center;
+    /*parallax */
+    background-attachment: fixed;
+    position: relative;
+    overflow: hidden;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (max-width: 768px) {
+    .hero-bg {
+      background-attachment: scroll;
+    }
+  }
+
+  .hero-content-box {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2rem;
+    max-width: 800px;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50px;
+    padding: 6px 18px;
+    margin-bottom: 1.5rem;
+    color: var(--vic-grass);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 6vw, 5rem);
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 1.2rem;
+    font-weight: 600;
+    margin-top: 0;
+  }
+  .hero-desc {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 2.2vw, 1.2rem);
+    color: rgba(255,255,255,0.85);
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-wave { 
+    position: absolute; 
+    bottom: -1px; 
+    left: 0; 
+    right: 0; 
+    width: 100%;
+    line-height: 0; 
+    z-index: 10; 
+  }
+
+  /* ── About Eco ── */
+  .vic-about-eco {
+    background: linear-gradient(180deg, #f5f0e8 0%, #edf4e3 60%, #deecd0 100%);
+    padding: 100px 0 120px;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  .vic-about-eco::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 80px 120px at 8% 20%, rgba(25,87,36,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 60px 90px at 92% 70%, rgba(74,124,89,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 100px 60px at 50% 90%, rgba(194,208,153,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .vic-section-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    color: var(--vic-moss);
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  .vic-section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    font-weight: 600;
+    color: var(--vic-forest);
+    line-height: 1.25;
+    margin-bottom: 1rem;
+  }
+  .vic-section-title span {
+    display: block;
+    font-size: 0.48em;
+    font-weight: 400;
+    font-family: 'Playfair Display', sans-serif;
+    letter-spacing: 0.12em;
+    color: var(--vic-moss);
+    margin-top: 0.2rem;
+  }
+  .vic-section-divider {
+    width: 48px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--vic-forest), var(--vic-grass));
+    border-radius: 2px;
+    margin: 0 auto 1.6rem;
+  }
+  .vic-section-intro {
+    max-width: 560px;
+    margin: 0 auto 3.5rem;
+    color: #4a5540;
+    font-size: 1rem;
+    line-height: 1.9;
+  }
+  .vic-card {
+    background: rgba(255,255,255,0.82);
+    border: 1px solid rgba(25,87,36,0.12);
+    border-radius: 20px;
+    padding: 3.2rem 2.8rem 3rem;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(6px);
+    transition: transform 0.35s cubic-bezier(.22,.68,0,.99), box-shadow 0.35s ease, border-color 0.35s ease;
+    box-shadow: 0 4px 24px rgba(25,87,36,0.07);
+  }
+  .vic-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 48px rgba(25,87,36,0.14);
+    border-color: rgba(25,87,36,0.28);
+  }
+  .vic-card::after {
+    content: '';
+    position: absolute;
+    top: -36px; right: -36px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(194,208,153,0.35) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .vic-card-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px; height: 60px;
+    border-radius: 16px;
+    margin-bottom: 1.5rem;
+    font-size: 1.6rem;
+    position: relative;
+    z-index: 1;
+  }
+  .vic-badge-eco {
+    background: linear-gradient(135deg, #d4edda, #c2d099);
+    color: var(--vic-forest);
+    box-shadow: 0 4px 16px rgba(25,87,36,0.15);
+  }
+  .vic-badge-alert {
+    background: linear-gradient(135deg, #fef3cd, #f5e4a0);
+    color: #856404;
+    box-shadow: 0 4px 16px rgba(133,100,4,0.15);
+  }
+  .vic-card-tag {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    font-weight: 500;
+    color: var(--vic-moss);
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  .vic-card-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--vic-forest);
+    margin-bottom: 1.2rem;
+    line-height: 1.5;
+  }
+  .vic-card-body {
+    color: #4a5540;
+    font-size: 1rem;
+    line-height: 2;
+    margin-bottom: 1.8rem;
+  }
+  .vic-pill {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.3em 0.9em;
+    border-radius: 999px;
+    border: 1px solid;
+    letter-spacing: 0.05em;
+  }
+  .vic-pill-green {
+    color: var(--vic-forest);
+    border-color: rgba(25,87,36,0.35);
+    background: rgba(194,208,153,0.25);
+  }
+  .vic-pill-amber {
+    color: #7a5c00;
+    border-color: rgba(133,100,4,0.3);
+    background: rgba(254,243,205,0.45);
+  }
+  .vic-stat-row {
+    margin-top: 5rem;
+    padding: 2.6rem 2rem;
+    background: linear-gradient(135deg, rgba(25,87,36,0.06) 0%, rgba(194,208,153,0.18) 100%);
+    border: 1px solid rgba(25,87,36,0.1);
+    border-radius: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+    gap: 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .vic-stat-row::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23195724' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .vic-stat-item { min-width: 140px; position: relative; }
+  .vic-stat-number {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--vic-forest);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .vic-stat-number sup { font-size: 0.65em; vertical-align: super; }
+  .vic-stat-label { font-size: 0.85rem; color: var(--vic-moss); letter-spacing: 0.08em; }
+  .vic-stat-divider { width: 1px; height: 48px; background: rgba(25,87,36,0.2); }
+
+  /* Footer */
+  .footer-link { color: #a8c4aa; font-size: 0.85rem; text-decoration: none; transition: color 0.2s; }
+  .footer-link:hover { color: #e6eec9; }
+
+  .vic-animate {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+  .vic-animate.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .vic-delay-1 { transition-delay: 0.1s; }
+  .vic-delay-2 { transition-delay: 0.25s; }
+  .vic-delay-3 { transition-delay: 0.4s; }
+  .vic-delay-4 { transition-delay: 0.55s; }
+
+  @media (max-width: 576px) {
+    .vic-stat-divider { display: none; }
+    .vic-stat-row { gap: 2rem; }
+  }
+</style>
+
+<!-- ── Hero Banner ── -->
+<section class="hero-bg">
+  
+  <div class="hero-content-box">
+    <div class="hero-badge">
+      <i class="bi bi-geo-alt-fill"></i>
+      Green Island · Taiwan
+    </div>
+    <h1 class="hero-title">Isle of Roam</h1>
+    <p class="hero-desc">
+      A journey beyond tourism — discovering the living, breathing ecosystem of Green Island and the communities that protect it.
+    </p>
+  </div>
+  <div class="hero-wave">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" preserveAspectRatio="none" style="width:100%;display:block;">
+      <path d="M0 40 C360 80 1080 0 1440 40 L1440 80 L0 80 Z" fill="#f5f0e8"/>
+    </svg>
+  </div>
+
+</section>
+
+<!-- ── About Eco Section ── -->
+<section id="about-eco" class="vic-about-eco">
+  <div class="container">
+
+    <div class="text-center vic-animate vic-delay-1">
+      <p class="vic-section-eyebrow"><i class="bi bi-geo-alt me-1"></i>Green Island · Taiwan</p>
+      <h2 class="vic-section-title">
+        Discover Green Tourism
+        <span>ABOUT ECO TOURISM</span>
+      </h2>
+      <div class="vic-section-divider"></div>
+      <p class="vic-section-intro">
+        We take the beauty, but leave a heavy cost. Protection begins with understanding. Turn your journey into a force for the island.
+      </p>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- Left card -->
+      <div class="col-md-6 vic-animate vic-delay-2">
+        <div class="vic-card">
+          <div class="vic-card-badge vic-badge-eco"><i class="bi bi-tree-fill"></i></div>
+          <p class="vic-card-tag"><i class="bi bi-water me-1"></i>Introduction · Ecological Overview</p>
+          <h3 class="vic-card-title">Where the Kuroshio Meets: An Ecological Ark in the Pacific</h3>
+          <p class="vic-card-body">
+            Nurtured by the warm Kuroshio Current flowing up from the tropics, this small volcanic island punches far above its weight as one of Taiwan's most biodiverse marine and terrestrial ecosystems.
+          </p>
+          <span class="vic-pill vic-pill-green"><i class="bi bi-award me-1"></i>Biodiversity Hotspot</span>
+        </div>
+      </div>
+
+      <!-- Right card -->
+      <div class="col-md-6 vic-animate vic-delay-3">
+        <div class="vic-card">
+          <div class="vic-card-badge vic-badge-alert"><i class="bi bi-exclamation-triangle-fill"></i></div>
+          <p class="vic-card-tag"><i class="bi bi-shield-exclamation me-1"></i>Ongoing Crises · Conservation Status</p>
+          <h3 class="vic-card-title">Four Threats Pushing Green Island's Ecosystems to the Brink</h3>
+          <p class="vic-card-body">
+            Over <strong>350,000 visitors</strong> descend on this 15 km² island every year. The cumulative weight of mass tourism, climate change, and habitat loss has elevated four ecological emergencies to critical status.
+          </p>
+          <span class="vic-pill vic-pill-amber"><i class="bi bi-binoculars me-1"></i>Urgent Need for Sustainable Tourism</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="vic-stat-row vic-animate vic-delay-4">
+      <div class="vic-stat-item">
+        <div class="vic-stat-number">
+          <span class="counter" data-target="800">0</span><sup>+</sup>
+        </div>
+        <div class="vic-stat-label">Marine Fish Species</div>
+      </div>
+      <div class="vic-stat-divider d-none d-sm-block"></div>
+      <div class="vic-stat-item">
+        <div class="vic-stat-number">
+          <span class="counter" data-target="15">0</span><sup>km²</sup>
+        </div>
+        <div class="vic-stat-label">Total Island Area</div>
+      </div>
+      <div class="vic-stat-divider d-none d-sm-block"></div>
+      <div class="vic-stat-item">
+        <div class="vic-stat-number">
+          <span class="counter" data-target="35">0</span><sup>萬+</sup>
+        </div>
+        <div class="vic-stat-label">Annual Visitors</div>
+      </div>
+      <div class="vic-stat-divider d-none d-sm-block"></div>
+      <div class="vic-stat-item">
+        <div class="vic-stat-number">
+          <span class="counter" data-target="300">0</span><sup>+</sup>
+        </div>
+        <div class="vic-stat-label">Coral Reef Species</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 共用頁尾 -->
+<footer class="site-footer" style="background: #1a2e1e; color: #a8c4aa; padding: 4rem 2rem 2rem;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; margin-bottom: 3rem; text-align: left;">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
+          <div style="width:30px;height:30px;background:#c2d099;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 2C9 2 4 6 4 10.5C4 13.5 6.5 16 9 16C11.5 16 14 13.5 14 10.5C14 6 9 2 9 2Z" fill="#35858e"/></svg>
+          </div>
+          <span style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#e6eec9;">ISLE of ROAM</span>
+        </div>
+        <p style="font-size:0.83rem;line-height:1.8;color:#7a9c7b;">Centered on sustainable tourism, we protect the pristine beauty of Green Island, making travel a power for change.</p>
+      </div>
+      <div>
+        <h4 style="font-size:0.78rem;letter-spacing:0.12em;color:#c2d099;margin-bottom:1rem;text-transform:uppercase;">Contact Us</h4>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;font-size:0.85rem;">
+          <span>📧 Isle_of_Roam@gmail.com</span>
+          <span>📍 NCU MIS IM3029A Group6</span>
+          <span>113403023 蔡仁懋 / 112102526 陳俊岳 / 113403017 賴韋衡</span>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,0.07);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+      <span style="font-size:0.8rem;color:#5a7a5c;">© 2026 ISLE of ROAM. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  
+  (function () {
+    const revealObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            // 觸發後解除觀察，確保動畫只執行一次
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        rootMargin: '0px 0px -40px 0px', 
+        threshold: 0
+      }
+    );
+
+    document.querySelectorAll('.vic-animate').forEach(function (el) {
+      revealObserver.observe(el);
+    });
+  })();
+
+
+  (function () {
+    /**
+     * @param {HTMLElement} el   - .counter span 元素
+     * @param {number}      target - 目標數值
+     * @param {number}      duration - 動畫持續毫秒
+     */
+    function animateCounter(el, target, duration) {
+      var startTime = null;
+      var startValue = 0;
+
+      function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        var elapsed = timestamp - startTime;
+        var progress = Math.min(elapsed / duration, 1);
+
+        var eased = 1 - Math.pow(1 - progress, 4);
+        var current = Math.round(startValue + (target - startValue) * eased);
+
+        el.textContent = current;
+
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          el.textContent = target; 
+        }
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    
+    var statRow = document.querySelector('.vic-stat-row');
+    if (!statRow) return;
+
+    var counterObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+           
+            entry.target.querySelectorAll('.counter').forEach(function (counterEl) {
+              var target = parseInt(counterEl.getAttribute('data-target'), 10);
+              animateCounter(counterEl, target, 1800); // 1.8 seconds duration
+            });
+            counterObserver.unobserve(entry.target);
+          }
+        });
+      },
+      {
+      }
+    );
+
+    counterObserver.observe(statRow);
+  })();
+</script>
+
+</body>
+</html>
