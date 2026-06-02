@@ -129,7 +129,8 @@ html, body {
   display: flex;
   flex: 1;
   min-height: 0;
-  height: calc(100vh - 66px);
+  margin-top: 64px;            /* 新增這行：將網頁內容往下推，避開固定標頭 */
+  height: calc(100vh - 64px);  /* 修改這行：扣掉新標頭精準的 64px 高度 */
 }
 
 /* ── FIX 3: Sidebar — clips content, lets children control scroll ── */
@@ -423,6 +424,49 @@ html, body {
 }
 .vic-spot-card { animation: vic-slide-in 0.35s ease both; }
 
+/* ── 共同標頭基本樣式 (無捲動特效實色版) ── */
+#header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(26,58,46,0.97);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+  backdrop-filter: blur(10px);
+}
+.desktop-nav {
+  display: flex; gap: 1.4rem; align-items: center;
+}
+.nav-link {
+  position: relative; color: rgba(255,255,255,0.85);
+  font-weight: 400; font-size: 0.9rem; letter-spacing: 0.04em;
+  transition: color 0.2s; text-decoration: none; padding: 4px 0;
+}
+.nav-link::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: #c2d099; transform: scaleX(0); transition: transform 0.25s;
+}
+.nav-link:hover { color: #fff; }
+.nav-link:hover::after { transform: scaleX(1); }
+.nav-link.active { color: #fff; }
+.nav-link.active::after { transform: scaleX(1); }
+
+#hamburger { display: none; }
+#mobile-menu {
+  display: none; position: fixed; inset: 0;
+  background: rgba(26,58,46,0.97);
+  z-index: 1200; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2rem;
+}
+#mobile-menu.show { display: flex; }
+.mobile-nav-link {
+  color: #e6eec9; font-size: 1.4rem; font-weight: 300;
+  letter-spacing: 0.1em; text-decoration: none; transition: color 0.2s;
+}
+.mobile-nav-link:hover { color: #fff; }
+
+@media (max-width: 768px) {
+  #hamburger { display: flex !important; }
+  .desktop-nav { display: none !important; }
+  .vic-map-wrapper { margin-top: 64px !important; }
+}
 </style>
 </head>
 <body>
@@ -430,20 +474,41 @@ html, body {
 <div class="vic-map-page">
 
   <!-- ── Header ── -->
-  <header class="vic-map-header">
-    <a href="#" class="vic-map-logo">
-      <div class="vic-map-logo-icon">
-        <i class="bi bi-geo-alt-fill"></i>
-      </div>
-      <div class="vic-map-logo-text">
-        <div class="vic-map-logo-en">Isle of Roam</div>
-        <div class="vic-map-logo-zh">綠島・續語</div>
-      </div>
+  <header id="header">
+  <div style="max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px;">
+    <a href="#" style="text-decoration:none;display:flex;align-items:center;gap:10px;">
+      <img src="images/logo.png" alt="Logo" style="width:34px;height:34px;">
+      <span style="font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;letter-spacing:0.05em;font-weight:600;">ISLE of ROAM</span>
     </a>
-    <span class="vic-map-header-tag">
-      <i class="bi bi-map me-1"></i>Interactive Map · Green Island, Taiwan
-    </span>
-  </header>
+
+    <nav class="desktop-nav">
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/homepage" class="nav-link">Home</a>
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/news" class="nav-link">News</a>
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/greenintro2" class="nav-link">About Eco</a>
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/green-tour-map/interactive-map" class="nav-link active">Green Map</a>
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/trans" class="nav-link">Transportation</a>
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/GREEN_MERCHANT/FinalShopInfo.html" class="nav-link">Merchant</a>
+      <a href="https://cc10206.github.io/Green-Island-Final-Project/stampColl" style="background:#c2d099;color:#2d3a2e;padding:8px 20px;border-radius:50px;font-size:0.85rem;font-weight:500;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background='#d4e3a8'" onmouseout="this.style.background='#c2d099'">Mission</a>
+    </nav>
+
+    <button id="hamburger" style="flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;" onclick="toggleMenu()">
+      <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
+      <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
+      <span style="width:24px;height:1.5px;background:#fff;border-radius:1px;display:block;"></span>
+    </button>
+  </div>
+</header>
+
+<div id="mobile-menu">
+  <button onclick="toggleMenu()" style="position:absolute;top:20px;right:24px;background:none;border:none;color:#e6eec9;font-size:1.8rem;cursor:pointer;">✕</button>
+  <a href="https://cc10206.github.io/Green-Island-Final-Project/homepage" class="mobile-nav-link">Home</a>
+  <a href="https://cc10206.github.io/Green-Island-Final-Project/news" class="mobile-nav-link">News</a>
+  <a href="https://cc10206.github.io/Green-Island-Final-Project/greenintro2" class="mobile-nav-link">About Eco</a>
+  <a href="https://cc10206.github.io/Green-Island-Final-Project/green-tour-map/interactive-map" class="mobile-nav-link" style="color:#fff;">Green Map</a>
+  <a href="https://cc10206.github.io/Green-Island-Final-Project/trans" class="mobile-nav-link">Transportation</a>
+  <a href="https://cc10206.github.io/Green-Island-Final-Project/GREEN_MERCHANT/FinalShopInfo.html" class="mobile-nav-link">Merchant</a>
+  <a href="https://cc10206.github.io/Green-Island-Final-Project/stampColl" class="mobile-nav-link">Mission</a>
+</div>
 
   <!-- ── Main layout ── -->
   <div class="vic-map-wrapper">
@@ -852,6 +917,10 @@ html, body {
   /* ── Initial render ── */
   renderSpotList();
 
+/* ── MOBILE MENU TOGGLE ── */
+function toggleMenu() {
+  document.getElementById('mobile-menu').classList.toggle('show');
+}
 </script>
 </body>
 </html>
